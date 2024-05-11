@@ -11,19 +11,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "sports")
 @Entity
-@Setter
+@Table(name = "article_status")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Sport {
+public class ArticleStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "title", nullable = false, unique = true)
+    @Column(name = "title", unique = true, nullable = false)
     private String title;
 
 }

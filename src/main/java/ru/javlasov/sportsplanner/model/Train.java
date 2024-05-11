@@ -11,19 +11,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "sports")
+import java.time.LocalDateTime;
+
 @Entity
-@Setter
+@Table(name = "trains")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Sport {
+public class Train {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "title", nullable = false, unique = true)
-    private String title;
+    @Column(name = "date", nullable = false)
+    private LocalDateTime date;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "reflection")
+    private String reflection;
+
+    @Column(name = "user_id", nullable = false)
+    private Long user;
 
 }

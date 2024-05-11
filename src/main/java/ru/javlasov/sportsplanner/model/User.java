@@ -7,17 +7,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "users")
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@NamedEntityGraph(name = "author-genre-entity-graph",
+        attributeNodes = {@NamedAttributeNode("trains"), @NamedAttributeNode("tournaments"),
+                @NamedAttributeNode("checkUp")})
 public class User {
 
     @Id
@@ -45,5 +56,17 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private Sport sport;
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Train> trains;
+
+    @OneToMany(mappedBy = "user")
+    private List<Tournament> tournaments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Health> checkUp;
 
 }

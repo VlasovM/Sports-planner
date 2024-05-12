@@ -1,6 +1,6 @@
 MERGE INTO article_status KEY (id, title)
-    VALUES (1, 'Статус1'),
-           (2, 'Статус2');
+    VALUES (1, 'На проверке модератором'),
+           (2, 'Опубликовано');
 
 MERGE INTO sports KEY (id, title)
     VALUES (1, 'Спорт1'),

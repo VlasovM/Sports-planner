@@ -1,5 +1,6 @@
 package ru.javlasov.sportsplanner;
 
+import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.model.Health;
@@ -15,8 +16,8 @@ import java.util.List;
 public class ExpectedDataFromDB {
 
     public static List<ArticleStatus> getExpectedArticlesStatusFromDB() {
-        var status1 = new ArticleStatus(1L, "Статус1");
-        var status2 = new ArticleStatus(2L, "Статус2");
+        var status1 = new ArticleStatus(1L, "На проверке модератором");
+        var status2 = new ArticleStatus(2L, "Опубликовано");
         return List.of(status1, status2);
     }
 
@@ -67,6 +68,12 @@ public class ExpectedDataFromDB {
         var train2 = new Train(2L, LocalDateTime.of(2000, 1, 1, 1, 1),
                 "Описание2", null, 1L);
         return List.of(train1, train2);
+    }
+
+    public static List<ArticleDto> getExpectedArticleDtoFromDB() {
+        var articleDto = new ArticleDto(1L, ArticleStatusDto.VERIFICATION, "Статья1", "Текст1",
+                LocalDate.of(2000, 1, 1), 1L);
+        return List.of(articleDto);
     }
 
 }

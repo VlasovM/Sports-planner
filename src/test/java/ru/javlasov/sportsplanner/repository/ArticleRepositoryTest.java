@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.model.Article;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,6 +50,35 @@ class ArticleRepositoryTest {
         assertThat(expectedArticle.getId()).isEqualTo(actualArticle.get().getId());
         assertThat(expectedArticle.getTitle()).isEqualTo(actualArticle.get().getTitle());
         assertThat(expectedArticle.getStatus().getId()).isEqualTo(actualArticle.get().getStatus().getId());
+    }
+
+    @Test
+    @DisplayName("Should get all articles by user id")
+    void getArticlesByUserIdTest() {
+        //given
+        List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB();
+
+        //when
+        List<Article> actualArticles = articleRepository.findAllByUser(1L);
+
+        //then
+        assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
+        assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
+        assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
+        assertThat(expectedArticles.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
+        assertThat(expectedArticles.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
+    }
+
+    @Test
+    @DisplayName("Should get empty articles by user id")
+    void getEmptyArticlesByUserIdTest() {
+
+        //when
+        List<Article> actualArticles = articleRepository.findAllByUser(2L);
+
+        //then
+        assertThat(actualArticles).isEmpty();
+
     }
 
 }

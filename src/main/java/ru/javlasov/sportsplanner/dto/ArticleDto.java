@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.javlasov.sportsplanner.ArticleStatusDto;
 
 import java.time.LocalDate;
 

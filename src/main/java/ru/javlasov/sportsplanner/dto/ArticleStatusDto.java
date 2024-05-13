@@ -1,8 +1,10 @@
-package ru.javlasov.sportsplanner;
+package ru.javlasov.sportsplanner.dto;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum ArticleStatusDto {
 
     UNKNOWN(0L, "Не определено"),

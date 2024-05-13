@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.model.Article;
+import ru.javlasov.sportsplanner.model.ArticleStatus;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -80,5 +83,56 @@ class ArticleRepositoryTest {
         assertThat(actualArticles).isEmpty();
 
     }
+
+    @Test
+    @DisplayName("Should save new article")
+    void saveArticleTest() {
+        //given
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        expectedArticle.setId(null);
+
+        //when
+        var actualArticle = articleRepository.save(expectedArticle);
+
+        //then
+        assertThat(actualArticle).isNotNull();
+        assertThat(actualArticle.getId()).isNotNull();
+        assertThat(expectedArticle.getTitle()).isEqualTo(actualArticle.getTitle());
+        assertThat(expectedArticle.getText()).isEqualTo(actualArticle.getText());
+    }
+
+    @Test
+    @DisplayName("Should delete article")
+    void deleteArticleTest() {
+        //given
+        var existsArticle = articleRepository.findById(1L);
+        assertThat(existsArticle).isPresent();
+
+        //when
+        articleRepository.deleteById(existsArticle.get().getId());
+
+        //then
+        var articleAfterDelete = articleRepository.findById(1L);
+
+        assertThat(articleAfterDelete).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should edit article")
+    void editArticleTest() {
+        //given
+        var existsArticle = articleRepository.findById(1L);
+        assertThat(existsArticle).isPresent();
+
+        //when
+        existsArticle.get().setTitle("Other title");
+        var actualArticle = articleRepository.save(existsArticle.get());
+
+
+        //then
+        assertThat(actualArticle).isNotNull();
+        assertThat(existsArticle.get().getTitle()).isEqualTo(actualArticle.getTitle());
+    }
+
 
 }

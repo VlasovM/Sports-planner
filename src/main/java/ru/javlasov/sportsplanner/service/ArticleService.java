@@ -12,4 +12,14 @@ public interface ArticleService {
 
     List<ArticleDto> getAllArticlesByUserId(Long userId);
 
+    void createArticle(ArticleDto articleDto);
+
+    void deleteArticle(Long articleId);
+
+    void editArticle(ArticleDto articleDto);
+
+    void acceptArticle(Long articleId);
+
+    void declineArticle(Long articleId);
+
 }

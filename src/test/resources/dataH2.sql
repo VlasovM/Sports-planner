@@ -1,4 +1,4 @@
-MERGE INTO article_status KEY (id, title)
+MERGE INTO article_status (id, title) KEY (id)
     VALUES (1, 'На проверке модератором'),
            (2, 'Опубликовано');
 
@@ -10,9 +10,9 @@ MERGE INTO users KEY (id, name, middle_name, surname, age, birthday, sport_id, b
     VALUES (1, 'Имя1', null, 'Фамилия1', 22, '2000-01-01 01:01:00.000', 1, 'Биография1'),
            (2, 'Имя2', 'Отчество2', 'Фамилия2', 25, '2000-01-01 01:01:00.000', 2, 'Биография2');
 
-MERGE INTO articles KEY (id, article_status, title, text, created, user_id)
-    VALUES (1, 1, 'Статья1', 'Текст1', '2000-01-01', 1),
-           (2, 2, 'Статья2', 'Текст2', '2000-01-01', 1);
+MERGE INTO articles (article_status, title, text, created, user_id) KEY (title, text)
+    VALUES (1, 'Статья1', 'Текст1', '2000-01-01', 1),
+           (2, 'Статья2', 'Текст2', '2000-01-01', 1);
 
 MERGE INTO trains KEY (id, date, description, reflection, user_id)
     VALUES (1, '2000-01-01 01:01:00.000', 'Описание1', 'Рефлексия1', 1),

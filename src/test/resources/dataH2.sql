@@ -1,27 +1,30 @@
-MERGE INTO article_status (id, title) KEY (id)
-    VALUES (1, 'На проверке модератором'),
-           (2, 'Опубликовано');
+MERGE INTO article_status (title) KEY (title)
+    VALUES ('article_status1'),
+           ('article_status2');
 
-MERGE INTO sports KEY (id, title)
-    VALUES (1, 'Спорт1'),
-           (2, 'Спорт2');
+MERGE INTO sports (title) KEY (title)
+    VALUES ('sport1'),
+           ('sport2');
 
-MERGE INTO users KEY (id, name, middle_name, surname, age, birthday, sport_id, biography)
-    VALUES (1, 'Имя1', null, 'Фамилия1', 22, '2000-01-01 01:01:00.000', 1, 'Биография1'),
-           (2, 'Имя2', 'Отчество2', 'Фамилия2', 25, '2000-01-01 01:01:00.000', 2, 'Биография2');
+MERGE INTO users (name, middle_name, surname, age, birthday, sport_id, biography) KEY (name, middle_name, surname, age, birthday, sport_id, biography)
+    VALUES ('name1', null, 'surname1', 22, '2000-01-01 01:01:00.000', 1, 'biography1'),
+           ('name2', 'middlename2', 'surname2', 25, '2000-01-01 01:01:00.000', 2, 'biography2');
+
+MERGE INTO user_credentials (email, password, user_id) KEY (email)
+    VALUES ('test@mail.ru', 'password', 1);
 
 MERGE INTO articles (article_status, title, text, created, user_id) KEY (title, text)
-    VALUES (1, 'Статья1', 'Текст1', '2000-01-01', 1),
-           (2, 'Статья2', 'Текст2', '2000-01-01', 1);
+    VALUES (1, 'title1', 'text1', '2000-01-01', 1),
+           (2, 'title2', 'text2', '2000-01-01', 1);
 
 MERGE INTO trains KEY (id, date, description, reflection, user_id)
-    VALUES (1, '2000-01-01 01:01:00.000', 'Описание1', 'Рефлексия1', 1),
-           (2, '2000-01-01 01:01:00.000', 'Описание2', null, 1);
+    VALUES (1, '2000-01-01 01:01:00.000', 'description1', 'reflection1', 1),
+           (2, '2000-01-01 01:01:00.000', 'description2', null, 1);
 
 MERGE INTO tournaments KEY (id, date, title, opponent, result, reflection, user_id)
-    VALUES (1, '2000-01-01', 'Заголовок1', 'Соперник1', 'Результат1', 'Рефлексия1', 1),
-           (2, '2000-01-01', 'Заголовок2', 'Соперник2', 'Результат1', null, 1);
+    VALUES (1, '2000-01-01', 'title1', 'opponent1', 'result1', 'reflection1', 1),
+           (2, '2000-01-01', 'title2', 'opponent2', 'result2', null, 1);
 
 MERGE INTO health KEY (id, date, clinic, doctor_specialization, doctor_full_name, result, user_id)
-    VALUES (1, '2000-01-01', 'Клиника1', 'Доктор1', 'ФИО1', 'Результат1', 1),
-           (2, '2000-01-01', 'Клиника2', 'Доктор2', 'ФИО2', 'Результат2', 1);
+    VALUES (1, '2000-01-01', 'clinic1', 'doctor_specialization1', 'doctor_full_name1', 'result1', 1),
+           (2, '2000-01-01', 'clinic2', 'doctor_specialization2', 'doctor_full_name2', 'result2', 1);

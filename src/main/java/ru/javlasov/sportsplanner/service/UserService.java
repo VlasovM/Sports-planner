@@ -6,4 +6,8 @@ public interface UserService {
 
     UserDto getInfoAuthorizedUser();
 
+    UserDto editProfile(UserDto userDto);
+
+    void createProfile(UserDto userDto);
+
 }

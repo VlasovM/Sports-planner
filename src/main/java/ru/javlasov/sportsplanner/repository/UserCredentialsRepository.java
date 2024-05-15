@@ -9,4 +9,6 @@ public interface UserCredentialsRepository extends CrudRepository<UserCredential
 
     Optional<UserCredentials> findByEmail(String email);
 
+    Optional<UserCredentials> findUserByUserId(Long userId);
+
 }

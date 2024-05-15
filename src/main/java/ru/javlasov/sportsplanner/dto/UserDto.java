@@ -1,6 +1,5 @@
 package ru.javlasov.sportsplanner.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -43,5 +42,8 @@ public class UserDto {
 
     @Size(min = 8, message = "Пароль должен быть минимум 8 символов")
     private String password;
+
+    @NotEmpty
+    private SportDto sport;
 
 }

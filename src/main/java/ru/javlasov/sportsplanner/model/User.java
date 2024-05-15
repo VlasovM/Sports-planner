@@ -53,7 +53,7 @@ public class User {
     @Column(name = "biography")
     private String biography;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private Sport sport;
 

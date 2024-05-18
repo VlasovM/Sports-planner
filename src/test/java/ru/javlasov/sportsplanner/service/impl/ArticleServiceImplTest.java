@@ -25,26 +25,26 @@ class ArticleServiceImplTest {
     @Test
     @DisplayName("Should get exception when find not exists article")
     void getNotExistsArticleTest() {
-        //when
+        // when
         NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> articleService.getArticleById(10L));
 
-        //then
+        // then
         assertThat(notFoundException.getMessage()).isEqualTo("Не найдена статья с id = 10");
     }
 
     @Test
     @DisplayName("Should edit article")
     void editArticleTest() {
-        //given
+        // given
         var incomeArticle = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
         incomeArticle.setText("OtherText");
         incomeArticle.setTitle("OtherTitle");
 
-        //when
+        // when
         articleService.editArticle(incomeArticle);
         var article = articleRepository.findById(incomeArticle.getId());
 
-        //then
+        // then
         assertThat(article).isPresent();
         assertThat(incomeArticle.getTitle()).isEqualTo(article.get().getTitle());
         assertThat(incomeArticle.getText()).isEqualTo(article.get().getText());
@@ -54,15 +54,15 @@ class ArticleServiceImplTest {
     @Test
     @DisplayName("Should change status article to accept")
     void acceptArticleTest() {
-        //given
+        // given
         var incomeArticle = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
         incomeArticle.setStatus(ArticleStatusDto.VERIFICATION);
 
-        //when
+        // when
         articleService.acceptArticle(incomeArticle.getId());
         var article = articleRepository.findById(incomeArticle.getId());
 
-        //then
+        // then
         assertThat(article).isPresent();
         assertThat(article.get().getStatus().getTitle()).isEqualTo(ArticleStatusDto.PUBLISHED.getTitle());
         assertThat(article.get().getStatus().getId()).isEqualTo(ArticleStatusDto.PUBLISHED.getId());
@@ -71,17 +71,18 @@ class ArticleServiceImplTest {
     @Test
     @DisplayName("Should change status article to decline")
     void declineArticleTest() {
-        //given
+        // given
         var incomeArticle = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
         incomeArticle.setStatus(ArticleStatusDto.VERIFICATION);
 
-        //when
+        // when
         articleService.declineArticle(incomeArticle.getId());
         var article = articleRepository.findById(incomeArticle.getId());
 
-        //then
+        // then
         assertThat(article).isPresent();
         assertThat(article.get().getStatus().getTitle()).isEqualTo(ArticleStatusDto.DECLINE.getTitle());
         assertThat(article.get().getStatus().getId()).isEqualTo(ArticleStatusDto.DECLINE.getId());
     }
+
 }

@@ -28,8 +28,8 @@ public class Train {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Column(name = "reflection")
     private String reflection;

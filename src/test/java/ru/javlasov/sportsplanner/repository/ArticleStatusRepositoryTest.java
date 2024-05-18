@@ -21,13 +21,13 @@ class ArticleStatusRepositoryTest {
     @Test
     @DisplayName("Should get all articles status")
     void getAllArticlesStatus() {
-        //given
+        // given
         List<ArticleStatus> expectedArticlesStatus = ExpectedDataFromDB.getExpectedArticlesStatusFromDB();
 
-        //when
+        // when
         List<ArticleStatus> actualArticlesStatus = articleStatusRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedArticlesStatus.size()).isEqualTo(actualArticlesStatus.size());
         assertThat(expectedArticlesStatus.get(0).getId()).isEqualTo(actualArticlesStatus.get(0).getId());
         assertThat(expectedArticlesStatus.get(0).getTitle()).isEqualTo(actualArticlesStatus.get(0).getTitle());
@@ -38,17 +38,16 @@ class ArticleStatusRepositoryTest {
     @Test
     @DisplayName("Should get article status by id")
     void getArticleStatusById() {
-        //given
+        // given
         var expectedArticleStatus = ExpectedDataFromDB.getExpectedArticlesStatusFromDB().get(0);
 
-        //when
+        // when
         var actualArticleStatus = articleStatusRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualArticleStatus).isPresent();
         assertThat(expectedArticleStatus.getId()).isEqualTo(actualArticleStatus.get().getId());
         assertThat(expectedArticleStatus.getTitle()).isEqualTo(actualArticleStatus.get().getTitle());
     }
-
 
 }

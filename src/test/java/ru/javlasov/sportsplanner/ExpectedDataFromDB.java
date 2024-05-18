@@ -2,7 +2,10 @@ package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.dto.ArticleStatusDto;
+import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.dto.SportDto;
+import ru.javlasov.sportsplanner.dto.TournamentDto;
+import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
@@ -103,6 +106,43 @@ public class ExpectedDataFromDB {
         expectedUserDto.setAge(expectedUser.getUser().getAge());
         expectedUserDto.setPassword(expectedUser.getPassword());
         return List.of(expectedUserDto);
+    }
+
+    public static List<TrainDto> getExpectedTrainDtoFromDB() {
+        var expectedTrain = getExpectedTrainsFromDB().get(0);
+        var expectedTrainDto = new TrainDto();
+        expectedTrainDto.setId(expectedTrain.getId());
+        expectedTrainDto.setUser(expectedTrain.getUser());
+        expectedTrainDto.setDate(expectedTrain.getDate());
+        expectedTrainDto.setTitle(expectedTrain.getTitle());
+        expectedTrainDto.setReflection(expectedTrain.getReflection());
+        return List.of(expectedTrainDto);
+    }
+
+    public static List<HealthDto> getExpectedHealthDto() {
+        var expectedHealth = getExpectedHealthFromDB().get(0);
+        var expectedHealthDto = new HealthDto();
+        expectedHealthDto.setId(expectedHealth.getId());
+        expectedHealthDto.setDate(expectedHealth.getDate());
+        expectedHealthDto.setClinic(expectedHealth.getClinic());
+        expectedHealthDto.setUser(expectedHealth.getUser());
+        expectedHealthDto.setResult(expectedHealth.getResult());
+        expectedHealthDto.setDoctorFullName(expectedHealth.getDoctorFullName());
+        expectedHealthDto.setDoctorSpecialization(expectedHealth.getDoctorSpecialization());
+        return List.of(expectedHealthDto);
+    }
+
+    public static List<TournamentDto> getExpectedTournamentDto() {
+        var expectedTournament = getExpectedTournamentsFromDB().get(0);
+        var expectedTournamentDto = new TournamentDto();
+        expectedTournamentDto.setId(expectedTournament.getId());
+        expectedTournamentDto.setUser(expectedTournament.getUser());
+        expectedTournamentDto.setResult(expectedTournament.getResult());
+        expectedTournamentDto.setDate(expectedTournament.getDate());
+        expectedTournamentDto.setReflection(expectedTournament.getReflection());
+        expectedTournamentDto.setTitle(expectedTournament.getTitle());
+        expectedTournamentDto.setOpponent(expectedTournament.getOpponent());
+        return List.of(expectedTournamentDto);
     }
 
 }

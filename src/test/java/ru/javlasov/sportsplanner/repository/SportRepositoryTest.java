@@ -20,13 +20,13 @@ class SportRepositoryTest {
     @Test
     @DisplayName("Should get all sports")
     void getAllSportsTest() {
-        //given
+        // given
         List<Sport> expectedSports = ExpectedDataFromDB.getExpectedSportsFromDB();
 
-        //when
+        // when
         List<Sport> actualSports = sportRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedSports.size()).isEqualTo(actualSports.size());
         assertThat(expectedSports.get(0).getId()).isEqualTo(actualSports.get(0).getId());
         assertThat(expectedSports.get(0).getTitle()).isEqualTo(actualSports.get(0).getTitle());
@@ -37,13 +37,13 @@ class SportRepositoryTest {
     @Test
     @DisplayName("Should get sport by id")
     void getSportByIdTest() {
-        //given
+        // given
         var expectedSport = ExpectedDataFromDB.getExpectedSportsFromDB().get(0);
 
-        //when
+        // when
         var actualSport = sportRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualSport).isPresent();
         assertThat(actualSport.get().getId()).isEqualTo(expectedSport.getId());
         assertThat(actualSport.get().getTitle()).isEqualTo(expectedSport.getTitle());

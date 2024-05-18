@@ -20,13 +20,13 @@ class HealthRepositoryTest {
     @Test
     @DisplayName("Should get all healths")
     void getAllHealthsTest() {
-        //given
+        // given
         List<Health> expectedHealths = ExpectedDataFromDB.getExpectedHealthFromDB();
 
-        //when
+        // when
         List<Health> actualHealths = healthRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedHealths.size()).isEqualTo(actualHealths.size());
         assertThat(expectedHealths.get(0).getId()).isEqualTo(actualHealths.get(0).getId());
         assertThat(expectedHealths.get(0).getDoctorFullName()).isEqualTo(actualHealths.get(0).getDoctorFullName());
@@ -37,17 +37,36 @@ class HealthRepositoryTest {
     @Test
     @DisplayName("Should get health by id")
     void getHealthByIdTest() {
-        //given
+        // given
         var expectedHealth = ExpectedDataFromDB.getExpectedHealthFromDB().get(0);
 
-        //when
+        // when
         var actualHealth = healthRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualHealth).isPresent();
         assertThat(actualHealth.get().getId()).isEqualTo(expectedHealth.getId());
         assertThat(actualHealth.get().getDoctorFullName()).isEqualTo(expectedHealth.getDoctorFullName());
         assertThat(actualHealth.get().getDate()).isEqualTo(expectedHealth.getDate());
+    }
+
+    @Test
+    @DisplayName("Should get all health by user id")
+    void findAllByUserTest() {
+        // given
+        var expectedHealth = ExpectedDataFromDB.getExpectedHealthFromDB();
+
+        // when
+
+        var actualHearth = healthRepository.findAllByUser(1L);
+
+        // then
+        assertThat(expectedHealth).isNotEmpty();
+        assertThat(expectedHealth.get(0).getId()).isEqualTo(actualHearth.get(0).getId());
+        assertThat(expectedHealth.get(0).getDoctorFullName()).isEqualTo(actualHearth.get(0).getDoctorFullName());
+        assertThat(expectedHealth.get(0).getDoctorSpecialization())
+                .isEqualTo(actualHearth.get(0).getDoctorSpecialization());
+        assertThat(expectedHealth.get(0).getUser()).isEqualTo(actualHearth.get(0).getUser());
     }
 
 }

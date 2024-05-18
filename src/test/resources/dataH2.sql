@@ -17,9 +17,9 @@ MERGE INTO articles (article_status, title, text, created, user_id) KEY (title, 
     VALUES (1, 'title1', 'text1', '2000-01-01', 1),
            (2, 'title2', 'text2', '2000-01-01', 1);
 
-MERGE INTO trains KEY (id, date, description, reflection, user_id)
-    VALUES (1, '2000-01-01 01:01:00.000', 'description1', 'reflection1', 1),
-           (2, '2000-01-01 01:01:00.000', 'description2', null, 1);
+INSERT INTO trains (date, title, reflection, user_id)
+    VALUES ('2000-01-01 01:01:00.000', 'description1', 'reflection1', 1),
+           ('2000-01-01 01:01:00.000', 'description2', null, 1);
 
 MERGE INTO tournaments KEY (id, date, title, opponent, result, reflection, user_id)
     VALUES (1, '2000-01-01', 'title1', 'opponent1', 'result1', 'reflection1', 1),

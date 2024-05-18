@@ -21,13 +21,13 @@ class TournamentRepositoryTest {
     @DisplayName("Should get all tournaments")
     @Test
     void getAllTournamentsTest() {
-        //given
+        // given
         List<Tournament> expectedTournaments = ExpectedDataFromDB.getExpectedTournamentsFromDB();
 
-        //when
+        // when
         List<Tournament> actualTournaments = tournamentRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedTournaments.size()).isEqualTo(actualTournaments.size());
         assertThat(expectedTournaments.get(0).getId()).isEqualTo(actualTournaments.get(0).getId());
         assertThat(expectedTournaments.get(0).getTitle()).isEqualTo(actualTournaments.get(0).getTitle());
@@ -38,17 +38,32 @@ class TournamentRepositoryTest {
     @DisplayName("Should get tournament by id")
     @Test
     void getTournamentByIdTest() {
-        //given
+        // given
         var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().get(0);
 
-        //when
+        // when
         var actualTournament = tournamentRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualTournament).isPresent();
         assertThat(actualTournament.get().getId()).isEqualTo(expectedTournament.getId());
         assertThat(actualTournament.get().getTitle()).isEqualTo(expectedTournament.getTitle());
     }
 
+    @Test
+    @DisplayName("Should get all tournaments by user id")
+    void findAllByUserTest() {
+        // given
+        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB();
+
+        // when
+
+        var actualTournament = tournamentRepository.findAllByUser(1L);
+
+        // then
+        assertThat(actualTournament).isNotEmpty();
+        assertThat(expectedTournament.get(0).getId()).isEqualTo(actualTournament.get(0).getId());
+        assertThat(expectedTournament.get(0).getTitle()).isEqualTo(actualTournament.get(0).getTitle());
+    }
 
 }

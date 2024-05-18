@@ -2,8 +2,8 @@ package ru.javlasov.sportsplanner.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
@@ -12,6 +12,7 @@ import ru.javlasov.sportsplanner.model.User;
 import ru.javlasov.sportsplanner.model.UserCredentials;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.repository.UserRepository;
+import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
 @Service
@@ -25,20 +26,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserCredentialsMapper userCredentialsMapper;
 
-    @Override
-    public UserDto getInfoAuthorizedUser() {
-        var emailCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        var currentUser = userCredentialsRepository.findByEmail(emailCurrentUser)
-                .orElseThrow(() -> {
-                    log.error("Ошибка при попытке найти пользователя по email %s".formatted(emailCurrentUser));
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
-                });
+    private final UserCredentialsService userCredentialsService;
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserDto getInfoAuthorizedUser() {
+        var currentUser = userCredentialsService.getCurrentAuthUser();
         return userCredentialsMapper.modelToDto(currentUser);
     }
 
     @Override
+    @Transactional
     public UserDto editProfile(UserDto userDto) {
         var userCredentials = userCredentialsRepository.findUserByUserId(userDto.getId())
                 .orElseThrow(() -> {
@@ -63,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void createProfile(UserDto userDto) {
         var createdUserCredentials = new UserCredentials();
         createdUserCredentials.setEmail(userDto.getEmail());

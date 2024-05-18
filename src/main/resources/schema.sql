@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS trains
 (
     id SERIAL PRIMARY KEY NOT NULL,
     date timestamp NOT NULL,
-    description VARCHAR(2048) NOT NULL,
+    title VARCHAR(256) NOT NULL,
     reflection VARCHAR(2048) NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)

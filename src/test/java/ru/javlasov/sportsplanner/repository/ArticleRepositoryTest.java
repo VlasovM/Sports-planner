@@ -25,13 +25,13 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should get all articles")
     void getAllArticlesTest() {
-        //given
+        // given
         List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB();
 
-        //when
+        // when
         List<Article> actualArticles = articleRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
         assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
         assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
@@ -42,13 +42,13 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should get article by id")
     void getArticleByIdTest() {
-        //given
+        // given
         var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
 
-        //when
+        // when
         var actualArticle = articleRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualArticle).isPresent();
         assertThat(expectedArticle.getId()).isEqualTo(actualArticle.get().getId());
         assertThat(expectedArticle.getTitle()).isEqualTo(actualArticle.get().getTitle());
@@ -58,13 +58,13 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should get all articles by user id")
     void getArticlesByUserIdTest() {
-        //given
+        // given
         List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB();
 
-        //when
+        // when
         List<Article> actualArticles = articleRepository.findAllByUser(1L);
 
-        //then
+        // then
         assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
         assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
         assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
@@ -75,11 +75,10 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should get empty articles by user id")
     void getEmptyArticlesByUserIdTest() {
-
-        //when
+        // when
         List<Article> actualArticles = articleRepository.findAllByUser(2L);
 
-        //then
+        // then
         assertThat(actualArticles).isEmpty();
 
     }
@@ -87,14 +86,14 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should save new article")
     void saveArticleTest() {
-        //given
+        // given
         var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
         expectedArticle.setId(null);
 
-        //when
+        // when
         var actualArticle = articleRepository.save(expectedArticle);
 
-        //then
+        // then
         assertThat(actualArticle).isNotNull();
         assertThat(actualArticle.getId()).isNotNull();
         assertThat(expectedArticle.getTitle()).isEqualTo(actualArticle.getTitle());
@@ -104,11 +103,11 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should delete article")
     void deleteArticleTest() {
-        //given
+        // given
         var existsArticle = articleRepository.findById(1L);
         assertThat(existsArticle).isPresent();
 
-        //when
+        // when
         articleRepository.deleteById(existsArticle.get().getId());
 
         //then
@@ -120,19 +119,18 @@ class ArticleRepositoryTest {
     @Test
     @DisplayName("Should edit article")
     void editArticleTest() {
-        //given
+        // given
         var existsArticle = articleRepository.findById(1L);
         assertThat(existsArticle).isPresent();
 
-        //when
+        // when
         existsArticle.get().setTitle("Other title");
         var actualArticle = articleRepository.save(existsArticle.get());
 
 
-        //then
+        // then
         assertThat(actualArticle).isNotNull();
         assertThat(existsArticle.get().getTitle()).isEqualTo(actualArticle.getTitle());
     }
-
 
 }

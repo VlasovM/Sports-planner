@@ -17,14 +17,14 @@ class UserCredentialsRepositoryTest {
     @Test
     @DisplayName("Should find userCredentials by email")
     void findByEmailTest() {
-        //given
+        // given
         var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
 
-        //when
+        // when
         var actualUserCredentials = userCredentialsRepository
                 .findByEmail(expectedUserCredentials.getEmail());
 
-        //then
+        // then
         assertThat(actualUserCredentials).isPresent();
         assertThat(actualUserCredentials.get().getEmail()).isEqualTo(expectedUserCredentials.getEmail());
         assertThat(actualUserCredentials.get().getUser()).isNotNull();
@@ -36,14 +36,14 @@ class UserCredentialsRepositoryTest {
     @Test
     @DisplayName("Should find userCredentials by user id")
     void findUserByUserIdTest() {
-        //given
+        // given
         var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
 
-        //when
+        // when
         var actualUserCredentials = userCredentialsRepository
                 .findUserByUserId(expectedUserCredentials.getUser().getId());
 
-        //then
+        // then
         assertThat(actualUserCredentials).isPresent();
         assertThat(actualUserCredentials.get().getEmail()).isEqualTo(expectedUserCredentials.getEmail());
         assertThat(actualUserCredentials.get().getUser()).isNotNull();
@@ -51,4 +51,5 @@ class UserCredentialsRepositoryTest {
         assertThat(actualUserCredentials.get().getUser().getName())
                 .isEqualTo(expectedUserCredentials.getUser().getName());
     }
+
 }

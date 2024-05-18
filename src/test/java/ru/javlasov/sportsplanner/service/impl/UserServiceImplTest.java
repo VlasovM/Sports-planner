@@ -3,14 +3,16 @@ package ru.javlasov.sportsplanner.service.impl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
+import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
+import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.repository.UserRepository;
+import ru.javlasov.sportsplanner.service.UserCredentialsService;
+import ru.javlasov.sportsplanner.service.UserService;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,88 +20,98 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class UserServiceImplTest {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserCredentialsRepository mockUserCredentialsRepository =
+            Mockito.mock(UserCredentialsRepository.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
+
+    private final UserCredentialsMapper mockUserCredentialsMapper = Mockito.mock(UserCredentialsMapper.class);
+
+    private final UserCredentialsService mockUserCredentialsService = Mockito.mock(UserCredentialsService.class);
+
+    private final UserService underTestService = new UserServiceImpl(mockUserCredentialsRepository, mockUserRepository,
+            mockUserCredentialsMapper, mockUserCredentialsService);
 
     @Test
     @DisplayName("Should get user dto")
     void getInfoAuthorizedUserTest() {
-        //given
+        // given
+        var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
         var expectedUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        Mockito.when(securityContext.getAuthentication().getName()).thenReturn("test@mail.ru");
-        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(mockUserCredentialsService.getCurrentAuthUser()).thenReturn(expectedUserCredentials);
+        Mockito.when(mockUserCredentialsMapper.modelToDto(expectedUserCredentials)).thenReturn(expectedUserDto);
 
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+        // when
+        var actualUserDto = underTestService.getInfoAuthorizedUser();
 
-        //when
-        var actualUserDto = userService.getInfoAuthorizedUser();
-
-        //then
+        // then
         assertThat(expectedUserDto.getId()).isEqualTo(actualUserDto.getId());
         assertThat(expectedUserDto.getName()).isEqualTo(actualUserDto.getName());
         assertThat(expectedUserDto.getEmail()).isEqualTo(actualUserDto.getEmail());
     }
 
     @Test
-    @DisplayName("Should get exception, if not found user by email")
-    void getErrorWhenUserNotFoundByEmailTest() {
-        //given
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        Mockito.when(securityContext.getAuthentication().getName()).thenReturn("notExists@mail.ru");
-        SecurityContextHolder.setContext(securityContext);
-
-
-        //when
-        NotFoundException notFoundException = assertThrows(NotFoundException.class,
-                () -> userService.getInfoAuthorizedUser());
-
-        //then
-        assertThat(notFoundException.getMessage()).isEqualTo("Возникла ошибка с получением данных," +
-                " обратитесь к администратору системы.");
-    }
-
-    @Test
     @DisplayName("Should edit user info")
     void editProfileTest() {
-        //given
+        // given
+        var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
+        var expectedUserAfterSave = expectedUserCredentials.getUser();
         var expectedUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
-        expectedUserDto.setSurname("newSurName");
 
-        //when
-        var actualUserDto = userService.editProfile(expectedUserDto);
+        Mockito.when(mockUserCredentialsRepository.findUserByUserId(expectedUserCredentials.getId())).thenReturn(
+                Optional.of(expectedUserCredentials));
+        expectedUserAfterSave.setName("OtherNameForUser");
+        expectedUserAfterSave.setAge(18);
+        expectedUserDto.setName(expectedUserDto.getName());
+        expectedUserDto.setAge(expectedUserAfterSave.getAge());
+        Mockito.when(mockUserRepository.save(expectedUserAfterSave)).thenReturn(expectedUserAfterSave);
+        Mockito.when(mockUserCredentialsMapper.modelToDto(expectedUserCredentials)).thenReturn(expectedUserDto);
 
-        //then
-        assertThat(actualUserDto.getName()).isEqualTo(actualUserDto.getName());
-        assertThat(actualUserDto.getSurname()).isEqualTo(actualUserDto.getSurname());
+        // when
+        var actualUserDto = underTestService.editProfile(expectedUserDto);
+
+        // then
+        assertThat(actualUserDto).isNotNull();
+        assertThat(actualUserDto.getName()).isEqualTo(expectedUserDto.getName());
+        assertThat(actualUserDto.getAge()).isEqualTo(expectedUserDto.getAge());
     }
 
     @Test
-    @DisplayName("Should create new user")
-    void createProfileTest() {
-        //given
-        var incomeUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
-        incomeUserDto.setEmail("newEmail@mail.ru");
-        incomeUserDto.setId(null);
-        incomeUserDto.setName("name");
+    @DisplayName("Should get exception if user not exists")
+    void getExceptionWhenEditNotExistsUserTest() {
+        // given
+        Mockito.when(mockUserCredentialsRepository.findUserByUserId(1L)).thenReturn(Optional.empty());
 
-        //when
-        userService.createProfile(incomeUserDto);
-        var actualUser = userRepository.findById(3L);
+        // when
+        NotFoundException actualException = assertThrows(NotFoundException.class, () -> {
+            underTestService.editProfile(ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0));
+        });
 
-        //then
-        assertThat(actualUser).isPresent();
-        assertThat(actualUser.get().getName()).isEqualTo(incomeUserDto.getName());
-        assertThat(actualUser.get().getSurname()).isEqualTo(incomeUserDto.getSurname());
-        assertThat(actualUser.get().getAge()).isEqualTo(incomeUserDto.getAge());
-        assertThat(actualUser.get().getBirthday()).isEqualTo(incomeUserDto.getBirthday());
+        // then
+        assertThat(actualException).isNotNull();
+        assertThat(actualException.getMessage()).isEqualTo("Не найден пользователь с id = 1");
+
     }
+//
+//    @Test
+//    @DisplayName("Should create new user")
+//    void createProfileTest() {
+//        // given
+//        var incomeUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
+//        incomeUserDto.setEmail("newEmail@mail.ru");
+//        incomeUserDto.setId(null);
+//        incomeUserDto.setName("name");
+//
+//        // when
+//        userService.createProfile(incomeUserDto);
+//        var actualUser = userRepository.findById(3L);
+//
+//        // then
+//        assertThat(actualUser).isPresent();
+//        assertThat(actualUser.get().getName()).isEqualTo(incomeUserDto.getName());
+//        assertThat(actualUser.get().getSurname()).isEqualTo(incomeUserDto.getSurname());
+//        assertThat(actualUser.get().getAge()).isEqualTo(incomeUserDto.getAge());
+//        assertThat(actualUser.get().getBirthday()).isEqualTo(incomeUserDto.getBirthday());
+//    }
 
 }

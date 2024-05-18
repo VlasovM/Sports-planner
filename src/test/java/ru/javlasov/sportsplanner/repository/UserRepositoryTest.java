@@ -38,7 +38,7 @@ class UserRepositoryTest {
     @Test
     @DisplayName("Should get User by id")
     void getUserByIdTest() {
-        //given
+        // given
         var expectedUser = ExpectedDataFromDB.getExpectedUsersFromDB().get(0);
 
         //when
@@ -50,6 +50,5 @@ class UserRepositoryTest {
         assertThat(actualUser.get().getName()).isEqualTo(expectedUser.getName());
         assertThat(actualUser.get().getTrains().size()).isEqualTo(expectedUser.getTrains().size());
     }
-
 
 }

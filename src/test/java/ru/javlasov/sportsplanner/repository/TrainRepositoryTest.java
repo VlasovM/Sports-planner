@@ -20,34 +20,49 @@ class TrainRepositoryTest {
     @DisplayName("Should get all trains")
     @Test
     void getAllTrainsTest() {
-        //given
+        // given
         List<Train> expectedTrains = ExpectedDataFromDB.getExpectedTrainsFromDB();
 
-        //when
+        // when
         List<Train> actualTrains = trainRepository.findAll();
 
-        //then
+        // then
         assertThat(expectedTrains.size()).isEqualTo(actualTrains.size());
         assertThat(expectedTrains.get(0).getId()).isEqualTo(actualTrains.get(0).getId());
-        assertThat(expectedTrains.get(0).getDescription()).isEqualTo(expectedTrains.get(0).getDescription());
+        assertThat(expectedTrains.get(0).getTitle()).isEqualTo(expectedTrains.get(0).getTitle());
         assertThat(expectedTrains.get(1).getId()).isEqualTo(actualTrains.get(1).getId());
-        assertThat(expectedTrains.get(1).getDescription()).isEqualTo(expectedTrains.get(1).getDescription());
+        assertThat(expectedTrains.get(1).getTitle()).isEqualTo(expectedTrains.get(1).getTitle());
     }
 
     @DisplayName("Should get train by id")
     @Test
     void getTrainByIdTest() {
-        //given
+        // given
         var expectedTrain = ExpectedDataFromDB.getExpectedTrainsFromDB().get(0);
 
-        //when
+        // when
         var actualTrain = trainRepository.findById(1L);
 
-        //then
+        // then
         assertThat(actualTrain).isPresent();
         assertThat(actualTrain.get().getId()).isEqualTo(expectedTrain.getId());
         assertThat(actualTrain.get().getUser()).isEqualTo(expectedTrain.getUser());
     }
 
+    @Test
+    @DisplayName("Should get all trains by user id")
+    void findAllByUserTest() {
+        // given
+        var expectedTrains = ExpectedDataFromDB.getExpectedTrainsFromDB();
+
+        // when
+
+        var actualTrainsDto = trainRepository.findAllByUser(1L);
+
+        // then
+        assertThat(actualTrainsDto).isNotEmpty();
+        assertThat(expectedTrains.get(0).getId()).isEqualTo(actualTrainsDto.get(0).getId());
+        assertThat(expectedTrains.get(0).getTitle()).isEqualTo(actualTrainsDto.get(0).getTitle());
+    }
 
 }

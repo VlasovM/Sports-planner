@@ -39,7 +39,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     @Transactional
-    public void saveOrCreate(TournamentDto tournamentDto) {
+    public void createOrEdit(TournamentDto tournamentDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         tournamentDto.setUser(currentUser.getId());
         tournamentRepository.save(tournamentMapper.dtoToModel(tournamentDto));
@@ -48,8 +48,8 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     @Transactional(readOnly = true)
     public List<TournamentDto> getTournamentCurrentUser() {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        List<Tournament> trains = tournamentRepository.findAllByUser(currentUser.getId());
+        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
+        List<Tournament> trains = tournamentRepository.findAllByUser(currentUserCredentials.getUser().getId());
         return tournamentMapper.listModelToListDto(trains);
     }
 

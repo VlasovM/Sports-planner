@@ -109,40 +109,70 @@ public class ExpectedDataFromDB {
     }
 
     public static List<TrainDto> getExpectedTrainDtoFromDB() {
-        var expectedTrain = getExpectedTrainsFromDB().get(0);
-        var expectedTrainDto = new TrainDto();
-        expectedTrainDto.setId(expectedTrain.getId());
-        expectedTrainDto.setUser(expectedTrain.getUser());
-        expectedTrainDto.setDate(expectedTrain.getDate());
-        expectedTrainDto.setTitle(expectedTrain.getTitle());
-        expectedTrainDto.setReflection(expectedTrain.getReflection());
-        return List.of(expectedTrainDto);
+        var expectedTrainFirst = getExpectedTrainsFromDB().get(0);
+        var expectedTrainDtoFirst = new TrainDto();
+        expectedTrainDtoFirst.setId(expectedTrainFirst.getId());
+        expectedTrainDtoFirst.setUser(expectedTrainFirst.getUser());
+        expectedTrainDtoFirst.setDate(expectedTrainFirst.getDate());
+        expectedTrainDtoFirst.setTitle(expectedTrainFirst.getTitle());
+        expectedTrainDtoFirst.setReflection(expectedTrainFirst.getReflection());
+
+        var expectedTrainSecond = getExpectedTrainsFromDB().get(1);
+        var expectedTrainDtoSecond = new TrainDto();
+        expectedTrainDtoSecond.setId(expectedTrainSecond.getId());
+        expectedTrainDtoSecond.setUser(expectedTrainSecond.getUser());
+        expectedTrainDtoSecond.setDate(expectedTrainSecond.getDate());
+        expectedTrainDtoSecond.setTitle(expectedTrainSecond.getTitle());
+        expectedTrainDtoSecond.setReflection(expectedTrainSecond.getReflection());
+
+        return List.of(expectedTrainDtoFirst, expectedTrainDtoSecond);
     }
 
     public static List<HealthDto> getExpectedHealthDto() {
-        var expectedHealth = getExpectedHealthFromDB().get(0);
-        var expectedHealthDto = new HealthDto();
-        expectedHealthDto.setId(expectedHealth.getId());
-        expectedHealthDto.setDate(expectedHealth.getDate());
-        expectedHealthDto.setClinic(expectedHealth.getClinic());
-        expectedHealthDto.setUser(expectedHealth.getUser());
-        expectedHealthDto.setResult(expectedHealth.getResult());
-        expectedHealthDto.setDoctorFullName(expectedHealth.getDoctorFullName());
-        expectedHealthDto.setDoctorSpecialization(expectedHealth.getDoctorSpecialization());
-        return List.of(expectedHealthDto);
+        var expectedHealthFirst = getExpectedHealthFromDB().get(0);
+        var expectedHealthDtoFirst = new HealthDto();
+        expectedHealthDtoFirst.setId(expectedHealthFirst.getId());
+        expectedHealthDtoFirst.setDate(expectedHealthFirst.getDate());
+        expectedHealthDtoFirst.setClinic(expectedHealthFirst.getClinic());
+        expectedHealthDtoFirst.setUser(expectedHealthFirst.getUser());
+        expectedHealthDtoFirst.setResult(expectedHealthFirst.getResult());
+        expectedHealthDtoFirst.setDoctorFullName(expectedHealthFirst.getDoctorFullName());
+        expectedHealthDtoFirst.setDoctorSpecialization(expectedHealthFirst.getDoctorSpecialization());
+
+        var expectedHealthSecond = getExpectedHealthFromDB().get(0);
+        var expectedHealthDtoSecond = new HealthDto();
+        expectedHealthDtoSecond.setId(expectedHealthSecond.getId());
+        expectedHealthDtoSecond.setDate(expectedHealthSecond.getDate());
+        expectedHealthDtoSecond.setClinic(expectedHealthSecond.getClinic());
+        expectedHealthDtoSecond.setUser(expectedHealthSecond.getUser());
+        expectedHealthDtoSecond.setResult(expectedHealthSecond.getResult());
+        expectedHealthDtoSecond.setDoctorFullName(expectedHealthSecond.getDoctorFullName());
+        expectedHealthDtoSecond.setDoctorSpecialization(expectedHealthSecond.getDoctorSpecialization());
+
+        return List.of(expectedHealthDtoFirst, expectedHealthDtoSecond);
     }
 
     public static List<TournamentDto> getExpectedTournamentDto() {
-        var expectedTournament = getExpectedTournamentsFromDB().get(0);
-        var expectedTournamentDto = new TournamentDto();
-        expectedTournamentDto.setId(expectedTournament.getId());
-        expectedTournamentDto.setUser(expectedTournament.getUser());
-        expectedTournamentDto.setResult(expectedTournament.getResult());
-        expectedTournamentDto.setDate(expectedTournament.getDate());
-        expectedTournamentDto.setReflection(expectedTournament.getReflection());
-        expectedTournamentDto.setTitle(expectedTournament.getTitle());
-        expectedTournamentDto.setOpponent(expectedTournament.getOpponent());
-        return List.of(expectedTournamentDto);
+        var expectedTournamentFirst = getExpectedTournamentsFromDB().get(0);
+        var expectedTournamentDtoFirst = new TournamentDto();
+        expectedTournamentDtoFirst.setId(expectedTournamentFirst.getId());
+        expectedTournamentDtoFirst.setUser(expectedTournamentFirst.getUser());
+        expectedTournamentDtoFirst.setResult(expectedTournamentFirst.getResult());
+        expectedTournamentDtoFirst.setDate(expectedTournamentFirst.getDate());
+        expectedTournamentDtoFirst.setReflection(expectedTournamentFirst.getReflection());
+        expectedTournamentDtoFirst.setTitle(expectedTournamentFirst.getTitle());
+        expectedTournamentDtoFirst.setOpponent(expectedTournamentFirst.getOpponent());
+
+        var expectedTournamentSecond = getExpectedTournamentsFromDB().get(1);
+        var expectedTournamentDtoSecond = new TournamentDto();
+        expectedTournamentDtoSecond.setId(expectedTournamentSecond.getId());
+        expectedTournamentDtoSecond.setUser(expectedTournamentSecond.getUser());
+        expectedTournamentDtoSecond.setResult(expectedTournamentSecond.getResult());
+        expectedTournamentDtoSecond.setDate(expectedTournamentSecond.getDate());
+        expectedTournamentDtoSecond.setReflection(expectedTournamentSecond.getReflection());
+        expectedTournamentDtoSecond.setTitle(expectedTournamentSecond.getTitle());
+        expectedTournamentDtoSecond.setOpponent(expectedTournamentSecond.getOpponent());
+        return List.of(expectedTournamentDtoFirst, expectedTournamentDtoSecond);
     }
 
 }

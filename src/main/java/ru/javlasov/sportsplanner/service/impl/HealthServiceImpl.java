@@ -39,7 +39,7 @@ public class HealthServiceImpl implements HealthService {
 
     @Override
     @Transactional
-    public void saveOrCreate(HealthDto healthDto) {
+    public void createOrEdit(HealthDto healthDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         healthDto.setUser(currentUser.getId());
         healthRepository.save(healthMapper.dtoToModel(healthDto));
@@ -48,8 +48,8 @@ public class HealthServiceImpl implements HealthService {
     @Override
     @Transactional(readOnly = true)
     public List<HealthDto> getHealthCurrentUser() {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        var trainsUser = healthRepository.findAllByUser(currentUser.getId());
+        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
+        var trainsUser = healthRepository.findAllByUser(currentUserCredentials.getUser().getId());
         return healthMapper.modelListToDtoList(trainsUser);
     }
 

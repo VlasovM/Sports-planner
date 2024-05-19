@@ -83,35 +83,13 @@ class UserServiceImplTest {
         Mockito.when(mockUserCredentialsRepository.findUserByUserId(1L)).thenReturn(Optional.empty());
 
         // when
-        NotFoundException actualException = assertThrows(NotFoundException.class, () -> {
-            underTestService.editProfile(ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0));
-        });
+        NotFoundException actualException = assertThrows(NotFoundException.class, () ->
+                underTestService.editProfile(ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0)));
 
         // then
         assertThat(actualException).isNotNull();
         assertThat(actualException.getMessage()).isEqualTo("Не найден пользователь с id = 1");
 
     }
-//
-//    @Test
-//    @DisplayName("Should create new user")
-//    void createProfileTest() {
-//        // given
-//        var incomeUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
-//        incomeUserDto.setEmail("newEmail@mail.ru");
-//        incomeUserDto.setId(null);
-//        incomeUserDto.setName("name");
-//
-//        // when
-//        userService.createProfile(incomeUserDto);
-//        var actualUser = userRepository.findById(3L);
-//
-//        // then
-//        assertThat(actualUser).isPresent();
-//        assertThat(actualUser.get().getName()).isEqualTo(incomeUserDto.getName());
-//        assertThat(actualUser.get().getSurname()).isEqualTo(incomeUserDto.getSurname());
-//        assertThat(actualUser.get().getAge()).isEqualTo(incomeUserDto.getAge());
-//        assertThat(actualUser.get().getBirthday()).isEqualTo(incomeUserDto.getBirthday());
-//    }
 
 }

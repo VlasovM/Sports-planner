@@ -27,8 +27,8 @@ public class TrainServiceImpl implements TrainService {
     @Override
     @Transactional(readOnly = true)
     public List<TrainDto> getAllTrainsCurrentUser() {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        var trainsUser = trainRepository.findAllByUser(currentUser.getId());
+        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
+        var trainsUser = trainRepository.findAllByUser(currentUserCredentials.getUser().getId());
         return trainMapper.modelListToDtoList(trainsUser);
     }
 
@@ -46,7 +46,7 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     @Transactional
-    public void createOrSave(TrainDto trainDto) {
+    public void createOrEdit(TrainDto trainDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         trainDto.setUser(currentUser.getId());
         trainRepository.save(trainMapper.dtoToModel(trainDto));

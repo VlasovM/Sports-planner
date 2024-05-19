@@ -10,6 +10,6 @@ public interface TrainService {
 
     void deleteById(Long id);
 
-    void createOrSave(TrainDto trainDto);
+    void createOrEdit(TrainDto trainDto);
 
 }

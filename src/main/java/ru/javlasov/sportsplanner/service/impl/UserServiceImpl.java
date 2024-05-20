@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto editProfile(UserDto userDto) {
+    public void editProfile(UserDto userDto) {
         var userCredentials = userCredentialsRepository.findUserByUserId(userDto.getId())
                 .orElseThrow(() -> {
                     var errorMessage = "Не найден пользователь с id = %d".formatted(userDto.getId());
@@ -46,9 +46,7 @@ public class UserServiceImpl implements UserService {
                 });
         var user = userCredentials.getUser();
         updateUserInfo(user, userDto);
-        user = userRepository.save(user);
-        userCredentials.setUser(user);
-        return userCredentialsMapper.modelToDto(userCredentials);
+        userRepository.save(user);
     }
 
     private void updateUserInfo(User user, UserDto userDto) {

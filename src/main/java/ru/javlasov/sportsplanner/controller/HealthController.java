@@ -26,7 +26,7 @@ public class HealthController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<HealthDto> getAllHealth() {
+    public List<HealthDto> getAllHealthForCurrentUser () {
         return healthService.getHealthCurrentUser();
     }
 
@@ -43,7 +43,7 @@ public class HealthController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void createHealth(@Valid @RequestBody HealthDto healthDto) {
         healthService.createOrEdit(healthDto);
     }

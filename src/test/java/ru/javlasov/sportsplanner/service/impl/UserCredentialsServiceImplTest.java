@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
@@ -68,6 +69,29 @@ class UserCredentialsServiceImplTest {
         assertThat(actualException).isNotNull();
         assertThat(actualException.getMessage())
                 .isEqualTo("Возникла ошибка с получением данных, обратитесь к администратору системы.");
+    }
+
+    @Test
+    @DisplayName("Should get user details by email")
+    void loadUserByUsername() {
+        // given
+        var expectedUser = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
+        Mockito.when(mockUserCredentialsRepository.findByEmail(expectedUser.getEmail()))
+                .thenReturn(Optional.of(expectedUser));
+        var expectedUserDetails = User
+                .builder()
+                .username(expectedUser.getEmail())
+                .password(expectedUser.getPassword())
+                .roles(expectedUser.getRole().getRole())
+                .build();
+
+        // when
+        var actualUserDetails = underTestService.loadUserByUsername(expectedUser.getEmail());
+
+        // then
+        assertThat(actualUserDetails).isNotNull();
+        assertThat(actualUserDetails.getUsername()).isEqualTo(expectedUser.getEmail());
+        assertThat(actualUserDetails.getPassword()).isEqualTo(expectedUser.getPassword());
     }
 
 }

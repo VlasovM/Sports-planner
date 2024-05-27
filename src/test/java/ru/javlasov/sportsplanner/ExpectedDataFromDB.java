@@ -10,6 +10,7 @@ import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.model.Health;
+import ru.javlasov.sportsplanner.model.Role;
 import ru.javlasov.sportsplanner.model.Sport;
 import ru.javlasov.sportsplanner.model.Tournament;
 import ru.javlasov.sportsplanner.model.Train;
@@ -85,9 +86,19 @@ public class ExpectedDataFromDB {
         return List.of(articleDto);
     }
 
+    public static List<Role> getExpectedRolesFromDB() {
+        var roleFirst = new Role();
+        roleFirst.setId(1L);
+        roleFirst.setRole("USER");
+        var roleSecond = new Role();
+        roleSecond.setId(2L);
+        roleSecond.setRole("ADMIN");
+        return List.of(roleFirst, roleSecond);
+    }
+
     public static List<UserCredentials> getExpectedUserCredentialsFromDB() {
         var userCredentials = new UserCredentials(1L, "test@mail.ru", "password",
-                getExpectedUsersFromDB().get(0));
+                getExpectedUsersFromDB().get(0), getExpectedRolesFromDB().get(0));
         return List.of(userCredentials);
     }
 

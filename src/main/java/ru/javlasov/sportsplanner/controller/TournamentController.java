@@ -26,7 +26,7 @@ public class TournamentController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TournamentDto> getAllTournaments() {
+    public List<TournamentDto> getAllTournamentForCurrentUser() {
         return tournamentService.getTournamentCurrentUser();
     }
 

@@ -14,20 +14,20 @@ public class HealthDto {
 
     private Long id;
 
-    @NotNull(message = "Заполните дату посещения врача")
+    @NotNull(message = "Please set the date of visit a doctor")
     private LocalDate date;
 
-    @NotEmpty(message = "Укажите название клиники, в которой проходили обследование")
+    @NotEmpty(message = "Please set the clinic name")
     private String clinic;
 
-    @NotEmpty(message = "Укажите специализацию врача")
+    @NotEmpty(message = "Please set the doctor specialization")
     private String doctorSpecialization;
 
-    @NotEmpty(message = "Укажите ФИО доктора")
+    @NotEmpty(message = "Please set the doctor full name")
     private String doctorFullName;
 
-    @NotEmpty(message = "Напишите результат посещения врача")
-    @Size(max = 2048, message = "Слишком длинное описание результата!")
+    @NotEmpty(message = "Please set the result of visiting")
+    @Size(max = 2048, message = "The result of visiting is too long")
     private String result;
 
     private Long user;

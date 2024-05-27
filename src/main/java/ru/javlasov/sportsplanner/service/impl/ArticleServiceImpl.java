@@ -105,4 +105,10 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    @Override
+    public void updateArticle(ArticleDto articleDto) {
+        var article = articleMapper.dtoToModel(articleDto);
+        articleRepository.save(article);
+    }
+
 }

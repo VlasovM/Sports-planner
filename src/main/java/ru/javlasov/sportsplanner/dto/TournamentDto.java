@@ -1,8 +1,8 @@
 package ru.javlasov.sportsplanner.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,19 +14,19 @@ public class TournamentDto {
 
     private Long id;
 
-    @NotNull(message = "Укажите дату турнира!")
+    @NotNull(message = "Please set the tournament day")
     private LocalDate date;
 
-    @NotEmpty(message = "Укажите название турнира!")
+    @NotEmpty(message = "Please set the tournament title")
     private String title;
 
-    @NotEmpty(message = "Вы не указали вашего соперника!")
+    @NotEmpty(message = "Please set the your opponent")
     private String opponent;
 
-    @NotEmpty(message = "Укажите результат!")
+    @NotEmpty(message = "Please set the result of tournament")
     private String result;
 
-    @Max(value = 2048, message = "Слишком длинное описание турнира")
+    @Size(max = 2048, message = "The reflection of tournament is too long")
     private String reflection;
 
     private Long user;

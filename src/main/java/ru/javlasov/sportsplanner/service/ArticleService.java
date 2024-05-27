@@ -22,4 +22,6 @@ public interface ArticleService {
 
     void declineArticle(Long articleId);
 
+    void updateArticle(ArticleDto articleDto);
+
 }

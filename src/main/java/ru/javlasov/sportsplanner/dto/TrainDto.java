@@ -1,8 +1,8 @@
 package ru.javlasov.sportsplanner.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,13 +14,13 @@ public class TrainDto {
 
     private Long id;
 
-    @NotNull(message = "Укажите дату тренировки!")
+    @NotNull(message = "Set date of birthday")
     private LocalDateTime date;
 
-    @NotEmpty(message = "Название тренировки не может быть пустой.")
+    @NotEmpty(message = "The title of training cannot be empty")
     private String title;
 
-    @Max(value = 2048, message = "Слишком длинное описание тренировки!")
+    @Size(max = 2048, message = "The reflection of training is too long")
     private String reflection;
 
     private Long user;

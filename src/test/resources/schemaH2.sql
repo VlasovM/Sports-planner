@@ -17,13 +17,21 @@ CREATE TABLE IF NOT EXISTS users
     FOREIGN KEY (sport_id) REFERENCES sports(id)
 );
 
+CREATE TABLE IF NOT EXISTS roles
+(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    role VARCHAR(64) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS user_credentials
 (
     id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     email VARCHAR(32) NOT NULL,
     password VARCHAR(64) NOT NULL,
     user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    role_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE IF NOT EXISTS article_status

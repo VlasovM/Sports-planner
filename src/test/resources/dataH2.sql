@@ -10,8 +10,11 @@ MERGE INTO users (name, middle_name, surname, age, birthday, sport_id, biography
     VALUES ('name1', null, 'surname1', 22, '2000-01-01 01:01:00.000', 1, 'biography1'),
            ('name2', 'middlename2', 'surname2', 25, '2000-01-01 01:01:00.000', 2, 'biography2');
 
-MERGE INTO user_credentials (email, password, user_id) KEY (email)
-    VALUES ('test@mail.ru', 'password', 1);
+MERGE INTO roles (role) KEY (role)
+    VALUES ('USER'), ('ADMIN');
+
+MERGE INTO user_credentials (email, password, user_id, role_id) KEY (email)
+    VALUES ('test@mail.ru', 'password', 1, 1);
 
 MERGE INTO articles (article_status, title, text, created, user_id) KEY (title, text)
     VALUES (1, 'title1', 'text1', '2000-01-01', 1),

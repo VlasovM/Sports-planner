@@ -42,6 +42,12 @@ public class ArticleController {
         articleService.createArticle(articleDto);
     }
 
+    @PatchMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public void updateArticle(@Valid @RequestBody ArticleDto articleDto) {
+        articleService.updateArticle(articleDto);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteArticleById(@PathVariable("id") Long id) {

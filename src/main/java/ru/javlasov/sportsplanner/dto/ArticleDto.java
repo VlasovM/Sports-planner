@@ -19,11 +19,11 @@ public class ArticleDto {
 
     private ArticleStatusDto status;
 
-    @NotNull(message = "Заголовок статьи не может быть пустым.")
-    @Size(min = 1, max = 255, message = "Заголовок должен быть от 1 до 255 символов.")
+    @NotNull(message = "The title cannot be empty")
+    @Size(min = 1, max = 255, message = "The title must be between 1 and 255 characters")
     private String title;
 
-    @NotNull(message = "Текст статьи не может быть пустым")
+    @NotNull(message = "The text of article cannot be empty")
     private String text;
 
     private LocalDate created;

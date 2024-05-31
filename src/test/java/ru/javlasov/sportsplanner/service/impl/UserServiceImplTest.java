@@ -9,6 +9,7 @@ import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.repository.UserRepository;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class UserServiceImplTest {
 
     private final UserCredentialsRepository mockUserCredentialsRepository =
@@ -29,8 +30,10 @@ class UserServiceImplTest {
 
     private final UserCredentialsService mockUserCredentialsService = Mockito.mock(UserCredentialsService.class);
 
+    private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
+
     private final UserService underTestService = new UserServiceImpl(mockUserCredentialsRepository, mockUserRepository,
-            mockUserCredentialsMapper, mockUserCredentialsService);
+            mockUserCredentialsMapper, mockUserCredentialsService, mockLoggingService);
 
     @Test
     @DisplayName("Should get user dto")

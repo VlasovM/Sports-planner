@@ -1,14 +1,13 @@
 package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
-import ru.javlasov.sportsplanner.dto.ArticleStatusDto;
+import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.dto.SportDto;
 import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.model.Article;
-import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.model.Health;
 import ru.javlasov.sportsplanner.model.Role;
 import ru.javlasov.sportsplanner.model.Sport;
@@ -23,9 +22,9 @@ import java.util.List;
 
 public class ExpectedDataFromDB {
 
-    public static List<ArticleStatus> getExpectedArticlesStatusFromDB() {
-        var status1 = new ArticleStatus(1L, "article_status1");
-        var status2 = new ArticleStatus(2L, "article_status2");
+    public static List<ru.javlasov.sportsplanner.model.ArticleStatus> getExpectedArticlesStatusFromDB() {
+        var status1 = new ru.javlasov.sportsplanner.model.ArticleStatus(1L, "article_status1");
+        var status2 = new ru.javlasov.sportsplanner.model.ArticleStatus(2L, "article_status2");
         return List.of(status1, status2);
     }
 
@@ -81,7 +80,7 @@ public class ExpectedDataFromDB {
     }
 
     public static List<ArticleDto> getExpectedArticleDtoFromDB() {
-        var articleDto = new ArticleDto(1L, ArticleStatusDto.VERIFICATION, "title1", "text1",
+        var articleDto = new ArticleDto(1L, ArticleStatusEnum.VERIFICATION, "title1", "text1",
                 LocalDate.of(2000, 1, 1), 1L);
         return List.of(articleDto);
     }

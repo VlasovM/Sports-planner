@@ -1,10 +1,11 @@
 package ru.javlasov.sportsplanner.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javlasov.sportsplanner.dto.LoggerEvent;
 import ru.javlasov.sportsplanner.dto.UserDto;
+import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
 import ru.javlasov.sportsplanner.model.Sport;
@@ -12,12 +13,12 @@ import ru.javlasov.sportsplanner.model.User;
 import ru.javlasov.sportsplanner.model.UserCredentials;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.repository.UserRepository;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class UserServiceImpl implements UserService {
 
     private final UserCredentialsRepository userCredentialsRepository;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private final UserCredentialsMapper userCredentialsMapper;
 
     private final UserCredentialsService userCredentialsService;
+
+    private final LoggingService loggingService;
 
     @Override
     @Transactional(readOnly = true)
@@ -41,12 +44,14 @@ public class UserServiceImpl implements UserService {
         var userCredentials = userCredentialsRepository.findUserByUserId(userDto.getId())
                 .orElseThrow(() -> {
                     var errorMessage = "Не найден пользователь с id = %d".formatted(userDto.getId());
-                    log.error(errorMessage);
+                    sendMessage(errorMessage, TypeMessage.ERROR);
                     return new NotFoundException(errorMessage);
                 });
         var user = userCredentials.getUser();
         updateUserInfo(user, userDto);
-        userRepository.save(user);
+        var editedUser = userRepository.save(user);
+        sendMessage("Пользователь %s изменил информацию о себе"
+                .formatted(editedUser.getSurname() + " " + editedUser.getName()), TypeMessage.INFO);
     }
 
     private void updateUserInfo(User user, UserDto userDto) {
@@ -65,7 +70,9 @@ public class UserServiceImpl implements UserService {
         createdUserCredentials.setEmail(userDto.getEmail());
         createdUserCredentials.setPassword(userDto.getPassword());
         createdUserCredentials.setUser(createNewUser(userDto));
-        userCredentialsRepository.save(createdUserCredentials);
+        var newUser = userCredentialsRepository.save(createdUserCredentials);
+        sendMessage("Создан новый пользователь id = %d, email = %s".formatted(newUser.getId(), newUser.getEmail()),
+                TypeMessage.INFO);
     }
 
     private User createNewUser(UserDto userDto) {
@@ -78,6 +85,11 @@ public class UserServiceImpl implements UserService {
         createdUser.setBiography(userDto.getBiography());
         createdUser.setSport(new Sport(userDto.getSport().getId(), userDto.getSport().getTitle()));
         return createdUser;
+    }
+
+    private void sendMessage(String message, TypeMessage type) {
+        var loggingDto = new LoggerEvent(message, type);
+        loggingService.sendMessage(loggingDto);
     }
 
 }

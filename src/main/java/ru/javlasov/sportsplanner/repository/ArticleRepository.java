@@ -9,4 +9,6 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long> {
 
     List<Article> findAllByUser(Long userId);
 
+    List<Article> findAllByStatusId(Long statusId);
+
 }

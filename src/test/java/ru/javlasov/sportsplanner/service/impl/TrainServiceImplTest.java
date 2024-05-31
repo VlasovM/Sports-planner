@@ -8,6 +8,7 @@ import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.TrainMapper;
 import ru.javlasov.sportsplanner.repository.TrainRepository;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.TrainService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class TrainServiceImplTest {
 
     private final TrainRepository mockTrainRepository = Mockito.mock(TrainRepository.class);
@@ -25,8 +26,10 @@ class TrainServiceImplTest {
 
     private final TrainMapper mockTrainMapper = Mockito.mock(TrainMapper.class);
 
+    private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
+
     private final TrainService underTestService = new TrainServiceImpl(mockTrainRepository, mockUserCredentialsService,
-            mockTrainMapper);
+            mockTrainMapper, mockLoggingService);
 
     @Test
     @DisplayName("Should get all trains for current user")

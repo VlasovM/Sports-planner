@@ -33,39 +33,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES).permitAll()
-                        .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES + "/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, BASE_URL_ARTICLES).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.DELETE, BASE_URL_ARTICLES + "/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES + "/accept/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES + "/decline/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, BASE_URL_HEALTH).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, BASE_URL_HEALTH + "/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, BASE_URL_HEALTH).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_HEALTH).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, BASE_URL_TOURNAMENT).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, BASE_URL_TOURNAMENT + "/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, BASE_URL_TOURNAMENT).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_TOURNAMENT).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, BASE_URL_TRAINING).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, BASE_URL_TRAINING + "/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, BASE_URL_TRAINING).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_TRAINING).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, BASE_URL_USER).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, BASE_URL_USER).permitAll()
-                        .requestMatchers(HttpMethod.PATCH, BASE_URL_USER).hasAnyRole("ADMIN", "USER")
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        HttpSecurity filterChain = httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        addPermissions(filterChain);
+        filterChain.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .userDetailsService(userCredentialsService)
-                .formLogin(Customizer.withDefaults())
-                .build();
+                .formLogin(Customizer.withDefaults());
+        return filterChain.build();
     }
+
+    private void addPermissions(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/homePage").permitAll()
+                .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES).permitAll()
+                .requestMatchers(HttpMethod.POST, BASE_URL_ARTICLES).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.DELETE, BASE_URL_ARTICLES + "/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES + "/accept/**").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES + "/decline/**").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_ARTICLES).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, BASE_URL_HEALTH).permitAll()
+                .requestMatchers(HttpMethod.DELETE, BASE_URL_HEALTH + "/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, BASE_URL_HEALTH).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_HEALTH).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, BASE_URL_TOURNAMENT).permitAll()
+                .requestMatchers(HttpMethod.DELETE, BASE_URL_TOURNAMENT + "/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, BASE_URL_TOURNAMENT).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_TOURNAMENT).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, BASE_URL_TRAINING).permitAll()
+                .requestMatchers(HttpMethod.DELETE, BASE_URL_TRAINING + "/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, BASE_URL_TRAINING).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_TRAINING).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, BASE_URL_USER).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, BASE_URL_USER).permitAll()
+                .requestMatchers(HttpMethod.PATCH, BASE_URL_USER).hasAnyRole("ADMIN", "USER")
+                .anyRequest().authenticated()
+        );
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

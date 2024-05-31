@@ -12,7 +12,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
-import ru.javlasov.sportsplanner.dto.ArticleStatusDto;
+import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.dto.ErrorDto;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
 import ru.javlasov.sportsplanner.service.ArticleService;
@@ -59,6 +59,7 @@ public class ArticleControllerTest {
 
     @Test
     @DisplayName("Should get OK status and article by id")
+    @WithMockUser
     void getArticleByIdTest() throws Exception {
         String findArticleId = "1";
         given(mockArticleService.getArticleById(1L)).willReturn(ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0));
@@ -101,7 +102,7 @@ public class ArticleControllerTest {
         var expectedErrorMessageFirstPart = "The title cannot be empty";
         var expectedErrorMessageSecondPart = "The text of article cannot be empty";
         var expectedErrorCode = "400 BAD_REQUEST";
-        var incomeInvalidDto = new ArticleDto(null, ArticleStatusDto.VERIFICATION,
+        var incomeInvalidDto = new ArticleDto(null, ArticleStatusEnum.VERIFICATION,
                 null, null, LocalDate.now(), 1L);
 
         // when

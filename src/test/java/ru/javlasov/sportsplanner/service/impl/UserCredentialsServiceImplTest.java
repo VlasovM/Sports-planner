@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
 import java.util.Optional;
@@ -18,14 +20,17 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class UserCredentialsServiceImplTest {
 
     private final UserCredentialsRepository mockUserCredentialsRepository =
             Mockito.mock(UserCredentialsRepository.class);
 
+    private final LoggingService mockLoggingService =
+            Mockito.mock(LoggingService.class);
+
     private final UserCredentialsService underTestService =
-            new UserCredentialsServiceImpl(mockUserCredentialsRepository);
+            new UserCredentialsServiceImpl(mockUserCredentialsRepository, mockLoggingService);
 
     @Test
     @DisplayName("Should get current auth user")
@@ -78,7 +83,7 @@ class UserCredentialsServiceImplTest {
         var expectedUser = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
         Mockito.when(mockUserCredentialsRepository.findByEmail(expectedUser.getEmail()))
                 .thenReturn(Optional.of(expectedUser));
-        var expectedUserDetails = User
+        User
                 .builder()
                 .username(expectedUser.getEmail())
                 .password(expectedUser.getPassword())

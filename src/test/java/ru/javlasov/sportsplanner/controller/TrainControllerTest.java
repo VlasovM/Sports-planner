@@ -41,6 +41,7 @@ class TrainControllerTest {
 
     @Test
     @DisplayName("Should get all trains and get OK status")
+    @WithMockUser
     void getAllTrainsTest() throws Exception {
         given(mockTrainService.getAllTrainsCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTrainDtoFromDB());
         mockMvc.perform(get(BASE_URL)

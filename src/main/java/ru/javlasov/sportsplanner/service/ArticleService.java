@@ -16,12 +16,10 @@ public interface ArticleService {
 
     void deleteArticle(Long articleId);
 
-    void editArticle(ArticleDto articleDto);
-
     void acceptArticle(Long articleId);
 
     void declineArticle(Long articleId);
 
-    void updateArticle(ArticleDto articleDto);
+    void editArticle(ArticleDto articleDto);
 
 }

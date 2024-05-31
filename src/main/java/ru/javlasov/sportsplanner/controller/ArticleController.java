@@ -45,7 +45,7 @@ public class ArticleController {
     @PatchMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateArticle(@Valid @RequestBody ArticleDto articleDto) {
-        articleService.updateArticle(articleDto);
+        articleService.editArticle(articleDto);
     }
 
     @DeleteMapping("/{id}")

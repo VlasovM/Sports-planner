@@ -9,6 +9,7 @@ import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.HealthMapper;
 import ru.javlasov.sportsplanner.repository.HealthRepository;
 import ru.javlasov.sportsplanner.service.HealthService;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
 import java.util.Optional;
@@ -16,8 +17,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class HealthServiceImplTest {
+
+    private final LoggingService mockLoggingService =
+            Mockito.mock(LoggingService.class);
 
     private final HealthMapper mockHealthMapper = Mockito.mock(HealthMapper.class);
 
@@ -26,9 +30,10 @@ class HealthServiceImplTest {
     private final UserCredentialsService mockUserCredentialsService = Mockito.mock(UserCredentialsService.class);
 
     private final HealthService underTestService = new HealthServiceImpl(mockHealthMapper, mockHealthRepository,
-            mockUserCredentialsService);
+            mockUserCredentialsService, mockLoggingService);
 
     @Test
+    @DisplayName("Should get health for current user")
     void getHealthCurrentUserTest() {
         // given
         var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);

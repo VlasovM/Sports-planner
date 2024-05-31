@@ -11,3 +11,6 @@ spring:
       mode: always
       schema-locations: "classpath:schemaH2.sql"
       data-locations: "classpath:dataH2.sql"
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092

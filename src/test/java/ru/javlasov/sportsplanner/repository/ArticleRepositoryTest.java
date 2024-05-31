@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
+import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -131,6 +133,23 @@ class ArticleRepositoryTest {
         // then
         assertThat(actualArticle).isNotNull();
         assertThat(existsArticle.get().getTitle()).isEqualTo(actualArticle.getTitle());
+    }
+
+    @Test
+    @DisplayName("Should get all articles by status")
+    void getAllArticlesByStatusTest() {
+        // given
+        List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB()
+                .stream().filter(article -> article.getStatus().getId()
+                        .equals(ArticleStatusEnum.PUBLISHED.getId())).toList();
+
+        // when
+        List<Article> actualArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
+
+        // then
+        assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
+        assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
+        assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
     }
 
 }

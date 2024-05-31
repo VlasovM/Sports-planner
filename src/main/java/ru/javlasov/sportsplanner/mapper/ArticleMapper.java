@@ -1,8 +1,8 @@
 package ru.javlasov.sportsplanner.mapper;
 
 import org.mapstruct.Mapper;
-import ru.javlasov.sportsplanner.dto.ArticleStatusDto;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
+import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
 
@@ -22,7 +22,7 @@ public interface ArticleMapper {
         articleDto.setTitle(model.getTitle());
         articleDto.setText(model.getText());
         articleDto.setUser(model.getUser());
-        articleDto.setStatus(ArticleStatusDto.getById(model.getStatus().getId()));
+        articleDto.setStatus(ArticleStatusEnum.getById(model.getStatus().getId()));
 
         return articleDto;
     }

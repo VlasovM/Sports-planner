@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("Article status repository test")
-class ArticleStatusRepositoryTest {
+class ArticleStatusEnumRepositoryTest {
 
     @Autowired
     private ArticleStatusRepository articleStatusRepository;

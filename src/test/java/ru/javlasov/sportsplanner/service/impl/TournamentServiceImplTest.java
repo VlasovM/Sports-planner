@@ -8,6 +8,7 @@ import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.TournamentMapper;
 import ru.javlasov.sportsplanner.repository.TournamentRepository;
+import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.TournamentService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
@@ -16,8 +17,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class TournamentServiceImplTest {
+
+    private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
 
     private final TournamentMapper mockTournamentMapper = Mockito.mock(TournamentMapper.class);
 
@@ -26,7 +29,7 @@ class TournamentServiceImplTest {
     private final UserCredentialsService mockUserCredentialsService = Mockito.mock(UserCredentialsService.class);
 
     private final TournamentService underTestService = new TournamentServiceImpl(mockTournamentMapper,
-            mockTournamentRepository, mockUserCredentialsService);
+            mockTournamentRepository, mockUserCredentialsService, mockLoggingService);
 
     @Test
     @DisplayName("Should get exception when cannot find by user id")

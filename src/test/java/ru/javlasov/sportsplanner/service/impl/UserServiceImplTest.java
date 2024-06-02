@@ -10,6 +10,7 @@ import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.repository.UserRepository;
 import ru.javlasov.sportsplanner.service.LoggingService;
+import ru.javlasov.sportsplanner.service.RoleService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
@@ -32,8 +33,10 @@ class UserServiceImplTest {
 
     private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
 
+    private final RoleService mockRoleService = Mockito.mock(RoleService.class);
+
     private final UserService underTestService = new UserServiceImpl(mockUserCredentialsRepository, mockUserRepository,
-            mockUserCredentialsMapper, mockUserCredentialsService, mockLoggingService);
+            mockUserCredentialsMapper, mockUserCredentialsService, mockLoggingService, mockRoleService);
 
     @Test
     @DisplayName("Should get user dto")
@@ -72,11 +75,6 @@ class UserServiceImplTest {
 
         // when
         underTestService.editProfile(expectedUserDto);
-//
-//        // then
-//        assertThat(actualUserDto).isNotNull();
-//        assertThat(actualUserDto.getName()).isEqualTo(expectedUserDto.getName());
-//        assertThat(actualUserDto.getAge()).isEqualTo(expectedUserDto.getAge());
     }
 
     @Test

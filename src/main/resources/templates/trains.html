@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои тренировки</title>
+    <style>
+        .h1 {
+            font-size: 30px;
+        }
+
+        .trains {
+            table-layout: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 20px;
+            border-collapse: collapse;
+            border: 2px solid black;
+            letter-spacing: 1px;
+            width: 1800px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<h1 class="h1" style="text-align: center">Мои тренировки</h1>
+<table class="trains">
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Дата тренировки</th>
+        <th scope="col">Рефлексия</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $.get('/api/v1/trains').done(function (trains) {
+            trains.forEach(function (train) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${train.title}</td>
+                        <td>${train.date}</td>
+                        <td>${train.reflection}</td>
+                        <td>Изменить</td>
+                        <td>
+                            <button onclick="deleteTrain(${train.id})">Удалить</button>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+    function deleteTrain(id) {
+        fetch("/api/v1/trains/" + id, {
+            method: "DELETE"
+        })
+            .then(() => {
+                location.reload();
+            })
+    }
+
+</script>
+
+</body>
+</html>

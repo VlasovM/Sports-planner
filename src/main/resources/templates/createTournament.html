@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить турнир</title>
+</head>
+<body>
+<h3>Добавить турнир</h3>
+<form id="create-form" action="createTournament.html" th:method="post">
+    <div>
+        <label for="tournament-date-input">Дата турнира:</label>
+        <input id="tournament-date-input" name="date" type="date" th:value="*{date}" value=""/>
+    </div>
+    <div>
+        <label for="tournament-title-input">Название турнира:</label>
+        <input id="tournament-title-input" name="title" type="text" th:value="*{title}" value=""/>
+    </div>
+    <div>
+        <label for="tournament-opponent-input">Соперник:</label>
+        <input id="tournament-opponent-input" name="opponent" type="text" th:value="*{opponent}" value=""/>
+    </div>
+    <div>
+        <label for="tournament-result-input">Результат:</label>
+        <input id="tournament-result-input" name="result" type="text" th:value="*{result}" value=""/>
+    </div>
+    <div>
+        <label for="tournament-reflection-input">Рефлексия:</label>
+        <input id="tournament-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
+    </div>
+    <div class="row">
+        <button type="button" onclick="create()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/}">
+            <button type="button">Отменить</button>
+        </a>
+    </div>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function create() {
+
+        const dateInput = document.getElementById("tournament-date-input")
+        const titleInput = document.getElementById("tournament-title-input")
+        const opponentInput = document.getElementById("tournament-opponent-input")
+        const resultInput = document.getElementById("tournament-result-input")
+        const reflectionInput = document.getElementById("tournament-reflection-input")
+
+        const tournament = {
+            date: dateInput.value,
+            title: titleInput.value,
+            opponent: opponentInput.value,
+            result: resultInput.value,
+            reflection: reflectionInput.value,
+        }
+
+        fetch("/api/v1/tournaments", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tournament)
+        })
+            .then(rawResponse => rawResponse.json())
+            .then(json => newTournament.innerHTML = JSON.stringify(json, null, 4))
+
+    }
+</script>
+</html>

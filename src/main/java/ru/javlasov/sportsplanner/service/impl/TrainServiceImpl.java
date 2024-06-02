@@ -8,6 +8,7 @@ import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.TrainMapper;
+import ru.javlasov.sportsplanner.model.Train;
 import ru.javlasov.sportsplanner.repository.TrainRepository;
 import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.TrainService;
@@ -53,8 +54,10 @@ public class TrainServiceImpl implements TrainService {
     @Transactional
     public void createOrEdit(TrainDto trainDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
-        trainDto.setUser(currentUser.getId());
-        var trainAfterSave = trainRepository.save(trainMapper.dtoToModel(trainDto));
+        trainDto.setUser(currentUser.getUser().getId());
+        var trainEntity = trainMapper.dtoToModel(trainDto);
+        checkReflection(trainEntity);
+        var trainAfterSave = trainRepository.save(trainEntity);
         sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
                 currentUser.getEmail(), trainDto.getId() == null ? "создал" : "изменил",
                 trainAfterSave.getId()), TypeMessage.INFO);
@@ -63,6 +66,13 @@ public class TrainServiceImpl implements TrainService {
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
+    }
+
+    private void checkReflection(Train train) {
+        var trainReflection = train.getReflection();
+        if (trainReflection.isEmpty()) {
+            train.setReflection(null);
+        }
     }
 
 }

@@ -14,8 +14,8 @@ public class TrainDto {
 
     private Long id;
 
-    @NotNull(message = "Set date of birthday")
-    private LocalDateTime date;
+    @NotNull(message = "Set date of train")
+    private String date;
 
     @NotEmpty(message = "The title of training cannot be empty")
     private String title;

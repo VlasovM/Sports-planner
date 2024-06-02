@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,14 +49,13 @@ public class User {
     private Integer age;
 
     @Column(name = "birthday", nullable = false)
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Column(name = "biography")
     private String biography;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "sport_id", referencedColumnName = "id")
-    private Sport sport;
+    @Column(name = "sport_id")
+    private Long sport;
 
     @OneToMany(mappedBy = "user")
     private List<Article> articles;

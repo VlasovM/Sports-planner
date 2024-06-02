@@ -78,9 +78,9 @@ CREATE TABLE IF NOT EXISTS health
 (
     id SERIAL PRIMARY KEY NOT NULL,
     date timestamp NOT NULL,
-    clinic VARCHAR(32) NOT NULL,
-    doctor_specialization VARCHAR(32) NOT NULL,
-    doctor_full_name VARCHAR(32) NOT NULL,
+    clinic VARCHAR(128) NOT NULL,
+    doctor_specialization VARCHAR(128) NOT NULL,
+    doctor_full_name VARCHAR(128) NOT NULL,
     result VARCHAR(2048) NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)

@@ -46,7 +46,7 @@ public class HealthServiceImpl implements HealthService {
     @Transactional
     public void createOrEdit(HealthDto healthDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
-        healthDto.setUser(currentUser.getId());
+        healthDto.setUser(currentUser.getUser().getId());
         Health healthAfterSave = healthRepository.save(healthMapper.dtoToModel(healthDto));
         sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
                 currentUser.getEmail(), healthDto.getId() == null ? "создал" : "изменил",

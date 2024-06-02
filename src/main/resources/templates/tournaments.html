@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои турниры</title>
+    <style>
+        .h1 {
+            font-size: 30px;
+        }
+
+        .tournaments {
+            table-layout: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 20px;
+            border-collapse: collapse;
+            border: 2px solid black;
+            letter-spacing: 1px;
+            width: 1800px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<h1 class="h1" style="text-align: center">Мои турниры</h1>
+<table class="tournaments">
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Дата турнира</th>
+        <th scope="col">Соперник</th>
+        <th scope="col">Результат</th>
+        <th scope="col">Рефлексия</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $.get('/api/v1/tournaments').done(function (tournaments) {
+            tournaments.forEach(function (tournament) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${tournament.title}</td>
+                        <td>${tournament.date}</td>
+                        <td>${tournament.opponent}</td>
+                        <td>${tournament.result}</td>
+                        <td>${tournament.reflection}</td>
+                        <td>
+                            <button>Изменить</button>
+                        </td>
+                        <td>
+                        <button onclick="deleteTournament(${tournament.id})">Удалить</button>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+    function deleteTournament(id) {
+        fetch("/api/v1/tournaments/" + id, {
+            method: "DELETE"
+        })
+            .then(() => {
+                location.reload();
+            })
+    }
+
+</script>
+</body>
+</html>

@@ -18,13 +18,13 @@ import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
 import ru.javlasov.sportsplanner.service.ArticleService;
 import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+import ru.javlasov.sportsplanner.service.UserService;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class ArticleServiceImplTest {
@@ -47,9 +47,12 @@ class ArticleServiceImplTest {
     private final ArticleStatusMapper mockArticleStatusMapper =
             Mockito.mock(ArticleStatusMapper.class);
 
+    private final UserService mockUserService =
+            Mockito.mock(UserService.class);
+
     private final ArticleService underTestService = new ArticleServiceImpl(
             mockArticleRepository, mockArticleMapper, mockArticleStatusMapper,
-            mockLoggingService, mockUserCredentialsService);
+            mockLoggingService, mockUserCredentialsService, mockUserService);
 
 
     @Test

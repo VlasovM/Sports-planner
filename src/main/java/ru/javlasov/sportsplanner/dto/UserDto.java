@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class UserDto {
     private Integer age;
 
     @NotNull(message = "The birthday cannot be empty")
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     private String biography;
 
@@ -43,6 +43,6 @@ public class UserDto {
     private String password;
 
     @NotNull
-    private SportDto sport;
+    private Long sport;
 
 }

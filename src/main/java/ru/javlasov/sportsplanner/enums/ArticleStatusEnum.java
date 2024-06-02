@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ArticleStatusEnum {
 
-    UNKNOWN(0L, "Не определено"),
-    VERIFICATION(1L, "На проверке модератором"),
-    PUBLISHED(2L, "Опубликовано"),
-    DECLINE(3L, "Отклонено");
+    UNKNOWN(1L, "Не определено"),
+    VERIFICATION(2L, "На проверке модератором"),
+    PUBLISHED(3L, "Опубликовано"),
+    DECLINE(4L, "Отклонено");
 
 
     private final Long id;

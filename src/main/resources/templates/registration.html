@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация пользователя</title>
+</head>
+<body>
+<h1>Регистрация</h1>
+<form id="create-form" action="registration.html" th:method="post">
+    <div>
+        <label for="user-name-input">Имя:</label>
+        <input id="user-name-input" name="name" type="text" th:value="*{name}" value=""/>
+    </div>
+    <div>
+        <label for="user-middle-name-input">Отчество:</label>
+        <input id="user-middle-name-input" name="middlename" type="text" th:value="*{middlename}" value=""/>
+    </div>
+    <div>
+        <label for="user-surname-input">Фамилия:</label>
+        <input id="user-surname-input" name="surname" type="text" th:value="*{surname}" value=""/>
+    </div>
+    <div>
+        <label for="user-birthday-input">Дата рождения:</label>
+        <input id="user-birthday-input" name="birthday" type="date" th:value="*{birthday}" value=""/>
+    </div>
+    <div class="row">
+        <label for="user-age-input">Возвраст:</label>
+        <input id="user-age-input" name="age" type="number" th:value="*{age}" value=""/>
+    </div>
+    <div class="row">
+        <label for="user-email-input">Почта:</label>
+        <input id="user-email-input" name="email" type="email" th:value="*{email}" value=""/>
+    </div>
+    <div class="row">
+        <label for="user-password-input">Пароль:</label>
+        <input id="user-password-input" name="password" type="password" th:value="*{password}" value=""/>
+    </div>
+    <div class="row">
+        <label for="sportId">Спорт:</label>
+        <select id="sportId" name="sportId">
+            <option>Выбрать жанр</option>
+        </select>
+    </div>
+    <div class="row">
+        <button type="button" onclick="registration()">Сохранить</button>
+        <a href="homePageNotAuth.html" th:href="@{/}">
+            <button type="button">Отменить</button>
+        </a>
+    </div>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function registration() {
+
+        const nameInput = document.getElementById("user-name-input")
+        const middleNameInput = document.getElementById("user-middle-name-input")
+        const surnameInput = document.getElementById("user-surname-input")
+        const birthdayInput = document.getElementById("user-birthday-input")
+        const ageInput = document.getElementById("user-age-input")
+        const emailInput = document.getElementById("user-email-input")
+        const passwordInput = document.getElementById("user-password-input")
+        const sportIdInput = document.getElementById("sportId")
+
+        const user = {
+            name: nameInput.value,
+            middleName: middleNameInput.value,
+            surname: surnameInput.value,
+            birthday: birthdayInput.value,
+            age: ageInput.value,
+            email: emailInput.value,
+            password: passwordInput.value,
+            sport: sportIdInput.value
+        }
+
+        fetch("/api/v1/users", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(rawResponse => rawResponse.json())
+            .then(json => newUser.innerHTML = JSON.stringify(json, null, 4))
+
+    }
+</script>
+
+<script>
+    $(function () {
+        $.ajax({
+            url: "/api/v1/sports",
+            type: "GET",
+            dataType: "json",
+            success: function (sports) {
+                $.each(sports, function (i, sport) {
+                    $("#sportId").append("<option value='" + sport.id + "'>" + sport.title + "</option>");
+                });
+            }
+        });
+    });
+</script>
+
+</html>

@@ -31,4 +31,6 @@ public class ArticleDto {
 
     private Long user;
 
+    private String userFullName;
+
 }

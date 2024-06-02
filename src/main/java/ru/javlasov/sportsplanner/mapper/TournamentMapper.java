@@ -11,7 +11,23 @@ public interface TournamentMapper {
 
     Tournament dtoToModel(TournamentDto dto);
 
-    TournamentDto modelToDto(Tournament model);
+    default TournamentDto modelToDto(Tournament model) {
+        if (model == null) {
+            return null;
+        }
+
+        TournamentDto tournamentDto = new TournamentDto();
+
+        tournamentDto.setId(model.getId());
+        tournamentDto.setDate(model.getDate());
+        tournamentDto.setTitle(model.getTitle());
+        tournamentDto.setOpponent(model.getOpponent());
+        tournamentDto.setResult(model.getResult());
+        tournamentDto.setReflection(model.getReflection() == null ? "-" : model.getReflection());
+        tournamentDto.setUser(model.getUser());
+
+        return tournamentDto;
+    }
 
     List<TournamentDto> listModelToListDto(List<Tournament> modelList);
 

@@ -1,12 +1,12 @@
 package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
-import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.dto.SportDto;
 import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
+import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.Health;
 import ru.javlasov.sportsplanner.model.Role;
@@ -18,14 +18,17 @@ import ru.javlasov.sportsplanner.model.UserCredentials;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpectedDataFromDB {
 
     public static List<ru.javlasov.sportsplanner.model.ArticleStatus> getExpectedArticlesStatusFromDB() {
         var status1 = new ru.javlasov.sportsplanner.model.ArticleStatus(1L, "article_status1");
         var status2 = new ru.javlasov.sportsplanner.model.ArticleStatus(2L, "article_status2");
-        return List.of(status1, status2);
+        var status3 = new ru.javlasov.sportsplanner.model.ArticleStatus(3L, "article_status3");
+        return List.of(status1, status2, status3);
     }
 
     public static List<Article> getExpectedArticlesFromDB() {
@@ -33,17 +36,19 @@ public class ExpectedDataFromDB {
                 "text1", LocalDate.of(2000, 1, 1), 1L);
         var article2 = new Article(2L, getExpectedArticlesStatusFromDB().get(1), "title2",
                 "text2", LocalDate.of(2000, 1, 1), 1L);
-        return List.of(article1, article2);
+        var article3 = new Article(2L, getExpectedArticlesStatusFromDB().get(2), "title3",
+                "text3", LocalDate.of(2000, 1, 1), 1L);
+        return List.of(article1, article2, article3);
     }
 
     public static List<User> getExpectedUsersFromDB() {
         var user1 = new User(1L, "name1", null, "surname1", 22,
-                LocalDateTime.of(2000, 1, 1, 1, 1), "biography1",
-                getExpectedSportsFromDB().get(0), getExpectedArticlesFromDB(), getExpectedTrainsFromDB(),
+                LocalDate.of(2000, 1, 1), "biography1",
+                getExpectedSportsFromDB().get(0).getId(), getExpectedArticlesFromDB(), getExpectedTrainsFromDB(),
                 getExpectedTournamentsFromDB(), getExpectedHealthFromDB());
         var user2 = new User(2L, "name2", "middlename2", "surname2", 25,
-                LocalDateTime.of(2000, 1, 1, 1, 1), "biography2",
-                getExpectedSportsFromDB().get(1), null, null, null, null);
+                LocalDate.of(2000, 1, 1), "biography2",
+                getExpectedSportsFromDB().get(1).getId(), null, null, null, null);
         return List.of(user1, user2);
     }
 
@@ -80,8 +85,10 @@ public class ExpectedDataFromDB {
     }
 
     public static List<ArticleDto> getExpectedArticleDtoFromDB() {
-        var articleDto = new ArticleDto(1L, ArticleStatusEnum.VERIFICATION, "title1", "text1",
-                LocalDate.of(2000, 1, 1), 1L);
+        var user = getExpectedUsersFromDB().get(0);
+        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
+        var articleDto = new ArticleDto(1L, ArticleStatusEnum.UNKNOWN, "title1", "text1",
+                LocalDate.of(2000, 1, 1), 1L, userFullName);
         return List.of(articleDto);
     }
 
@@ -105,8 +112,7 @@ public class ExpectedDataFromDB {
         var expectedUser = getExpectedUserCredentialsFromDB().get(0);
         var expectedUserDto = new UserDto();
         expectedUserDto.setId(expectedUser.getId());
-        expectedUserDto.setSport(new SportDto(expectedUser.getUser().getSport().getId(),
-                expectedUser.getUser().getSport().getTitle()));
+        expectedUserDto.setSport(ExpectedDataFromDB.getExpectedSportsFromDB().get(0).getId());
         expectedUserDto.setName(expectedUser.getUser().getName());
         expectedUserDto.setSurname(expectedUser.getUser().getSurname());
         expectedUserDto.setMiddleName(expectedUser.getUser().getMiddleName());
@@ -119,11 +125,13 @@ public class ExpectedDataFromDB {
     }
 
     public static List<TrainDto> getExpectedTrainDtoFromDB() {
+        var dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.ENGLISH);
         var expectedTrainFirst = getExpectedTrainsFromDB().get(0);
         var expectedTrainDtoFirst = new TrainDto();
         expectedTrainDtoFirst.setId(expectedTrainFirst.getId());
         expectedTrainDtoFirst.setUser(expectedTrainFirst.getUser());
-        expectedTrainDtoFirst.setDate(expectedTrainFirst.getDate());
+
+        expectedTrainDtoFirst.setDate(expectedTrainFirst.getDate().format(dateTimeFormatter));
         expectedTrainDtoFirst.setTitle(expectedTrainFirst.getTitle());
         expectedTrainDtoFirst.setReflection(expectedTrainFirst.getReflection());
 
@@ -131,7 +139,7 @@ public class ExpectedDataFromDB {
         var expectedTrainDtoSecond = new TrainDto();
         expectedTrainDtoSecond.setId(expectedTrainSecond.getId());
         expectedTrainDtoSecond.setUser(expectedTrainSecond.getUser());
-        expectedTrainDtoSecond.setDate(expectedTrainSecond.getDate());
+        expectedTrainDtoSecond.setDate(expectedTrainSecond.getDate().format(dateTimeFormatter));
         expectedTrainDtoSecond.setTitle(expectedTrainSecond.getTitle());
         expectedTrainDtoSecond.setReflection(expectedTrainSecond.getReflection());
 

@@ -46,8 +46,10 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     public void createOrEdit(TournamentDto tournamentDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
-        tournamentDto.setUser(currentUser.getId());
-        var tournamentAfterSave = tournamentRepository.save(tournamentMapper.dtoToModel(tournamentDto));
+        tournamentDto.setUser(currentUser.getUser().getId());
+        var tournamentEntity = tournamentMapper.dtoToModel(tournamentDto);
+        checkReflection(tournamentEntity);
+        var tournamentAfterSave = tournamentRepository.save(tournamentEntity);
         sendMessage("Пользователь %s %s новую инфо о турнире с id = %d".formatted(
                 userCredentialsService.getCurrentAuthUser().getEmail(),
                 tournamentDto.getId() == null ? "создал" : "изменил", tournamentAfterSave.getId()), TypeMessage.INFO);
@@ -64,6 +66,13 @@ public class TournamentServiceImpl implements TournamentService {
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
+    }
+
+    private void checkReflection(Tournament tournament) {
+        var tournamentReflection = tournament.getReflection();
+        if (tournamentReflection.isEmpty()) {
+            tournament.setReflection(null);
+        }
     }
 
 }

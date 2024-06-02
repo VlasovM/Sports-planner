@@ -16,8 +16,10 @@ import ru.javlasov.sportsplanner.repository.ArticleRepository;
 import ru.javlasov.sportsplanner.service.ArticleService;
 import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+import ru.javlasov.sportsplanner.service.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,19 +35,31 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final UserCredentialsService userCredentialsService;
 
+    private final UserService userService;
+
 
     @Override
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticles() {
         List<Article> allArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
-        return articleMapper.modelToDtoList(allArticles);
+        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(allArticles);
+        allArticlesDto = allArticlesDto.stream().peek(article -> {
+            var user = userService.getUserById(article.getUser());
+            var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
+            article.setUserFullName(userFullName);
+        }).collect(Collectors.toList());
+        return allArticlesDto;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ArticleDto getArticleById(Long id) {
         var article = findArticle(id);
-        return articleMapper.modelToDto(article);
+        var articleDto = articleMapper.modelToDto(article);
+        var user = userService.getUserById(articleDto.getUser());
+        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
+        articleDto.setUserFullName(userFullName);
+        return articleDto;
     }
 
     @Override

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SportsApplication</title>
+    <style>
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .article {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 64px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .h1 {
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+<h1 class="h1" style="text-align: center">Спортивный планировщик</h1>
+<a th:href="@{/application/logout}" class="button" style="float: right">Выход</a>
+<table>
+    <thead>
+    <tr>
+        <th>
+            <a href="articles.html" th:href="@{/articles}" class="article">Статьи</a>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            <a href="trains.html" th:href="@{/trains}" class="button">Мои тренировки</a>
+        </th>
+        <th>
+            <a href="tournaments.html" th:href="@{/tournaments}" class="button">Мои турниры</a>
+        </th>
+        <th>
+            <a href="health.html" th:href="@{/health}" class="button">Моё здоровье</a>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            <a href="createTrain.html" th:href="@{/trains/create}" class="button">Добавить тренировку</a>
+        </th>
+        <th>
+            <a href="createTournament.html" th:href="@{/tournaments/create}" class="button">Добавить турнир</a>
+        </th>
+        <th>
+            <a href="createHealth.html" th:href="@{/health/create}" class="button">Добавить проверку здоровья</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</body>
+</html>

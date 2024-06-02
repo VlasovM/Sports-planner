@@ -103,7 +103,7 @@ public class ArticleControllerTest {
         var expectedErrorMessageSecondPart = "The text of article cannot be empty";
         var expectedErrorCode = "400 BAD_REQUEST";
         var incomeInvalidDto = new ArticleDto(null, ArticleStatusEnum.VERIFICATION,
-                null, null, LocalDate.now(), 1L);
+                null, null, LocalDate.now(), 1L, "userFullName");
 
         // when
         var resultActions = mockMvc.perform(post(BASE_URL)

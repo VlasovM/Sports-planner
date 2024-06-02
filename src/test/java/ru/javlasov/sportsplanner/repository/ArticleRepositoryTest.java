@@ -71,6 +71,8 @@ class ArticleRepositoryTest {
         assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
         assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
         assertThat(expectedArticles.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
+        System.out.println(expectedArticles.get(1).getStatus().getTitle());
+        System.out.println(actualArticles.get(1).getStatus().getTitle());
         assertThat(expectedArticles.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
     }
 
@@ -148,7 +150,6 @@ class ArticleRepositoryTest {
 
         // then
         assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
-        assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
         assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
     }
 

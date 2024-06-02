@@ -45,6 +45,8 @@ public class SecurityConfig {
         return filterChain.build();
     }
 
+//    /article/{id}
+
     private void addPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/").permitAll()
@@ -53,26 +55,19 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/registration").permitAll()
                 .requestMatchers(HttpMethod.GET, BASE_URL_API_SPORTS).permitAll()
                 .requestMatchers(HttpMethod.GET, BASE_URL_API_ARTICLES).permitAll()
-                .requestMatchers(HttpMethod.POST, BASE_URL_API_ARTICLES).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, BASE_URL_API_ARTICLES + "/article/**").permitAll()
+                .requestMatchers(BASE_URL_API_ARTICLES).hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.DELETE, BASE_URL_API_ARTICLES + "/**").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.PATCH, BASE_URL_API_ARTICLES + "/accept/**").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.PATCH, BASE_URL_API_ARTICLES + "/decline/**").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.PATCH, BASE_URL_API_ARTICLES).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.GET, BASE_URL_API_HEALTH).permitAll()
                 .requestMatchers(HttpMethod.DELETE, BASE_URL_API_HEALTH + "/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.POST, BASE_URL_API_HEALTH).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.PATCH, BASE_URL_API_HEALTH).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.GET, BASE_URL_API_TOURNAMENT).permitAll()
+                .requestMatchers(BASE_URL_API_HEALTH).hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.DELETE, BASE_URL_API_TOURNAMENT + "/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.POST, BASE_URL_API_TOURNAMENT).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.PATCH, BASE_URL_API_TOURNAMENT).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.GET, BASE_URL_API_TRAINING).permitAll()
+                .requestMatchers(BASE_URL_API_TOURNAMENT).hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.DELETE, BASE_URL_API_TRAINING + "/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.POST, BASE_URL_API_TRAINING).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.PATCH, BASE_URL_API_TRAINING).hasAnyRole("ADMIN", "USER")
-                .requestMatchers(HttpMethod.GET, BASE_URL_API_USER).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(BASE_URL_API_TRAINING).hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.POST, BASE_URL_API_USER).permitAll()
-                .requestMatchers(HttpMethod.PATCH, BASE_URL_API_USER).hasAnyRole("ADMIN", "USER")
+                .requestMatchers(BASE_URL_API_USER).hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
         );
     }

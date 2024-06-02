@@ -1,12 +1,10 @@
 package ru.javlasov.sportsplanner.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,7 +12,7 @@ public class TrainDto {
 
     private Long id;
 
-    @NotNull(message = "Set date of train")
+    @NotBlank(message = "Set date of train")
     private String date;
 
     @NotEmpty(message = "The title of training cannot be empty")

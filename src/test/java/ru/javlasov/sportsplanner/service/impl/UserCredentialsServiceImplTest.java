@@ -73,7 +73,7 @@ class UserCredentialsServiceImplTest {
         // then
         assertThat(actualException).isNotNull();
         assertThat(actualException.getMessage())
-                .isEqualTo("Возникла ошибка с получением данных, обратитесь к администратору системы.");
+                .isEqualTo("Пользователь с такой почтой не найден!");
     }
 
     @Test

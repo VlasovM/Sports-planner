@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить статью</title>
+</head>
+<body>
+<h1>Добавить новую стать</h1>
+<form id="create-form" action="createArticle.html" th:method="post">
+    <div>
+        <label for="article-title-input">Заголовок:</label>
+        <input id="article-title-input" name="title" type="text" th:value="*{title}" value=""/>
+    </div>
+    <div>
+        <label for="article-text-input">Текст:</label>
+        <input id="article-text-input" name="text" type="text" th:value="*{text}" value=""/>
+    </div>
+    <div class="row">
+        <button type="button" onclick="create()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/}">
+            <button type="button">Отменить</button>
+        </a>
+    </div>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function create() {
+
+        const titleInput = document.getElementById("article-title-input")
+        const textInput = document.getElementById("article-text-input")
+
+        const article = {
+            title: titleInput.value,
+            text: textInput.value,
+        }
+
+        fetch("/api/v1/articles", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(article)
+        })
+            .then(rawResponse => rawResponse.json())
+            .then(json => newArticle.innerHTML = JSON.stringify(json, null, 4))
+
+    }
+</script>
+</html>

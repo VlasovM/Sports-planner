@@ -12,4 +12,6 @@ public interface TournamentService {
 
     List<TournamentDto> getTournamentCurrentUser();
 
+    TournamentDto getById(Long id);
+
 }

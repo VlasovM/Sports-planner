@@ -11,8 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
+import ru.javlasov.sportsplanner.controller.rest.TrainRestController;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
-import ru.javlasov.sportsplanner.service.TournamentService;
+import ru.javlasov.sportsplanner.service.TrainService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
 import static org.mockito.BDDMockito.given;
@@ -21,11 +22,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TournamentController.class)
-@Import(SecurityConfig.class)
-class TournamentControllerTest {
+@WebMvcTest(TrainRestController.class)
+@Import({SecurityConfig.class})
+class TrainRestControllerTest {
 
-    private final static String BASE_URL = "/api/v1/tournaments";
+    private final static String BASE_URL = "/api/v1/trains";
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,28 +35,28 @@ class TournamentControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private TournamentService mockTournamentService;
+    private TrainService mockTrainService;
 
     @MockBean
     private UserCredentialsService mockUserCredentialsService;
 
     @Test
-    @DisplayName("Should get all tournament and get OK status")
-    void getAllTournamentsTest() throws Exception {
-        given(mockTournamentService.getTournamentCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTournamentDto());
+    @DisplayName("Should get all trains and get OK status")
+    @WithMockUser
+    void getAllTrainsTest() throws Exception {
+        given(mockTrainService.getAllTrainsCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTrainDtoFromDB());
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(
-                        objectMapper.writeValueAsString(ExpectedDataFromDB.getExpectedTournamentDto())
-                ));
+                .andExpect(content().json(objectMapper
+                        .writeValueAsString(ExpectedDataFromDB.getExpectedTrainDtoFromDB())));
     }
 
     @Test
     @WithMockUser
-    @DisplayName("Should delete tournament and get 200 (OK) status")
-    void deleteTournamentByIdTest() throws Exception {
+    @DisplayName("Should delete train and get OK status")
+    void deleteTrainByIdTest() throws Exception {
         // given
         var expectedDeletedId = 1L;
 
@@ -67,36 +68,36 @@ class TournamentControllerTest {
 
     @Test
     @WithMockUser
-    @DisplayName("Should create tournament and get 201 (created) status")
-    void createTournamentTest() throws Exception {
-        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().get(0);
-        incomeTournamentDto.setId(null);
+    @DisplayName("Should create train and get CREATED status")
+    void createTrainTest() throws Exception {
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
+        incomeHealthDto.setId(null);
 
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeTournamentDto))
+                        .content(objectMapper.writeValueAsString(incomeHealthDto))
                 )
                 .andExpect(status().isCreated());
     }
 
     @Test
     @WithMockUser
-    @DisplayName("Should update tournament and get 200 (OK) status")
-    void updateTournamentTest() throws Exception {
-        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().get(0);
+    @DisplayName("Should edit train and get OK status")
+    void editTrainTest() throws Exception {
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeTournamentDto))
+                        .content(objectMapper.writeValueAsString(incomeHealthDto))
                 )
                 .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("Should get 302 (redirect) status if create with not auth user")
-    void createTournamentWithNotAuthUserTest() throws Exception {
+    @DisplayName("Should get 302 (redirect) status if created with not auth user")
+    void createTrainWithNotAuthUserTest() throws Exception {
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))

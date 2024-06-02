@@ -11,9 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
+import ru.javlasov.sportsplanner.controller.rest.UserRestController;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
-import ru.javlasov.sportsplanner.service.TrainService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+import ru.javlasov.sportsplanner.service.UserService;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,11 +22,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TrainController.class)
-@Import({SecurityConfig.class})
-class TrainControllerTest {
+@WebMvcTest(UserRestController.class)
+@Import(SecurityConfig.class)
+class UserRestControllerTest {
 
-    private final static String BASE_URL = "/api/v1/trains";
+    private final static String BASE_URL = "/api/v1/users";
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,73 +35,51 @@ class TrainControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private TrainService mockTrainService;
+    private UserService mockUserService;
 
     @MockBean
     private UserCredentialsService mockUserCredentialsService;
 
+
     @Test
-    @DisplayName("Should get all trains and get OK status")
+    @DisplayName("Should get all users and get OK status")
     @WithMockUser
-    void getAllTrainsTest() throws Exception {
-        given(mockTrainService.getAllTrainsCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTrainDtoFromDB());
+    void getUserInformation() throws Exception {
+        given(mockUserService.getInfoAuthorizedUser()).willReturn(ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0));
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper
-                        .writeValueAsString(ExpectedDataFromDB.getExpectedTrainDtoFromDB())));
+                        .writeValueAsString(ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0))));
     }
 
     @Test
-    @WithMockUser
-    @DisplayName("Should delete train and get OK status")
-    void deleteTrainByIdTest() throws Exception {
-        // given
-        var expectedDeletedId = 1L;
-
-        // when
-        mockMvc.perform(delete(BASE_URL + "/" + expectedDeletedId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser
-    @DisplayName("Should create train and get CREATED status")
-    void createTrainTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
-        incomeHealthDto.setId(null);
+    @DisplayName("Should register user and get 201 CREATED status")
+    void registration() throws Exception {
+        var incomeUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
+        incomeUserDto.setId(null);
 
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
+                        .content(objectMapper.writeValueAsString(incomeUserDto))
                 )
                 .andExpect(status().isCreated());
     }
 
     @Test
     @WithMockUser
-    @DisplayName("Should edit train and get OK status")
-    void editTrainTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
+    @DisplayName("Should edit profile and get OK status")
+    void editProfile() throws Exception {
+        var incomeUserDto = ExpectedDataFromDB.getExpectedUserDtoFromDB().get(0);
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
+                        .content(objectMapper.writeValueAsString(incomeUserDto))
                 )
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Should get 302 (redirect) status if created with not auth user")
-    void createTrainWithNotAuthUserTest() throws Exception {
-        mockMvc.perform(post(BASE_URL)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is3xxRedirection());
     }
 
 }

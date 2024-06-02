@@ -1,51 +1,42 @@
 package ru.javlasov.sportsplanner.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.service.HealthService;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/healths")
+@RequestMapping("/health")
 public class HealthController {
 
     private final HealthService healthService;
 
+
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<HealthDto> getAllHealthForCurrentUser () {
-        return healthService.getHealthCurrentUser();
+    public String health() {
+        return "health";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteHealthById(@PathVariable("id") Long id) {
-        healthService.deleteById(id);
+    @GetMapping("/create")
+    public String createHealth() {
+        return "createHealth";
     }
 
-    @PatchMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void updateHealth(@Valid @RequestBody HealthDto healthDto) {
-        healthService.createOrEdit(healthDto);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createHealth(@Valid @RequestBody HealthDto healthDto) {
-        healthService.createOrEdit(healthDto);
+    @GetMapping("/edit/{id}")
+    public String editHealth(@PathVariable(name = "id") Long id, Model model) {
+        HealthDto healthDto = healthService.getById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("date", healthDto.getDate());
+        model.addAttribute("clinic", healthDto.getClinic());
+        model.addAttribute("doctorSpecialization", healthDto.getDoctorSpecialization());
+        model.addAttribute("doctorFullName", healthDto.getDoctorFullName());
+        model.addAttribute("result", healthDto.getResult());
+        return "editHealth";
     }
 
 }

@@ -43,7 +43,7 @@
     let articleId = articleIdInput.value;
 
     $(function () {
-        $.get('/api/v1/articles/' + articleId).done(function (article) {
+        $.get('/api/v1/articles/article/' + articleId).done(function (article) {
             $('tbody').append(`
                     <tr>
                         <th class="article-values">${article.title}</th>

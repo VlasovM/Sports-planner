@@ -63,6 +63,18 @@ public class TournamentServiceImpl implements TournamentService {
         return tournamentMapper.listModelToListDto(trains);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public TournamentDto getById(Long id) {
+        var tournament = tournamentRepository.findById(id)
+                .orElseThrow(() -> {
+                    sendMessage("Ошибка при попытке найти турнир по id %d".formatted(id), TypeMessage.ERROR);
+                    throw new NotFoundException("Возникла ошибка с получением данных," +
+                            " обратитесь к администратору системы.");
+                });
+        return tournamentMapper.modelToDto(tournament);
+    }
+
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);

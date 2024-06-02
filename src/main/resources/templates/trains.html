@@ -49,7 +49,11 @@
                         <td>${train.title}</td>
                         <td>${train.date}</td>
                         <td>${train.reflection}</td>
-                        <td>Изменить</td>
+                       <td>
+                            <a href="/trains/edit/${train.id}">
+                                <button value="${train.id}">Изменить</button>
+                            </a>
+                        </td>
                         <td>
                             <button onclick="deleteTrain(${train.id})">Удалить</button>
                         </td>

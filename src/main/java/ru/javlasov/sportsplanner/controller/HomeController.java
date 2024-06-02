@@ -4,9 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class HomeController {
@@ -33,50 +31,9 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @GetMapping("/articles")
-    public String articles() {
-        return "articles";
-    }
-
-    @GetMapping("/articles/article/{id}")
-    public String article(@PathVariable(name = "id") Long id, Model model) {
-        model.addAttribute("id", id);
-        return "article";
-    }
-
-    @GetMapping("/trains")
-    public String trains() {
-        return "trains";
-    }
-
-    @GetMapping("/tournaments")
-    public String tournaments() {
-        return "tournaments";
-    }
-
-    @GetMapping("/health")
-    public String health() {
-        return "health";
-    }
-
     @GetMapping("/registration")
     public String registration() {
         return "registration";
-    }
-
-    @GetMapping("/trains/create")
-    public String createTrain() {
-        return "createTrain";
-    }
-
-    @GetMapping("/tournaments/create")
-    public String createTournament() {
-        return "createTournament";
-    }
-
-    @GetMapping("/health/create")
-    public String createHealth() {
-        return "createHealth";
     }
 
 }

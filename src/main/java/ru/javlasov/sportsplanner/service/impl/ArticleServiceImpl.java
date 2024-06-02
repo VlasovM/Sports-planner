@@ -18,6 +18,7 @@ import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +78,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public void createArticle(ArticleDto articleDto) {
+        var currentUser = userCredentialsService.getCurrentAuthUser();
+        articleDto.setUser(currentUser.getUser().getId());
+        articleDto.setStatus(ArticleStatusEnum.VERIFICATION);
         Article entity = articleMapper.dtoToModel(articleDto);
+        entity.setCreated(LocalDate.now());
         var newArticle = articleRepository.save(entity);
         sendMessage("Пользователь %s создал новую статью с id = %d".formatted(
                 userCredentialsService.getCurrentAuthUser().getEmail(), newArticle.getId()), TypeMessage.INFO);
@@ -100,9 +105,9 @@ public class ArticleServiceImpl implements ArticleService {
                     sendMessage(errorMessage, TypeMessage.ERROR);
                     throw new NotFoundException(errorMessage);
                 });
+        article.setStatus(articleStatusMapper.dtoToModel(ArticleStatusEnum.VERIFICATION));
         article.setTitle(articleDto.getTitle());
         article.setText(articleDto.getText());
-        article.setStatus(articleStatusMapper.dtoToModel(articleDto.getStatus()));
         var articleAfterSave = articleRepository.save(article);
         sendMessage("Пользователь %s изменил статью с id = %d".formatted(
                 userCredentialsService.getCurrentAuthUser().getEmail(), articleAfterSave.getId()), TypeMessage.INFO);

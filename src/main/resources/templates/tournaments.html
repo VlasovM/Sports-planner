@@ -53,8 +53,10 @@
                         <td>${tournament.opponent}</td>
                         <td>${tournament.result}</td>
                         <td>${tournament.reflection}</td>
-                        <td>
-                            <button>Изменить</button>
+                         <td>
+                            <a href="/tournaments/edit/${tournament.id}">
+                                <button value="${tournament.id}">Изменить</button>
+                            </a>
                         </td>
                         <td>
                         <button onclick="deleteTournament(${tournament.id})">Удалить</button>

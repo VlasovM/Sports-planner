@@ -12,4 +12,6 @@ public interface HealthService {
 
     List<HealthDto> getHealthCurrentUser();
 
+    HealthDto getById(Long id);
+
 }

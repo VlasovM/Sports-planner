@@ -12,4 +12,6 @@ public interface TrainService {
 
     void createOrEdit(TrainDto trainDto);
 
+    TrainDto getById(Long id);
+
 }

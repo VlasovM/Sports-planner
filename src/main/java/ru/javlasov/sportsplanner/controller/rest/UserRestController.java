@@ -1,4 +1,4 @@
-package ru.javlasov.sportsplanner.controller;
+package ru.javlasov.sportsplanner.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import ru.javlasov.sportsplanner.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
 

@@ -1,4 +1,4 @@
-package ru.javlasov.sportsplanner.controller;
+package ru.javlasov.sportsplanner.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/sports")
-public class SportController {
+public class SportRestController {
 
     private final SportService sportService;
 

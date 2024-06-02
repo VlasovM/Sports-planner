@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.model.Train;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;

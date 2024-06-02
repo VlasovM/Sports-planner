@@ -63,6 +63,18 @@ public class TrainServiceImpl implements TrainService {
                 trainAfterSave.getId()), TypeMessage.INFO);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public TrainDto getById(Long id) {
+        var train = trainRepository.findById(id)
+                .orElseThrow(() -> {
+                    sendMessage("Ошибка при попытке найти тренировку по id %d".formatted(id), TypeMessage.ERROR);
+                    throw new NotFoundException("Возникла ошибка с получением данных," +
+                            " обратитесь к администратору системы.");
+                });
+        return trainMapper.modelToDto(train);
+    }
+
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);

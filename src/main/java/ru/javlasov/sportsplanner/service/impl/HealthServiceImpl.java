@@ -61,6 +61,17 @@ public class HealthServiceImpl implements HealthService {
         return healthMapper.modelListToDtoList(trainsUser);
     }
 
+    @Override
+    public HealthDto getById(Long id) {
+        var health = healthRepository.findById(id)
+                .orElseThrow(() -> {
+                    sendMessage("Ошибка при попытке найти посещение врача по id %d".formatted(id), TypeMessage.ERROR);
+                    throw new NotFoundException("Возникла ошибка с получением данных," +
+                            " обратитесь к администратору системы.");
+                });
+        return healthMapper.modelToDto(health);
+    }
+
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);

@@ -1,69 +1,56 @@
 package ru.javlasov.sportsplanner.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.service.ArticleService;
+import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/articles")
+@RequestMapping("/articles")
 public class ArticleController {
 
     private final ArticleService articleService;
 
+    private final UserCredentialsService userCredentialsService;
+
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<ArticleDto> getAllArticles() {
-        return articleService.getAllArticles();
+    public String articles() {
+        return "articles";
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ArticleDto getArticleById(@PathVariable("id") Long id) {
-        return articleService.getArticleById(id);
+    @GetMapping("/article/{id}")
+    public String article(@PathVariable(name = "id") Long id, Model model) {
+        model.addAttribute("id", id);
+        return "article";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createArticle(@Valid @RequestBody ArticleDto articleDto) {
-        articleService.createArticle(articleDto);
+    @GetMapping("/create")
+    public String create() {
+        return "createArticle";
     }
 
-    @PatchMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public void updateArticle(@Valid @RequestBody ArticleDto articleDto) {
-        articleService.editArticle(articleDto);
+    @GetMapping("/edit/{id}")
+    public String editHealth(@PathVariable(name = "id") Long id, Model model) {
+        ArticleDto articleDto = articleService.getArticleById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("text", articleDto.getText());
+        model.addAttribute("title", articleDto.getTitle());
+        model.addAttribute("created", articleDto.getCreated());
+        return "editArticle";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteArticleById(@PathVariable("id") Long id) {
-        articleService.deleteArticle(id);
+    @GetMapping("/user/")
+    public String articlesByUser(Model model) {
+        var currentUser = userCredentialsService.getCurrentAuthUser();
+        model.addAttribute("userId", currentUser.getUser().getId());
+        return "articlesByUser";
     }
 
-    @PatchMapping("/accept/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void acceptArticle(@PathVariable("id") Long id) {
-        articleService.acceptArticle(id);
-    }
-
-    @PatchMapping("/decline/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void declineArticle(@PathVariable("id") Long id) {
-        articleService.declineArticle(id);
-    }
 
 }

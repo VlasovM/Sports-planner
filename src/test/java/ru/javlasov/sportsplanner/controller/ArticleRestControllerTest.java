@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
+import ru.javlasov.sportsplanner.controller.rest.ArticleRestController;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.dto.ErrorDto;
@@ -27,9 +28,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ArticleController.class)
+@WebMvcTest(ArticleRestController.class)
 @Import({SecurityConfig.class})
-public class ArticleControllerTest {
+public class ArticleRestControllerTest {
 
     private final static String BASE_URL = "/api/v1/articles";
 
@@ -63,7 +64,7 @@ public class ArticleControllerTest {
     void getArticleByIdTest() throws Exception {
         String findArticleId = "1";
         given(mockArticleService.getArticleById(1L)).willReturn(ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0));
-        mockMvc.perform(get(BASE_URL + "/" + findArticleId)
+        mockMvc.perform(get(BASE_URL + "/article/" + findArticleId)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

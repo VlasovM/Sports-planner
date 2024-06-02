@@ -44,8 +44,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
         return userCredentialsRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     sendMessage("Ошибка при попытке найти пользователя по email %s".formatted(email));
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
+                    throw new NotFoundException("Пользователь с такой почтой не найден!");
                 });
     }
 

@@ -29,28 +29,23 @@
         .h1 {
             font-size: 40px;
         }
+
+        .h2 {
+            color: darkcyan;
+        }
     </style>
 </head>
 <body>
 <h1 class="h1" style="text-align: center">Спортивный планировщик</h1>
-<a href="registration.html"  class="button" style="float: right" th:href="@{/registration}">Зарегистрироваться</a>
+<h2 class="h2" style="text-align: center">Чтобы увидеть больше возможностей войдите или зарегистрируйтесь</h2>
+<a href="registration.html" class="button" style="float: right" th:href="@{/registration}">Зарегистрироваться</a>
 <a th:href="@{/application/login}" class="button" style="float: right">Вход</a>
+
 <table>
     <thead>
     <tr>
         <th>
             <a href="articles.html" th:href="@{/articles}" class="article">Статьи</a>
-        </th>
-    </tr>
-    <tr>
-        <th>
-            <a href="trains.html" th:href="@{/trains}" class="button">Мои тренировки</a>
-        </th>
-        <th>
-            <a href="tournaments.html" th:href="@{/tournaments}" class="button">Мои турниры</a>
-        </th>
-        <th>
-            <a href="health.html" th:href="@{/health}" class="button">Моё здоровье</a>
         </th>
     </tr>
     </thead>

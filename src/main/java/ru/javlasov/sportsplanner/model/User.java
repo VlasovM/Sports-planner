@@ -2,6 +2,7 @@ package ru.javlasov.sportsplanner.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,9 +24,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedEntityGraph(name = "author-genre-entity-graph",
+@NamedEntityGraph(name = "trains-tournaments-checkUp-articles-entity-graph",
         attributeNodes = {@NamedAttributeNode("trains"), @NamedAttributeNode("tournaments"),
-                @NamedAttributeNode("checkUp")})
+                @NamedAttributeNode("checkUp"), @NamedAttributeNode("articles")})
 public class User {
 
     @Id
@@ -53,16 +54,16 @@ public class User {
     @Column(name = "sport_id")
     private Long sport;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Article> articles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Train> trains;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Tournament> tournaments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Health> checkUp;
 
 }

@@ -58,7 +58,7 @@ public class TrainServiceImpl implements TrainService {
         var trainEntity = trainMapper.dtoToModel(trainDto);
         checkReflection(trainEntity);
         var trainAfterSave = trainRepository.save(trainEntity);
-        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
+        sendMessage("Пользователь %s %s тренировку с id = %d".formatted(
                 currentUser.getEmail(), trainDto.getId() == null ? "создал" : "изменил",
                 trainAfterSave.getId()), TypeMessage.INFO);
     }

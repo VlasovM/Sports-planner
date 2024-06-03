@@ -32,7 +32,9 @@
         <input id="tournament-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
     </div>
     <div class="row">
-        <button type="button" onclick="update()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/tournaments}">
+            <button type="button" onclick="edit()">Сохранить</button>
+        </a>
         <a href="homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>
@@ -41,7 +43,7 @@
 </body>
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 <script>
-    function update() {
+    function edit() {
 
         const idInput = document.getElementById("id-input")
         const dateInput = document.getElementById("tournament-date-input")

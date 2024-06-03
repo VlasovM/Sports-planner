@@ -16,7 +16,9 @@
         <input id="article-text-input" name="text" type="text" th:value="*{text}" value=""/>
     </div>
     <div class="row">
-        <button type="button" onclick="create()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/articles/user/}">
+            <button type="button" onclick="create()">Сохранить</button>
+        </a>
         <a href="homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>

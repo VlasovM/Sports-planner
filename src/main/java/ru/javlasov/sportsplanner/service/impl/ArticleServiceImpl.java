@@ -67,11 +67,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticlesByUserId(Long userId) {
         List<Article> allArticles = articleRepository.findAllByUser(userId);
-        if (allArticles.isEmpty()) {
-            var errorMessage = "Не удалось найти статьи с userId = %d".formatted(userId);
-            sendMessage(errorMessage, TypeMessage.ERROR);
-            throw new NotFoundException(errorMessage);
-        }
         return articleMapper.modelToDtoList(allArticles);
     }
 

@@ -30,7 +30,9 @@
         <input id="health-result-input" name="result" type="text" th:value="*{result}" value=""/>
     </div>
     <div class="row">
-        <button type="button" onclick="create()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/health}">
+            <button type="button" onclick="create()">Сохранить</button>
+        </a>
         <a href="homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>

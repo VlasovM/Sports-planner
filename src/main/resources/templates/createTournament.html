@@ -28,7 +28,9 @@
         <input id="tournament-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
     </div>
     <div class="row">
-        <button type="button" onclick="create()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/tournaments}">
+            <button type="button" onclick="create()">Сохранить</button>
+        </a>
         <a href="homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>

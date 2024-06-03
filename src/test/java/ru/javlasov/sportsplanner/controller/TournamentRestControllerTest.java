@@ -12,9 +12,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.controller.rest.TournamentRestController;
+import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
 import ru.javlasov.sportsplanner.service.TournamentService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -44,7 +49,10 @@ class TournamentRestControllerTest {
     @DisplayName("Should get all tournament and get OK status")
     @WithMockUser
     void getAllTournamentsTest() throws Exception {
-        given(mockTournamentService.getTournamentCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTournamentDto());
+        Set<TournamentDto> expectedTournamentsDtoSet = ExpectedDataFromDB.getExpectedTournamentDto();
+        List<TournamentDto> expectedTournamentsDtoList = new ArrayList<>(expectedTournamentsDtoSet);
+
+        given(mockTournamentService.getTournamentCurrentUser()).willReturn(expectedTournamentsDtoList);
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -71,7 +79,7 @@ class TournamentRestControllerTest {
     @WithMockUser
     @DisplayName("Should create tournament and get 201 (created) status")
     void createTournamentTest() throws Exception {
-        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().get(0);
+        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().iterator().next();
         incomeTournamentDto.setId(null);
 
         mockMvc.perform(post(BASE_URL)
@@ -86,7 +94,7 @@ class TournamentRestControllerTest {
     @WithMockUser
     @DisplayName("Should update tournament and get 200 (OK) status")
     void updateTournamentTest() throws Exception {
-        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().get(0);
+        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentDto().iterator().next();
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())

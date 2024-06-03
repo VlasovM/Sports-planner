@@ -73,7 +73,7 @@ class ArticleServiceImplTest {
         incomeArticle.setText("OtherText");
         incomeArticle.setTitle("OtherTitle");
 
-        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream().iterator().next();
         expectedArticle.setText("OtherText");
         expectedArticle.setTitle("OtherTitle");
 
@@ -102,7 +102,7 @@ class ArticleServiceImplTest {
         incomeArticle.setStatus(ArticleStatusEnum.VERIFICATION);
 
         // when
-        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream().iterator().next();
         expectedArticle.setStatus(new ArticleStatus(ArticleStatusEnum.VERIFICATION.getId(),
                 ArticleStatusEnum.VERIFICATION.getTitle()));
         Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));
@@ -125,7 +125,7 @@ class ArticleServiceImplTest {
         incomeArticle.setStatus(ArticleStatusEnum.VERIFICATION);
 
         // when
-        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream().iterator().next();
         expectedArticle.setStatus(new ArticleStatus(ArticleStatusEnum.DECLINE.getId(),
                 ArticleStatusEnum.DECLINE.getTitle()));
         Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));

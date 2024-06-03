@@ -12,9 +12,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.controller.rest.HealthRestController;
+import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
 import ru.javlasov.sportsplanner.service.HealthService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -45,7 +50,9 @@ class HealthRestControllerTest {
     @DisplayName("Should get all healths")
     @WithMockUser
     void getAllHealthForCurrentUserTest() throws Exception {
-        given(mockHealthService.getHealthCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedHealthDto());
+        Set<HealthDto> expectedHealthDtoSet = ExpectedDataFromDB.getExpectedHealthDto();
+        List<HealthDto> expectedHealthDtoList = new ArrayList<>(expectedHealthDtoSet);
+        given(mockHealthService.getHealthCurrentUser()).willReturn(expectedHealthDtoList);
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +88,7 @@ class HealthRestControllerTest {
     @WithMockUser
     @DisplayName("Should update health and get ok status")
     void updateHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDto().get(0);
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDto().iterator().next();
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())
@@ -95,7 +102,7 @@ class HealthRestControllerTest {
     @WithMockUser
     @DisplayName("Should create health and get created status")
     void createHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDto().get(0);
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDto().iterator().next();
         incomeHealthDto.setId(null);
 
         mockMvc.perform(post(BASE_URL)

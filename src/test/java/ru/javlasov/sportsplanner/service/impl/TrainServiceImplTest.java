@@ -5,14 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
+import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.TrainMapper;
+import ru.javlasov.sportsplanner.model.Train;
 import ru.javlasov.sportsplanner.repository.TrainRepository;
 import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.TrainService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,24 +43,27 @@ class TrainServiceImplTest {
         var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
         Mockito.when(mockUserCredentialsService.getCurrentAuthUser()).thenReturn(expectedUserCredentials);
 
-        var expectedTrains = ExpectedDataFromDB.getExpectedTrainsFromDB();
-        Mockito.when(mockTrainRepository.findAllByUser(expectedUserCredentials.getUser().getId())).thenReturn(expectedTrains);
+        Set<Train> expectedTrainsSet = ExpectedDataFromDB.getExpectedTrainsFromDB();
+        List<Train> expectedTrainsList = new ArrayList<>(expectedTrainsSet);
+        Mockito.when(mockTrainRepository.findAllByUser(expectedUserCredentials.getUser().getId()))
+                .thenReturn(expectedTrainsList);
 
-        var expectedTrainsDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB();
-        Mockito.when(mockTrainMapper.modelListToDtoList(expectedTrains))
-                .thenReturn(ExpectedDataFromDB.getExpectedTrainDtoFromDB());
+        Set<TrainDto> expectedTrainsDtoSet = ExpectedDataFromDB.getExpectedTrainDtoFromDB();
+        List<TrainDto> expectedTrainsDtoList = new ArrayList<>(expectedTrainsDtoSet);
+        Mockito.when(mockTrainMapper.modelListToDtoList(expectedTrainsList))
+                .thenReturn(expectedTrainsDtoList);
 
         // when
         var actualTrainsDto = underTestService.getAllTrainsCurrentUser();
 
         // then
-        assertThat(expectedTrainsDto.size()).isEqualTo(actualTrainsDto.size());
-        assertThat(expectedTrainsDto.get(0).getId()).isEqualTo(actualTrainsDto.get(0).getId());
-        assertThat(expectedTrainsDto.get(0).getTitle()).isEqualTo(actualTrainsDto.get(0).getTitle());
-        assertThat(expectedTrainsDto.get(0).getUser()).isEqualTo(actualTrainsDto.get(0).getUser());
-        assertThat(expectedTrainsDto.get(1).getId()).isEqualTo(actualTrainsDto.get(1).getId());
-        assertThat(expectedTrainsDto.get(1).getTitle()).isEqualTo(actualTrainsDto.get(1).getTitle());
-        assertThat(expectedTrainsDto.get(1).getUser()).isEqualTo(actualTrainsDto.get(1).getUser());
+        assertThat(expectedTrainsDtoList.size()).isEqualTo(actualTrainsDto.size());
+        assertThat(expectedTrainsDtoList.get(0).getId()).isEqualTo(actualTrainsDto.get(0).getId());
+        assertThat(expectedTrainsDtoList.get(0).getTitle()).isEqualTo(actualTrainsDto.get(0).getTitle());
+        assertThat(expectedTrainsDtoList.get(0).getUser()).isEqualTo(actualTrainsDto.get(0).getUser());
+        assertThat(expectedTrainsDtoList.get(1).getId()).isEqualTo(actualTrainsDto.get(1).getId());
+        assertThat(expectedTrainsDtoList.get(1).getTitle()).isEqualTo(actualTrainsDto.get(1).getTitle());
+        assertThat(expectedTrainsDtoList.get(1).getUser()).isEqualTo(actualTrainsDto.get(1).getUser());
     }
 
     @Test

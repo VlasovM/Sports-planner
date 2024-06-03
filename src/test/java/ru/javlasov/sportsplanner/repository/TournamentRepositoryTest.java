@@ -7,7 +7,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.model.Tournament;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,24 +26,31 @@ class TournamentRepositoryTest {
     @Test
     void getAllTournamentsTest() {
         // given
-        List<Tournament> expectedTournaments = ExpectedDataFromDB.getExpectedTournamentsFromDB();
+        Set<Tournament> expectedTournamentsSet = ExpectedDataFromDB.getExpectedTournamentsFromDB();
+        List<Tournament> expectedTournamentsList = new ArrayList<>(expectedTournamentsSet);
+        expectedTournamentsList = expectedTournamentsList
+                .stream()
+                .sorted(Comparator.comparing(Tournament::getId)).
+                collect(Collectors.toList());
 
         // when
         List<Tournament> actualTournaments = tournamentRepository.findAll();
 
         // then
-        assertThat(expectedTournaments.size()).isEqualTo(actualTournaments.size());
-        assertThat(expectedTournaments.get(0).getId()).isEqualTo(actualTournaments.get(0).getId());
-        assertThat(expectedTournaments.get(0).getTitle()).isEqualTo(actualTournaments.get(0).getTitle());
-        assertThat(expectedTournaments.get(1).getId()).isEqualTo(actualTournaments.get(1).getId());
-        assertThat(expectedTournaments.get(1).getTitle()).isEqualTo(actualTournaments.get(1).getTitle());
+        assertThat(expectedTournamentsList.size()).isEqualTo(actualTournaments.size());
+        assertThat(expectedTournamentsList.get(0).getId()).isEqualTo(actualTournaments.get(0).getId());
+        assertThat(expectedTournamentsList.get(0).getTitle()).isEqualTo(actualTournaments.get(0).getTitle());
+        assertThat(expectedTournamentsList.get(1).getId()).isEqualTo(actualTournaments.get(1).getId());
+        assertThat(expectedTournamentsList.get(1).getTitle()).isEqualTo(actualTournaments.get(1).getTitle());
     }
 
     @DisplayName("Should get tournament by id")
     @Test
     void getTournamentByIdTest() {
         // given
-        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().get(0);
+        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().stream()
+                .filter(tournament -> tournament.getId().equals(1L))
+                .findFirst().orElseThrow();
 
         // when
         var actualTournament = tournamentRepository.findById(1L);
@@ -54,7 +65,12 @@ class TournamentRepositoryTest {
     @DisplayName("Should get all tournaments by user id")
     void findAllByUserTest() {
         // given
-        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB();
+        Set<Tournament> expectedTournamentsSet = ExpectedDataFromDB.getExpectedTournamentsFromDB();
+        List<Tournament> expectedTournamentsList = new ArrayList<>(expectedTournamentsSet);
+        expectedTournamentsList = expectedTournamentsList
+                .stream()
+                .sorted(Comparator.comparing(Tournament::getId)).
+                collect(Collectors.toList());
 
         // when
 
@@ -62,8 +78,8 @@ class TournamentRepositoryTest {
 
         // then
         assertThat(actualTournament).isNotEmpty();
-        assertThat(expectedTournament.get(0).getId()).isEqualTo(actualTournament.get(0).getId());
-        assertThat(expectedTournament.get(0).getTitle()).isEqualTo(actualTournament.get(0).getTitle());
+        assertThat(expectedTournamentsList.get(0).getId()).isEqualTo(actualTournament.get(0).getId());
+        assertThat(expectedTournamentsList.get(0).getTitle()).isEqualTo(actualTournament.get(0).getTitle());
     }
 
 }

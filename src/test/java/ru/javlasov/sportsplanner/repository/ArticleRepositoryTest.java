@@ -7,12 +7,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.model.Article;
-import ru.javlasov.sportsplanner.model.ArticleStatus;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,24 +27,31 @@ class ArticleRepositoryTest {
     @DisplayName("Should get all articles")
     void getAllArticlesTest() {
         // given
-        List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB();
+        Set<Article> expectedArticlesSet = ExpectedDataFromDB.getExpectedArticlesFromDB();
+        List<Article> expectedArticlesList = new ArrayList<>(expectedArticlesSet);
+        expectedArticlesList = expectedArticlesList
+                .stream()
+                .sorted(Comparator.comparing(Article::getId)).
+                collect(Collectors.toList());
 
         // when
         List<Article> actualArticles = articleRepository.findAll();
 
         // then
-        assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
-        assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
-        assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
-        assertThat(expectedArticles.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
-        assertThat(expectedArticles.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
+        assertThat(expectedArticlesList.size()).isEqualTo(actualArticles.size());
+        assertThat(expectedArticlesList.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
+        assertThat(expectedArticlesList.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
+        assertThat(expectedArticlesList.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
+        assertThat(expectedArticlesList.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
     }
 
     @Test
     @DisplayName("Should get article by id")
     void getArticleByIdTest() {
         // given
-        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream()
+                .filter(article -> article.getId().equals(1L))
+                .findFirst().orElseThrow();
 
         // when
         var actualArticle = articleRepository.findById(1L);
@@ -61,19 +67,22 @@ class ArticleRepositoryTest {
     @DisplayName("Should get all articles by user id")
     void getArticlesByUserIdTest() {
         // given
-        List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB();
+        Set<Article> expectedArticlesSet = ExpectedDataFromDB.getExpectedArticlesFromDB();
+        List<Article> expectedArticlesList = new ArrayList<>(expectedArticlesSet);
+        expectedArticlesList = expectedArticlesList
+                .stream()
+                .sorted(Comparator.comparing(Article::getId)).
+                collect(Collectors.toList());
 
         // when
         List<Article> actualArticles = articleRepository.findAllByUser(1L);
 
         // then
-        assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());
-        assertThat(expectedArticles.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
-        assertThat(expectedArticles.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
-        assertThat(expectedArticles.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
-        System.out.println(expectedArticles.get(1).getStatus().getTitle());
-        System.out.println(actualArticles.get(1).getStatus().getTitle());
-        assertThat(expectedArticles.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
+        assertThat(expectedArticlesList.size()).isEqualTo(actualArticles.size());
+        assertThat(expectedArticlesList.get(0).getId()).isEqualTo(actualArticles.get(0).getId());
+        assertThat(expectedArticlesList.get(0).getStatus().getId()).isEqualTo(actualArticles.get(0).getStatus().getId());
+        assertThat(expectedArticlesList.get(1).getId()).isEqualTo(actualArticles.get(1).getId());
+        assertThat(expectedArticlesList.get(1).getStatus().getId()).isEqualTo(actualArticles.get(1).getStatus().getId());
     }
 
     @Test
@@ -91,7 +100,9 @@ class ArticleRepositoryTest {
     @DisplayName("Should save new article")
     void saveArticleTest() {
         // given
-        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream()
+                .filter(article -> article.getId().equals(1L))
+                .findFirst().orElseThrow();
         expectedArticle.setId(null);
 
         // when

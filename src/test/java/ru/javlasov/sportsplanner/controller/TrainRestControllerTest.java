@@ -12,9 +12,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.controller.rest.TrainRestController;
+import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
 import ru.javlasov.sportsplanner.service.TrainService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -44,7 +49,9 @@ class TrainRestControllerTest {
     @DisplayName("Should get all trains and get OK status")
     @WithMockUser
     void getAllTrainsTest() throws Exception {
-        given(mockTrainService.getAllTrainsCurrentUser()).willReturn(ExpectedDataFromDB.getExpectedTrainDtoFromDB());
+        Set<TrainDto> expectedTrainsDtoSet = ExpectedDataFromDB.getExpectedTrainDtoFromDB();
+        List<TrainDto> expectedTrainsDtoList = new ArrayList<>(expectedTrainsDtoSet);
+        given(mockTrainService.getAllTrainsCurrentUser()).willReturn(expectedTrainsDtoList);
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +77,7 @@ class TrainRestControllerTest {
     @WithMockUser
     @DisplayName("Should create train and get CREATED status")
     void createTrainTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().iterator().next();
         incomeHealthDto.setId(null);
 
         mockMvc.perform(post(BASE_URL)
@@ -85,7 +92,7 @@ class TrainRestControllerTest {
     @WithMockUser
     @DisplayName("Should edit train and get OK status")
     void editTrainTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().get(0);
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedTrainDtoFromDB().iterator().next();
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())

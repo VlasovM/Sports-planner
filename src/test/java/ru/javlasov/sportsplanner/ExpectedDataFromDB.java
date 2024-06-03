@@ -2,7 +2,6 @@ package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.dto.HealthDto;
-import ru.javlasov.sportsplanner.dto.SportDto;
 import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.dto.TrainDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
@@ -21,6 +20,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ExpectedDataFromDB {
 
@@ -31,57 +32,57 @@ public class ExpectedDataFromDB {
         return List.of(status1, status2, status3);
     }
 
-    public static List<Article> getExpectedArticlesFromDB() {
+    public static Set<Article> getExpectedArticlesFromDB() {
         var article1 = new Article(1L, getExpectedArticlesStatusFromDB().get(0), "title1",
                 "text1", LocalDate.of(2000, 1, 1), 1L);
         var article2 = new Article(2L, getExpectedArticlesStatusFromDB().get(1), "title2",
                 "text2", LocalDate.of(2000, 1, 1), 1L);
-        var article3 = new Article(2L, getExpectedArticlesStatusFromDB().get(2), "title3",
+        var article3 = new Article(3L, getExpectedArticlesStatusFromDB().get(2), "title3",
                 "text3", LocalDate.of(2000, 1, 1), 1L);
-        return List.of(article1, article2, article3);
+        return Set.of(article1, article2, article3);
     }
 
     public static List<User> getExpectedUsersFromDB() {
         var user1 = new User(1L, "name1", null, "surname1", 22,
                 LocalDate.of(2000, 1, 1), "biography1",
-                getExpectedSportsFromDB().get(0).getId(), getExpectedArticlesFromDB(), getExpectedTrainsFromDB(),
+                getExpectedSportsFromDB().iterator().next().getId(), getExpectedArticlesFromDB(), getExpectedTrainsFromDB(),
                 getExpectedTournamentsFromDB(), getExpectedHealthFromDB());
         var user2 = new User(2L, "name2", "middlename2", "surname2", 25,
                 LocalDate.of(2000, 1, 1), "biography2",
-                getExpectedSportsFromDB().get(1).getId(), null, null, null, null);
+                2L, null, null, null, null);
         return List.of(user1, user2);
     }
 
-    public static List<Sport> getExpectedSportsFromDB() {
+    public static Set<Sport> getExpectedSportsFromDB() {
         var sport1 = new Sport(1L, "sport1");
         var sport2 = new Sport(2L, "sport2");
-        return List.of(sport1, sport2);
+        return Set.of(sport1, sport2);
     }
 
-    public static List<Health> getExpectedHealthFromDB() {
+    public static Set<Health> getExpectedHealthFromDB() {
         var health1 = new Health(1L, LocalDate.of(2000, 1, 1), "clinic1",
                 "doctor_specialization1", "doctor_full_name1",
                 "result1", 1L);
         var health2 = new Health(2L, LocalDate.of(2000, 1, 1), "clinic2",
                 "doctor_specialization2", "doctor_full_name2",
                 "result2", 1L);
-        return List.of(health1, health2);
+        return Set.of(health1, health2);
     }
 
-    public static List<Tournament> getExpectedTournamentsFromDB() {
+    public static Set<Tournament> getExpectedTournamentsFromDB() {
         var tournament1 = new Tournament(1L, LocalDate.of(2000, 1, 1),
                 "title1", "opponent1", "result1", "reflection1", 1L);
         var tournament2 = new Tournament(2L, LocalDate.of(2000, 1, 1), "title2",
                 "opponent2", "result2", null, 1L);
-        return List.of(tournament1, tournament2);
+        return Set.of(tournament1, tournament2);
     }
 
-    public static List<Train> getExpectedTrainsFromDB() {
+    public static Set<Train> getExpectedTrainsFromDB() {
         var train1 = new Train(1L, LocalDateTime.of(2000, 1, 1, 1, 1),
                 "description1", "reflection1", 1L);
         var train2 = new Train(2L, LocalDateTime.of(2000, 1, 1, 1, 1),
                 "description2", null, 1L);
-        return List.of(train1, train2);
+        return Set.of(train1, train2);
     }
 
     public static List<ArticleDto> getExpectedArticleDtoFromDB() {
@@ -112,7 +113,7 @@ public class ExpectedDataFromDB {
         var expectedUser = getExpectedUserCredentialsFromDB().get(0);
         var expectedUserDto = new UserDto();
         expectedUserDto.setId(expectedUser.getId());
-        expectedUserDto.setSport(ExpectedDataFromDB.getExpectedSportsFromDB().get(0).getId());
+        expectedUserDto.setSport(ExpectedDataFromDB.getExpectedSportsFromDB().iterator().next().getId());
         expectedUserDto.setName(expectedUser.getUser().getName());
         expectedUserDto.setSurname(expectedUser.getUser().getSurname());
         expectedUserDto.setMiddleName(expectedUser.getUser().getMiddleName());
@@ -124,73 +125,48 @@ public class ExpectedDataFromDB {
         return List.of(expectedUserDto);
     }
 
-    public static List<TrainDto> getExpectedTrainDtoFromDB() {
+    public static Set<TrainDto> getExpectedTrainDtoFromDB() {
         var dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.ENGLISH);
-        var expectedTrainFirst = getExpectedTrainsFromDB().get(0);
-        var expectedTrainDtoFirst = new TrainDto();
-        expectedTrainDtoFirst.setId(expectedTrainFirst.getId());
-        expectedTrainDtoFirst.setUser(expectedTrainFirst.getUser());
-
-        expectedTrainDtoFirst.setDate(expectedTrainFirst.getDate().format(dateTimeFormatter));
-        expectedTrainDtoFirst.setTitle(expectedTrainFirst.getTitle());
-        expectedTrainDtoFirst.setReflection(expectedTrainFirst.getReflection());
-
-        var expectedTrainSecond = getExpectedTrainsFromDB().get(1);
-        var expectedTrainDtoSecond = new TrainDto();
-        expectedTrainDtoSecond.setId(expectedTrainSecond.getId());
-        expectedTrainDtoSecond.setUser(expectedTrainSecond.getUser());
-        expectedTrainDtoSecond.setDate(expectedTrainSecond.getDate().format(dateTimeFormatter));
-        expectedTrainDtoSecond.setTitle(expectedTrainSecond.getTitle());
-        expectedTrainDtoSecond.setReflection(expectedTrainSecond.getReflection());
-
-        return List.of(expectedTrainDtoFirst, expectedTrainDtoSecond);
+        Set<Train> expectedTrains = getExpectedTrainsFromDB();
+        return expectedTrains.stream().map(entity -> {
+            var expectedDto = new TrainDto();
+            expectedDto.setId(entity.getId());
+            expectedDto.setUser(entity.getUser());
+            expectedDto.setDate(entity.getDate().format(dateTimeFormatter));
+            expectedDto.setTitle(entity.getTitle());
+            expectedDto.setReflection(entity.getReflection());
+            return expectedDto;
+        }).collect(Collectors.toSet());
     }
 
-    public static List<HealthDto> getExpectedHealthDto() {
-        var expectedHealthFirst = getExpectedHealthFromDB().get(0);
-        var expectedHealthDtoFirst = new HealthDto();
-        expectedHealthDtoFirst.setId(expectedHealthFirst.getId());
-        expectedHealthDtoFirst.setDate(expectedHealthFirst.getDate());
-        expectedHealthDtoFirst.setClinic(expectedHealthFirst.getClinic());
-        expectedHealthDtoFirst.setUser(expectedHealthFirst.getUser());
-        expectedHealthDtoFirst.setResult(expectedHealthFirst.getResult());
-        expectedHealthDtoFirst.setDoctorFullName(expectedHealthFirst.getDoctorFullName());
-        expectedHealthDtoFirst.setDoctorSpecialization(expectedHealthFirst.getDoctorSpecialization());
-
-        var expectedHealthSecond = getExpectedHealthFromDB().get(0);
-        var expectedHealthDtoSecond = new HealthDto();
-        expectedHealthDtoSecond.setId(expectedHealthSecond.getId());
-        expectedHealthDtoSecond.setDate(expectedHealthSecond.getDate());
-        expectedHealthDtoSecond.setClinic(expectedHealthSecond.getClinic());
-        expectedHealthDtoSecond.setUser(expectedHealthSecond.getUser());
-        expectedHealthDtoSecond.setResult(expectedHealthSecond.getResult());
-        expectedHealthDtoSecond.setDoctorFullName(expectedHealthSecond.getDoctorFullName());
-        expectedHealthDtoSecond.setDoctorSpecialization(expectedHealthSecond.getDoctorSpecialization());
-
-        return List.of(expectedHealthDtoFirst, expectedHealthDtoSecond);
+    public static Set<HealthDto> getExpectedHealthDto() {
+        Set<Health> expectedHealth = getExpectedHealthFromDB();
+        return expectedHealth.stream().map(entity -> {
+            var expectedDto = new HealthDto();
+            expectedDto.setId(entity.getId());
+            expectedDto.setDate(entity.getDate());
+            expectedDto.setClinic(entity.getClinic());
+            expectedDto.setUser(entity.getUser());
+            expectedDto.setResult(entity.getResult());
+            expectedDto.setDoctorFullName(entity.getDoctorFullName());
+            expectedDto.setDoctorSpecialization(entity.getDoctorSpecialization());
+            return expectedDto;
+        }).collect(Collectors.toSet());
     }
 
-    public static List<TournamentDto> getExpectedTournamentDto() {
-        var expectedTournamentFirst = getExpectedTournamentsFromDB().get(0);
-        var expectedTournamentDtoFirst = new TournamentDto();
-        expectedTournamentDtoFirst.setId(expectedTournamentFirst.getId());
-        expectedTournamentDtoFirst.setUser(expectedTournamentFirst.getUser());
-        expectedTournamentDtoFirst.setResult(expectedTournamentFirst.getResult());
-        expectedTournamentDtoFirst.setDate(expectedTournamentFirst.getDate());
-        expectedTournamentDtoFirst.setReflection(expectedTournamentFirst.getReflection());
-        expectedTournamentDtoFirst.setTitle(expectedTournamentFirst.getTitle());
-        expectedTournamentDtoFirst.setOpponent(expectedTournamentFirst.getOpponent());
-
-        var expectedTournamentSecond = getExpectedTournamentsFromDB().get(1);
-        var expectedTournamentDtoSecond = new TournamentDto();
-        expectedTournamentDtoSecond.setId(expectedTournamentSecond.getId());
-        expectedTournamentDtoSecond.setUser(expectedTournamentSecond.getUser());
-        expectedTournamentDtoSecond.setResult(expectedTournamentSecond.getResult());
-        expectedTournamentDtoSecond.setDate(expectedTournamentSecond.getDate());
-        expectedTournamentDtoSecond.setReflection(expectedTournamentSecond.getReflection());
-        expectedTournamentDtoSecond.setTitle(expectedTournamentSecond.getTitle());
-        expectedTournamentDtoSecond.setOpponent(expectedTournamentSecond.getOpponent());
-        return List.of(expectedTournamentDtoFirst, expectedTournamentDtoSecond);
+    public static Set<TournamentDto> getExpectedTournamentDto() {
+        Set<Tournament> expectedTournament = getExpectedTournamentsFromDB();
+        return expectedTournament.stream().map(entity -> {
+            var expectedDto = new TournamentDto();
+            expectedDto.setId(entity.getId());
+            expectedDto.setUser(entity.getUser());
+            expectedDto.setResult(entity.getResult());
+            expectedDto.setDate(entity.getDate());
+            expectedDto.setReflection(entity.getReflection());
+            expectedDto.setTitle(entity.getTitle());
+            expectedDto.setOpponent(entity.getOpponent());
+            return expectedDto;
+        }).collect(Collectors.toSet());
     }
 
 }

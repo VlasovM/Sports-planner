@@ -7,7 +7,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.model.Train;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,24 +25,31 @@ class TrainRepositoryTest {
     @Test
     void getAllTrainsTest() {
         // given
-        List<Train> expectedTrains = ExpectedDataFromDB.getExpectedTrainsFromDB();
+        Set<Train> expectedTrainsSet = ExpectedDataFromDB.getExpectedTrainsFromDB();
+        List<Train> expectedTrainsList = new ArrayList<>(expectedTrainsSet);
+        expectedTrainsList = expectedTrainsList
+                .stream()
+                .sorted(Comparator.comparing(Train::getId)).
+                collect(Collectors.toList());
 
         // when
         List<Train> actualTrains = trainRepository.findAll();
 
         // then
-        assertThat(expectedTrains.size()).isEqualTo(actualTrains.size());
-        assertThat(expectedTrains.get(0).getId()).isEqualTo(actualTrains.get(0).getId());
-        assertThat(expectedTrains.get(0).getTitle()).isEqualTo(expectedTrains.get(0).getTitle());
-        assertThat(expectedTrains.get(1).getId()).isEqualTo(actualTrains.get(1).getId());
-        assertThat(expectedTrains.get(1).getTitle()).isEqualTo(expectedTrains.get(1).getTitle());
+        assertThat(expectedTrainsList.size()).isEqualTo(actualTrains.size());
+        assertThat(expectedTrainsList.get(0).getId()).isEqualTo(actualTrains.get(0).getId());
+        assertThat(expectedTrainsList.get(0).getTitle()).isEqualTo(actualTrains.get(0).getTitle());
+        assertThat(expectedTrainsList.get(1).getId()).isEqualTo(actualTrains.get(1).getId());
+        assertThat(expectedTrainsList.get(1).getTitle()).isEqualTo(actualTrains.get(1).getTitle());
     }
 
     @DisplayName("Should get train by id")
     @Test
     void getTrainByIdTest() {
         // given
-        var expectedTrain = ExpectedDataFromDB.getExpectedTrainsFromDB().get(0);
+        var expectedTrain = ExpectedDataFromDB.getExpectedTrainsFromDB().stream()
+                .filter(train -> train.getId().equals(1L))
+                .findFirst().orElseThrow();
 
         // when
         var actualTrain = trainRepository.findById(1L);
@@ -53,7 +64,12 @@ class TrainRepositoryTest {
     @DisplayName("Should get all trains by user id")
     void findAllByUserTest() {
         // given
-        var expectedTrains = ExpectedDataFromDB.getExpectedTrainsFromDB();
+        Set<Train> expectedTrainsSet = ExpectedDataFromDB.getExpectedTrainsFromDB();
+        List<Train> expectedTrainsList = new ArrayList<>(expectedTrainsSet);
+        expectedTrainsList = expectedTrainsList
+                .stream()
+                .sorted(Comparator.comparing(Train::getId)).
+                collect(Collectors.toList());
 
         // when
 
@@ -61,8 +77,8 @@ class TrainRepositoryTest {
 
         // then
         assertThat(actualTrainsDto).isNotEmpty();
-        assertThat(expectedTrains.get(0).getId()).isEqualTo(actualTrainsDto.get(0).getId());
-        assertThat(expectedTrains.get(0).getTitle()).isEqualTo(actualTrainsDto.get(0).getTitle());
+        assertThat(expectedTrainsList.get(0).getId()).isEqualTo(actualTrainsDto.get(0).getId());
+        assertThat(expectedTrainsList.get(0).getTitle()).isEqualTo(actualTrainsDto.get(0).getTitle());
     }
 
 }

@@ -19,9 +19,12 @@ class ArticleMapperTest {
     void modelToDtoTest() {
         //given
         var expectedDto = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().stream()
+                .filter(article -> article.getId().equals(expectedDto.getId()))
+                .findFirst().orElseThrow();
 
         //when
-        var actualDto = articleMapper.modelToDto(ExpectedDataFromDB.getExpectedArticlesFromDB().get(0));
+        var actualDto = articleMapper.modelToDto(expectedArticle);
 
         //then
         assertThat(expectedDto.getId()).isEqualTo(actualDto.getId());

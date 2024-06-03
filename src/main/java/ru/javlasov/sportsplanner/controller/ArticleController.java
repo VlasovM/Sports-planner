@@ -52,5 +52,9 @@ public class ArticleController {
         return "articlesByUser";
     }
 
+    @GetMapping("/validate")
+    public String validateArticles() {
+        return "articlesValidate";
+    }
 
 }

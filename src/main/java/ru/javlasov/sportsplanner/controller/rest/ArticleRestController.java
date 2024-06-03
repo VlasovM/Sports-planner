@@ -72,4 +72,10 @@ public class ArticleRestController {
         return articleService.getAllArticlesByUserId(id);
     }
 
+    @GetMapping("/validate")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ArticleDto> getArticlesForValidate() {
+        return articleService.getArticleForValidate();
+    }
+
 }

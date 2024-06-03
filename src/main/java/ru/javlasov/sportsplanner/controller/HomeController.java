@@ -2,12 +2,15 @@ package ru.javlasov.sportsplanner.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+
+    private static final String ROLE_ADMIN = "[ROLE_ADMIN]";
 
     @GetMapping("/")
     public String startPage() {
@@ -16,7 +19,8 @@ public class HomeController {
         if (authentication instanceof AnonymousAuthenticationToken) {
             return "homePageNotAuth";
         } else {
-            return "homePageAuth";
+            boolean isModerator = checkUser(authentication);
+            return isModerator ? "homePageAdmin" : "homePageAuth";
         }
     }
 
@@ -34,6 +38,11 @@ public class HomeController {
     @GetMapping("/registration")
     public String registration() {
         return "registration";
+    }
+
+    private boolean checkUser(Authentication authentication) {
+        var role = authentication.getAuthorities().toString();
+        return role.equals(ROLE_ADMIN);
     }
 
 }

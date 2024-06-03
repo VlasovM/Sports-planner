@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Статьи для валидации</title>
+</head>
+<table class="articles">
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Автор</th>
+        <th scope="col">Дата создания</th>
+        <th scope="col">Текст</th>
+        <th scope="col">Статус</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(function () {
+        $.get('/api/v1/articles/validate').done(function (articles) {
+            articles.forEach(function (article) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${article.title}</td>
+                        <td>${article.userFullName}</td>
+                        <td>${article.created}</td>
+                        <td>${article.text}</td>
+                        <td>${article.status}</td>
+                        <td>
+                            <button onclick="acceptArticle(${article.id})">Принять статью</button>
+                        </td>
+                        <td>
+                            <button onclick="declineArticle(${article.id})">Отклонить статью</button>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+    function acceptArticle(id) {
+        fetch("/api/v1/articles/accept/" + id, {
+            method: "PATCH"
+        })
+            .then(() => {
+                location.reload();
+            })
+    }
+
+    function declineArticle(id) {
+        fetch("/api/v1/articles/decline/" + id, {
+            method: "PATCH"
+        })
+            .then(() => {
+                location.reload();
+            })
+    }
+
+</script>
+
+</body>
+</html>

@@ -44,12 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDto> getAllArticles() {
         List<Article> allArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
         List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(allArticles);
-        allArticlesDto = allArticlesDto.stream().peek(article -> {
-            var user = userService.getUserById(article.getUser());
-            var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
-            article.setUserFullName(userFullName);
-        }).collect(Collectors.toList());
-        return allArticlesDto;
+        return fillArticlesForUserFullName(allArticlesDto);
     }
 
     @Override
@@ -125,6 +120,13 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    @Override
+    public List<ArticleDto> getArticleForValidate() {
+        List<Article> findArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.VERIFICATION.getId());
+        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(findArticles);
+        return fillArticlesForUserFullName(allArticlesDto);
+    }
+
     private Article findArticle(Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(
                 () -> {
@@ -137,6 +139,14 @@ public class ArticleServiceImpl implements ArticleService {
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
+    }
+
+    private List<ArticleDto> fillArticlesForUserFullName(List<ArticleDto> allArticlesDto) {
+        return allArticlesDto.stream().peek(article -> {
+            var user = userService.getUserById(article.getUser());
+            var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
+            article.setUserFullName(userFullName);
+        }).collect(Collectors.toList());
     }
 
 }

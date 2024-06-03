@@ -22,4 +22,6 @@ public interface ArticleService {
 
     void editArticle(ArticleDto articleDto);
 
+    List<ArticleDto> getArticleForValidate();
+
 }

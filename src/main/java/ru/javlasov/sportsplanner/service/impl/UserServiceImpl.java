@@ -74,7 +74,8 @@ public class UserServiceImpl implements UserService {
         setPassword(createdUserCredentials, userDto);
         var role = roleService.getUserRole();
         createdUserCredentials.setRole(role);
-        createdUserCredentials.setUser(createNewUser(userDto));
+        var user = createNewUser(userDto);
+        createdUserCredentials.setUser(user);
         var newUser = userCredentialsRepository.save(createdUserCredentials);
         sendMessage("Создан новый пользователь id = %d, email = %s".formatted(newUser.getId(), newUser.getEmail()),
                 TypeMessage.INFO);

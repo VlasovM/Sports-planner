@@ -59,8 +59,8 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional(readOnly = true)
     public List<TournamentDto> getTournamentCurrentUser() {
         var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        List<Tournament> trains = tournamentRepository.findAllByUser(currentUserCredentials.getUser().getId());
-        return tournamentMapper.listModelToListDto(trains);
+        var tournamentSet = currentUserCredentials.getUser().getTournaments();
+        return tournamentMapper.setModelToDtoList(tournamentSet);
     }
 
     @Override

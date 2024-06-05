@@ -32,8 +32,8 @@ public class TrainServiceImpl implements TrainService {
     @Transactional(readOnly = true)
     public List<TrainDto> getAllTrainsCurrentUser() {
         var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        var trainsUser = trainRepository.findAllByUser(currentUserCredentials.getUser().getId());
-        return trainMapper.modelListToDtoList(trainsUser);
+        var trainsUser = currentUserCredentials.getUser().getTrains();
+        return trainMapper.modelSetToDtoList(trainsUser);
     }
 
     @Override

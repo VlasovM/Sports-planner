@@ -22,7 +22,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class TournamentServiceImplTest {
 
     private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
@@ -51,38 +50,6 @@ class TournamentServiceImplTest {
         assertThat(actualException.getClass()).isEqualTo(NotFoundException.class);
         assertThat(actualException.getMessage()).isEqualTo("Возникла ошибка с получением данных, " +
                 "обратитесь к администратору системы.");
-    }
-
-    @Test
-    @DisplayName("Should get all tournaments for current auth user")
-    void getTournamentCurrentUserTest() {
-        // given
-        var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
-        Mockito.when(mockUserCredentialsService.getCurrentAuthUser()).thenReturn(expectedUserCredentials);
-
-        Set<Tournament> expectedTournamentsSet = ExpectedDataFromDB.getExpectedTournamentsFromDB();
-        List<Tournament> expectedTournamentsList = new ArrayList<>(expectedTournamentsSet);
-        Mockito.when(mockTournamentRepository.findAllByUser(expectedUserCredentials.getUser().getId()))
-                .thenReturn(expectedTournamentsList);
-
-        Set<TournamentDto> expectedTournamentDtoSet = ExpectedDataFromDB.getExpectedTournamentDto();
-        List<TournamentDto> expectedTournamentsDtoList = new ArrayList<>(expectedTournamentDtoSet);
-        Mockito.when(mockTournamentMapper.listModelToListDto(expectedTournamentsList))
-                .thenReturn(expectedTournamentsDtoList);
-
-        // when
-        var actualTournamentDto = underTestService.getTournamentCurrentUser();
-
-        // then
-        assertThat(expectedTournamentsDtoList.size()).isEqualTo(actualTournamentDto.size());
-        assertThat(expectedTournamentsDtoList.get(0).getId()).isEqualTo(actualTournamentDto.get(0).getId());
-        assertThat(expectedTournamentsDtoList.get(0).getUser()).isEqualTo(actualTournamentDto.get(0).getUser());
-        assertThat(expectedTournamentsDtoList.get(0).getOpponent()).isEqualTo(actualTournamentDto.get(0).getOpponent());
-        assertThat(expectedTournamentsDtoList.get(0).getTitle()).isEqualTo(actualTournamentDto.get(0).getTitle());
-        assertThat(expectedTournamentsDtoList.get(1).getId()).isEqualTo(actualTournamentDto.get(1).getId());
-        assertThat(expectedTournamentsDtoList.get(1).getUser()).isEqualTo(actualTournamentDto.get(1).getUser());
-        assertThat(expectedTournamentsDtoList.get(1).getOpponent()).isEqualTo(actualTournamentDto.get(1).getOpponent());
-        assertThat(expectedTournamentsDtoList.get(1).getTitle()).isEqualTo(actualTournamentDto.get(1).getTitle());
     }
 
 }

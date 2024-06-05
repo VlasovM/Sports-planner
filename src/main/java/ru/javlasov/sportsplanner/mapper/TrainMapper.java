@@ -7,6 +7,7 @@ import ru.javlasov.sportsplanner.model.Train;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface TrainMapper {
@@ -32,5 +33,7 @@ public interface TrainMapper {
     List<TrainDto> modelListToDtoList(List<Train> modelList);
 
     Train dtoToModel(TrainDto dto);
+
+    List<TrainDto> modelSetToDtoList(Set<Train> models);
 
 }

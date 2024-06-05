@@ -57,8 +57,8 @@ public class HealthServiceImpl implements HealthService {
     @Transactional(readOnly = true)
     public List<HealthDto> getHealthCurrentUser() {
         var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        var trainsUser = healthRepository.findAllByUser(currentUserCredentials.getUser().getId());
-        return healthMapper.modelListToDtoList(trainsUser);
+        var healthSet = currentUserCredentials.getUser().getCheckUp();
+        return healthMapper.modelSetToDtoList(healthSet);
     }
 
     @Override

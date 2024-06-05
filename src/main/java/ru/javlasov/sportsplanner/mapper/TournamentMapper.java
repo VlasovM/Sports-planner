@@ -5,6 +5,7 @@ import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.model.Tournament;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface TournamentMapper {
@@ -30,5 +31,7 @@ public interface TournamentMapper {
     }
 
     List<TournamentDto> listModelToListDto(List<Tournament> modelList);
+
+    List<TournamentDto> setModelToDtoList(Set<Tournament> modelSet);
 
 }

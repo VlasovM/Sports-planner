@@ -52,9 +52,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleDto getArticleById(Long id) {
         var article = findArticle(id);
         var articleDto = articleMapper.modelToDto(article);
-        var user = userService.getUserById(articleDto.getUser());
-        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
-        articleDto.setUserFullName(userFullName);
+        setUserFullName(articleDto);
         return articleDto;
     }
 
@@ -147,6 +145,12 @@ public class ArticleServiceImpl implements ArticleService {
             var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
             article.setUserFullName(userFullName);
         }).collect(Collectors.toList());
+    }
+
+    private void setUserFullName(ArticleDto articleDto) {
+        var user = userService.getUserById(articleDto.getUser());
+        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
+        articleDto.setUserFullName(userFullName);
     }
 
 }

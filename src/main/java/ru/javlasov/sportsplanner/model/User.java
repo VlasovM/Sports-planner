@@ -5,9 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Table(name = "users")
 @Entity
@@ -23,9 +19,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedEntityGraph(name = "trains-tournaments-checkUp-articles-entity-graph",
-        attributeNodes = {@NamedAttributeNode("trains"), @NamedAttributeNode("tournaments"),
-                @NamedAttributeNode("checkUp"), @NamedAttributeNode("articles")})
 public class User {
 
     @Id
@@ -52,17 +45,5 @@ public class User {
 
     @Column(name = "sport_id")
     private Long sport;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Article> articles;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Train> trains;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Tournament> tournaments;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Health> checkUp;
 
 }

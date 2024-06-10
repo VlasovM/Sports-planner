@@ -9,13 +9,9 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface HealthMapper {
-
-    HealthDto modelToDto(Health model);
-
-    Health dtoToModel(HealthDto dto);
-
-    List<HealthDto> modelListToDtoList(List<Health> modelList);
-
-    List<HealthDto> modelSetToDtoList(Set<Health> modelSet);
+//
+//    HealthDto modelToDto(Health model);
+//
+//    Health dtoToModel(HealthDto dto);
 
 }

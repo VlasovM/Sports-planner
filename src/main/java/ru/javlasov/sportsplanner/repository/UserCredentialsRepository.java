@@ -1,14 +1,18 @@
 package ru.javlasov.sportsplanner.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import ru.javlasov.sportsplanner.model.UserCredentials;
 
 import java.util.Optional;
 
 public interface UserCredentialsRepository extends CrudRepository<UserCredentials, Long> {
 
-    Optional<UserCredentials> findByEmail(String email);
+    @EntityGraph(value = "role-user-entity-graph")
+    Optional<UserCredentials> findByEmail(@NonNull String email);
 
-    Optional<UserCredentials> findUserByUserId(Long userId);
+    @EntityGraph(value = "role-user-entity-graph")
+    Optional<UserCredentials> findUserByUserId(@NonNull Long userId);
 
 }

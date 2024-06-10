@@ -1,10 +1,15 @@
 package ru.javlasov.sportsplanner.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +24,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(name = "tournament-entity-graph", attributeNodes = {@NamedAttributeNode("user")})
 public class Tournament {
 
     @Id
@@ -40,7 +46,8 @@ public class Tournament {
     @Column(name = "reflection")
     private String reflection;
 
-    @Column(name = "user_id", nullable = false)
-    private Long user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

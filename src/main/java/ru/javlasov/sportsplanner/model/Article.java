@@ -7,6 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,8 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(name = "article-entity-graph", attributeNodes = {@NamedAttributeNode("status"),
+        @NamedAttributeNode("user")})
 public class Article {
 
     @Id
@@ -41,7 +46,8 @@ public class Article {
     @Column(name = "created", nullable = false)
     private LocalDate created;
 
-    @Column(name = "user_id", nullable = false)
-    private Long user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

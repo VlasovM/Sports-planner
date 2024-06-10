@@ -7,7 +7,6 @@ import ru.javlasov.sportsplanner.dto.LoggerEvent;
 import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
-import ru.javlasov.sportsplanner.mapper.TournamentMapper;
 import ru.javlasov.sportsplanner.model.Tournament;
 import ru.javlasov.sportsplanner.repository.TournamentRepository;
 import ru.javlasov.sportsplanner.service.LoggingService;
@@ -20,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TournamentServiceImpl implements TournamentService {
 
-    private final TournamentMapper tournamentMapper;
+//    private final TournamentMapper tournamentMapper;
 
     private final TournamentRepository tournamentRepository;
 
@@ -47,20 +46,22 @@ public class TournamentServiceImpl implements TournamentService {
     public void createOrEdit(TournamentDto tournamentDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         tournamentDto.setUser(currentUser.getUser().getId());
-        var tournamentEntity = tournamentMapper.dtoToModel(tournamentDto);
-        checkReflection(tournamentEntity);
-        var tournamentAfterSave = tournamentRepository.save(tournamentEntity);
-        sendMessage("Пользователь %s %s новую инфо о турнире с id = %d".formatted(
-                userCredentialsService.getCurrentAuthUser().getEmail(),
-                tournamentDto.getId() == null ? "создал" : "изменил", tournamentAfterSave.getId()), TypeMessage.INFO);
+//        var tournamentEntity = tournamentMapper.dtoToModel(tournamentDto);
+//        checkReflection(tournamentEntity);
+//        var tournamentAfterSave = tournamentRepository.save(tournamentEntity);
+//        sendMessage("Пользователь %s %s новую инфо о турнире с id = %d".formatted(
+//                userCredentialsService.getCurrentAuthUser().getEmail(),
+//                tournamentDto.getId() == null ? "создал" : "изменил", tournamentAfterSave.getId()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<TournamentDto> getTournamentCurrentUser() {
         var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        var tournamentSet = currentUserCredentials.getUser().getTournaments();
-        return tournamentMapper.setModelToDtoList(tournamentSet);
+        //TODO
+//        var tournamentSet = currentUserCredentials.getUser().getTournaments();
+//        return tournamentMapper.setModelToDtoList(tournamentSet);
+        return null;
     }
 
     @Override
@@ -72,7 +73,8 @@ public class TournamentServiceImpl implements TournamentService {
                     throw new NotFoundException("Возникла ошибка с получением данных," +
                             " обратитесь к администратору системы.");
                 });
-        return tournamentMapper.modelToDto(tournament);
+//        return tournamentMapper.modelToDto(tournament);
+        return null;
     }
 
     private void sendMessage(String message, TypeMessage type) {

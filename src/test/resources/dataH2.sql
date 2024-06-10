@@ -15,14 +15,14 @@ MERGE INTO roles (role) KEY (role)
     VALUES ('USER'), ('ADMIN');
 
 MERGE INTO user_credentials (email, password, user_id, role_id) KEY (email)
-    VALUES ('test@mail.ru', 'password', 1, 1);
+    VALUES ('name1@mail.ru', 'password', 1, 1), ('name2@mail.ru', 'password', 2, 1);
 
 MERGE INTO articles (article_status, title, text, created, user_id) KEY (title, text)
     VALUES (1, 'title1', 'text1', '2000-01-01', 1),
            (2, 'title2', 'text2', '2000-01-01', 1),
            (3, 'title3', 'text3', '2000-01-01', 1);
 
-INSERT INTO trains (date, title, reflection, user_id)
+INSERT INTO workout (date, title, reflection, user_id)
     VALUES ('2000-01-01 01:01:00.000', 'description1', 'reflection1', 1),
            ('2000-01-01 01:01:00.000', 'description2', null, 1);
 

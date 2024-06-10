@@ -8,7 +8,6 @@ import ru.javlasov.sportsplanner.dto.LoggerEvent;
 import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
-import ru.javlasov.sportsplanner.mapper.ArticleMapper;
 import ru.javlasov.sportsplanner.mapper.ArticleStatusMapper;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
@@ -18,7 +17,7 @@ import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
 import ru.javlasov.sportsplanner.service.UserService;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    private final ArticleMapper articleMapper;
+//    private final ArticleMapper articleMapper;
 
     private final ArticleStatusMapper articleStatusMapper;
 
@@ -43,24 +42,25 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticles() {
         List<Article> allArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
-        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(allArticles);
-        return fillArticlesForUserFullName(allArticlesDto);
+//        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(allArticles);
+        return null;
     }
 
     @Override
     @Transactional(readOnly = true)
     public ArticleDto getArticleById(Long id) {
         var article = findArticle(id);
-        var articleDto = articleMapper.modelToDto(article);
-        setUserFullName(articleDto);
-        return articleDto;
+//        var articleDto = articleMapper.modelToDto(article);
+//        setUserFullName(articleDto);
+        return null;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticlesByUserId(Long userId) {
-        List<Article> allArticles = articleRepository.findAllByUser(userId);
-        return articleMapper.modelToDtoList(allArticles);
+        //TODO
+        List<Article> allArticles = new ArrayList<>();
+        return null;
     }
 
     @Override
@@ -69,11 +69,11 @@ public class ArticleServiceImpl implements ArticleService {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         articleDto.setUser(currentUser.getUser().getId());
         articleDto.setStatus(ArticleStatusEnum.VERIFICATION);
-        Article entity = articleMapper.dtoToModel(articleDto);
-        entity.setCreated(LocalDate.now());
-        var newArticle = articleRepository.save(entity);
-        sendMessage("Пользователь %s создал новую статью с id = %d".formatted(
-                userCredentialsService.getCurrentAuthUser().getEmail(), newArticle.getId()), TypeMessage.INFO);
+//        Article entity = articleMapper.dtoToModel(articleDto);
+//        entity.setCreated(LocalDate.now());
+//        var newArticle = articleRepository.save(entity);
+//        sendMessage("Пользователь %s создал новую статью с id = %d".formatted(
+//                userCredentialsService.getCurrentAuthUser().getEmail(), newArticle.getId()), TypeMessage.INFO);
     }
 
     @Override
@@ -121,8 +121,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleDto> getArticleForValidate() {
         List<Article> findArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.VERIFICATION.getId());
-        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(findArticles);
-        return fillArticlesForUserFullName(allArticlesDto);
+//        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(findArticles);
+//        return fillArticlesForUserFullName(allArticlesDto);
+        return null;
     }
 
     private Article findArticle(Long articleId) {

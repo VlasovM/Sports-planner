@@ -47,18 +47,20 @@ public class HealthServiceImpl implements HealthService {
     public void createOrEdit(HealthDto healthDto) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         healthDto.setUser(currentUser.getUser().getId());
-        Health healthAfterSave = healthRepository.save(healthMapper.dtoToModel(healthDto));
-        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
-                currentUser.getEmail(), healthDto.getId() == null ? "создал" : "изменил",
-                healthAfterSave.getId()), TypeMessage.INFO);
+//        Health healthAfterSave = healthRepository.save(healthMapper.dtoToModel(healthDto));
+//        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
+//                currentUser.getEmail(), healthDto.getId() == null ? "создал" : "изменил",
+//                healthAfterSave.getId()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<HealthDto> getHealthCurrentUser() {
         var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        var healthSet = currentUserCredentials.getUser().getCheckUp();
-        return healthMapper.modelSetToDtoList(healthSet);
+        //TODO
+//        var healthSet = currentUserCredentials.getUser().getCheckUp();
+//        return healthMapper.modelSetToDtoList(healthSet);
+        return null;
     }
 
     @Override
@@ -69,7 +71,8 @@ public class HealthServiceImpl implements HealthService {
                     throw new NotFoundException("Возникла ошибка с получением данных," +
                             " обратитесь к администратору системы.");
                 });
-        return healthMapper.modelToDto(health);
+//        return healthMapper.modelToDto(health);
+        return null;
     }
 
     private void sendMessage(String message, TypeMessage type) {

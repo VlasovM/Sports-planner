@@ -12,16 +12,16 @@
         <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
     </div>
     <div>
-        <label for="train-title-input">Название тренировки:</label>
-        <input id="train-title-input" name="title" type="text" th:value="*{title}" value=""/>
+        <label for="workout-title-input">Название тренировки:</label>
+        <input id="workout-title-input" name="title" type="text" th:value="*{title}" value=""/>
     </div>
     <div>
-        <label for="train-date-input">Дата тренировки:</label>
-        <input id="train-date-input" name="date" type="datetime-local" th:value="*{date}" value=""/>
+        <label for="workout-date-input">Дата тренировки:</label>
+        <input id="workout-date-input" name="date" type="datetime-local" th:value="*{date}" value=""/>
     </div>
     <div>
-        <label for="train-reflection-input">О тренировке:</label>
-        <input id="train-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
+        <label for="workout-reflection-input">О тренировке:</label>
+        <input id="workout-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
     </div>
     <div class="row">
         <a href="homePageAuth.html" th:href="@{/trains}">
@@ -38,11 +38,11 @@
     function update() {
 
         const idInput = document.getElementById("id-input")
-        const titleInput = document.getElementById("train-title-input")
-        const dateInput = document.getElementById("train-date-input")
-        const reflectionInput = document.getElementById("train-reflection-input")
+        const titleInput = document.getElementById("workout-title-input")
+        const dateInput = document.getElementById("workout-date-input")
+        const reflectionInput = document.getElementById("workout-reflection-input")
 
-        const train = {
+        const workout = {
             id: idInput.value,
             title: titleInput.value,
             date: dateInput.value,
@@ -55,7 +55,7 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(train)
+            body: JSON.stringify(workout)
         })
             .then(rawResponse => rawResponse.json())
             .then(json => newTrain.innerHTML = JSON.stringify(json, null, 4))

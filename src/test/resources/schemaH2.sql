@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS articles
     FOREIGN KEY (article_status) REFERENCES article_status(id)
 );
 
-CREATE TABLE IF NOT EXISTS trains
+CREATE TABLE IF NOT EXISTS workout
 (
     id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     date timestamp NOT NULL,

@@ -9,6 +9,7 @@ import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@DisplayName("Tests for userCredentials repository")
 class UserCredentialsRepositoryTest {
 
     @Autowired
@@ -26,11 +27,7 @@ class UserCredentialsRepositoryTest {
 
         // then
         assertThat(actualUserCredentials).isPresent();
-        assertThat(actualUserCredentials.get().getEmail()).isEqualTo(expectedUserCredentials.getEmail());
-        assertThat(actualUserCredentials.get().getUser()).isNotNull();
-        assertThat(actualUserCredentials.get().getUser().getId()).isEqualTo(expectedUserCredentials.getUser().getId());
-        assertThat(actualUserCredentials.get().getUser().getName())
-                .isEqualTo(expectedUserCredentials.getUser().getName());
+        assertThat(expectedUserCredentials).usingRecursiveComparison().isEqualTo(actualUserCredentials.get());
     }
 
     @Test
@@ -45,11 +42,7 @@ class UserCredentialsRepositoryTest {
 
         // then
         assertThat(actualUserCredentials).isPresent();
-        assertThat(actualUserCredentials.get().getEmail()).isEqualTo(expectedUserCredentials.getEmail());
-        assertThat(actualUserCredentials.get().getUser()).isNotNull();
-        assertThat(actualUserCredentials.get().getUser().getId()).isEqualTo(expectedUserCredentials.getUser().getId());
-        assertThat(actualUserCredentials.get().getUser().getName())
-                .isEqualTo(expectedUserCredentials.getUser().getName());
+        assertThat(expectedUserCredentials).usingRecursiveComparison().isEqualTo(actualUserCredentials.get());
     }
 
 }

@@ -1,16 +1,17 @@
 package ru.javlasov.sportsplanner.mapper;
 
 import org.mapstruct.Mapper;
-import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
+import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
+import ru.javlasov.sportsplanner.model.ArticleStatus;
 
 @Mapper(componentModel = "spring")
 public interface ArticleStatusMapper {
 
-    default ru.javlasov.sportsplanner.model.ArticleStatus dtoToModel(ArticleStatusEnum dto) {
-        if (dto == null) {
-            return null;
+    default ArticleStatusDto modelToDto(ArticleStatus articleStatus) {
+        if (articleStatus == null) {
+            return ArticleStatusDto.UNKNOWN;
         }
-        return new ru.javlasov.sportsplanner.model.ArticleStatus(dto.getId(), dto.getTitle());
+        return ArticleStatusDto.getById(articleStatus.getId());
     }
 
 }

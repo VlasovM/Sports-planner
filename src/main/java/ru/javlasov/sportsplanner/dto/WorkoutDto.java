@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TrainDto {
+public class WorkoutDto {
 
     private Long id;
 
@@ -21,6 +21,6 @@ public class TrainDto {
     @Size(max = 2048, message = "The reflection of training is too long")
     private String reflection;
 
-    private Long user;
+    private UserDto user;
 
 }

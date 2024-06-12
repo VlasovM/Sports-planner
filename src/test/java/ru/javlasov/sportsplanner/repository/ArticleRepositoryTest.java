@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
-import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
+import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import ru.javlasov.sportsplanner.model.Article;
 
 import java.util.List;
@@ -40,11 +40,11 @@ class ArticleRepositoryTest {
         // given
         List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB()
                 .stream()
-                .filter(article -> article.getStatus().getId().equals(ArticleStatusEnum.PUBLISHED.getId()))
+                .filter(article -> article.getStatus().getId().equals(ArticleStatusDto.PUBLISHED.getId()))
                 .toList();
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
+        List<Article> actualArticles = articleRepository.findAllByStatusId(ArticleStatusDto.PUBLISHED.getId());
 
         // then
         assertThat(expectedArticles.size()).isEqualTo(actualArticles.size());

@@ -12,40 +12,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.javlasov.sportsplanner.dto.TrainDto;
-import ru.javlasov.sportsplanner.service.TrainService;
+import ru.javlasov.sportsplanner.dto.WorkoutDto;
+import ru.javlasov.sportsplanner.service.WorkoutService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/trains")
-public class TrainRestController {
+@RequestMapping("/api/v1/workout")
+public class WorkoutRestController {
 
-    private final TrainService trainService;
+    private final WorkoutService workoutService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TrainDto> getAllTrains() {
-        return trainService.getAllTrainsCurrentUser();
+    public List<WorkoutDto> getAllTrains() {
+        return workoutService.getAllForCurrentUser();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTrainById(@PathVariable("id") Long id) {
-        trainService.deleteById(id);
+        workoutService.deleteById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTrain(@Valid @RequestBody TrainDto trainDto) {
-        trainService.createOrEdit(trainDto);
+    public void createTrain(@Valid @RequestBody WorkoutDto workoutDto) {
+        workoutService.updateOrCreate(workoutDto);
     }
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public void editTrain(@Valid @RequestBody TrainDto trainDto) {
-        trainService.createOrEdit(trainDto);
+    public void editTrain(@Valid @RequestBody WorkoutDto workoutDto) {
+        workoutService.updateOrCreate(workoutDto);
     }
 
 }

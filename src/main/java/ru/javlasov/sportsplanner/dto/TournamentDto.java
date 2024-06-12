@@ -29,6 +29,6 @@ public class TournamentDto {
     @Size(max = 2048, message = "The reflection of tournament is too long")
     private String reflection;
 
-    private Long user;
+    private UserDto user;
 
 }

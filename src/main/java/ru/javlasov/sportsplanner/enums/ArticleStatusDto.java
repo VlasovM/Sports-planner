@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum ArticleStatusEnum {
+public enum ArticleStatusDto {
 
     UNKNOWN(1L, "Не определено"),
-    VERIFICATION(2L, "На проверке модератором"),
+    VERIFICATION(2L, "На проверке у модератора"),
     PUBLISHED(3L, "Опубликовано"),
     DECLINE(4L, "Отклонено");
 
@@ -17,8 +17,8 @@ public enum ArticleStatusEnum {
 
     private final String title;
 
-    public static ArticleStatusEnum getById(Long id) {
-        for (ArticleStatusEnum statusDto : values()) {
+    public static ArticleStatusDto getById(Long id) {
+        for (ArticleStatusDto statusDto : values()) {
             if (statusDto.id.equals(id)) {
                 return statusDto;
             }

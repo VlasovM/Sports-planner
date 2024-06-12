@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
+import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 
 import java.time.LocalDate;
 
@@ -18,7 +18,7 @@ public class ArticleDto {
 
     private Long id;
 
-    private ArticleStatusEnum status;
+    private ArticleStatusDto status;
 
     @NotBlank(message = "The title cannot be empty")
     @Size(min = 1, max = 255, message = "The title must be between 1 and 255 characters")
@@ -29,8 +29,6 @@ public class ArticleDto {
 
     private LocalDate created;
 
-    private Long user;
-
-    private String userFullName;
+    private UserDto userDto;
 
 }

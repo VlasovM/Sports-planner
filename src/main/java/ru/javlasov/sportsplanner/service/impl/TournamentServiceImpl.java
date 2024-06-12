@@ -7,6 +7,7 @@ import ru.javlasov.sportsplanner.dto.LoggerEvent;
 import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
+import ru.javlasov.sportsplanner.mapper.TournamentMapper;
 import ru.javlasov.sportsplanner.model.Tournament;
 import ru.javlasov.sportsplanner.repository.TournamentRepository;
 import ru.javlasov.sportsplanner.service.LoggingService;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TournamentServiceImpl implements TournamentService {
 
-//    private final TournamentMapper tournamentMapper;
+    private final TournamentMapper tournamentMapper;
 
     private final TournamentRepository tournamentRepository;
 
@@ -30,12 +31,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        tournamentRepository.findById(id)
-                .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти турнир по id %d".formatted(id), TypeMessage.ERROR);
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
-                });
+        findById(id);
         tournamentRepository.deleteById(id);
         sendMessage("Пользователь %s удалил инфо о турнире с id = %d".formatted(
                 userCredentialsService.getCurrentAuthUser().getEmail(), id), TypeMessage.INFO);
@@ -43,38 +39,30 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     @Transactional
-    public void createOrEdit(TournamentDto tournamentDto) {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        tournamentDto.setUser(currentUser.getUser().getId());
-//        var tournamentEntity = tournamentMapper.dtoToModel(tournamentDto);
-//        checkReflection(tournamentEntity);
-//        var tournamentAfterSave = tournamentRepository.save(tournamentEntity);
-//        sendMessage("Пользователь %s %s новую инфо о турнире с id = %d".formatted(
-//                userCredentialsService.getCurrentAuthUser().getEmail(),
-//                tournamentDto.getId() == null ? "создал" : "изменил", tournamentAfterSave.getId()), TypeMessage.INFO);
+    public void updateOrCreate(TournamentDto tournamentDto) {
+        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
+        var currentUser = currentUserCredentials.getUser();
+        var tournament = tournamentMapper.dtoToModel(tournamentDto);
+        tournament.setUser(currentUser);
+        tournament = tournamentRepository.save(tournament);
+        sendMessage("Пользователь %s %s новую инфо о турнире с id = %d".formatted(
+                currentUserCredentials.getEmail(),
+                tournamentDto.getId() == null ? "создал" : "изменил", tournament.getId()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<TournamentDto> getTournamentCurrentUser() {
-        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        //TODO
-//        var tournamentSet = currentUserCredentials.getUser().getTournaments();
-//        return tournamentMapper.setModelToDtoList(tournamentSet);
-        return null;
+        var currentUser = userCredentialsService.getCurrentAuthUser().getUser();
+        var findTournaments = tournamentRepository.findAllByUser(currentUser);
+        return tournamentMapper.listModelToListDto(findTournaments);
     }
 
     @Override
     @Transactional(readOnly = true)
     public TournamentDto getById(Long id) {
-        var tournament = tournamentRepository.findById(id)
-                .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти турнир по id %d".formatted(id), TypeMessage.ERROR);
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
-                });
-//        return tournamentMapper.modelToDto(tournament);
-        return null;
+        var tournament = findById(id);
+        return tournamentMapper.modelToDto(tournament);
     }
 
     private void sendMessage(String message, TypeMessage type) {
@@ -82,11 +70,13 @@ public class TournamentServiceImpl implements TournamentService {
         loggingService.sendMessage(loggingDto);
     }
 
-    private void checkReflection(Tournament tournament) {
-        var tournamentReflection = tournament.getReflection();
-        if (tournamentReflection.isEmpty()) {
-            tournament.setReflection(null);
-        }
+    private Tournament findById(Long tournamentId) {
+        return tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> {
+                    sendMessage("Ошибка при попытке найти турнир по id %d".formatted(tournamentId), TypeMessage.ERROR);
+                    throw new NotFoundException("Возникла ошибка с получением данных," +
+                            " обратитесь к администратору системы.");
+                });
     }
 
 }

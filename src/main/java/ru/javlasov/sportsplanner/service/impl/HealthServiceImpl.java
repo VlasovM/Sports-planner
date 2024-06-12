@@ -31,12 +31,7 @@ public class HealthServiceImpl implements HealthService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        healthRepository.findById(id)
-                .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти посещение врача по id %d".formatted(id), TypeMessage.ERROR);
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
-                });
+        findById(id);
         healthRepository.deleteById(id);
         sendMessage("Пользователь %s удалил проверку здоровья с id = %d".formatted(
                 userCredentialsService.getCurrentAuthUser().getEmail(), id), TypeMessage.INFO);
@@ -44,40 +39,43 @@ public class HealthServiceImpl implements HealthService {
 
     @Override
     @Transactional
-    public void createOrEdit(HealthDto healthDto) {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        healthDto.setUser(currentUser.getUser().getId());
-//        Health healthAfterSave = healthRepository.save(healthMapper.dtoToModel(healthDto));
-//        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
-//                currentUser.getEmail(), healthDto.getId() == null ? "создал" : "изменил",
-//                healthAfterSave.getId()), TypeMessage.INFO);
+    public void updateOrCreate(HealthDto healthDto) {
+        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
+        var currentUser = currentUserCredentials.getUser();
+        var health = healthMapper.dtoToModel(healthDto);
+        health.setUser(currentUser);
+        health = healthRepository.save(health);
+        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
+                currentUserCredentials.getEmail(), healthDto.getId() == null ? "создал" : "изменил",
+                health.getId()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<HealthDto> getHealthCurrentUser() {
-        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        //TODO
-//        var healthSet = currentUserCredentials.getUser().getCheckUp();
-//        return healthMapper.modelSetToDtoList(healthSet);
-        return null;
+        var currentUser = userCredentialsService.getCurrentAuthUser().getUser();
+        List<Health> findHealth = healthRepository.findAllByUser(currentUser);
+        return healthMapper.modelListToDtoList(findHealth);
     }
 
     @Override
     public HealthDto getById(Long id) {
-        var health = healthRepository.findById(id)
-                .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти посещение врача по id %d".formatted(id), TypeMessage.ERROR);
-                    throw new NotFoundException("Возникла ошибка с получением данных," +
-                            " обратитесь к администратору системы.");
-                });
-//        return healthMapper.modelToDto(health);
-        return null;
+        var health = findById(id);
+        return healthMapper.modelToDto(health);
     }
 
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
+    }
+
+    private Health findById(Long healthId) {
+        return healthRepository.findById(healthId)
+                .orElseThrow(() -> {
+                    sendMessage("Ошибка при попытке найти посещение врача по id %d".formatted(healthId), TypeMessage.ERROR);
+                    throw new NotFoundException("Возникла ошибка с получением данных," +
+                            " обратитесь к администратору системы.");
+                });
     }
 
 }

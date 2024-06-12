@@ -66,10 +66,10 @@ public class ArticleRestController {
         articleService.declineArticle(id);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user/")
     @ResponseStatus(HttpStatus.OK)
-    public List<ArticleDto> getMyArticles(@PathVariable("id") Long id) {
-        return articleService.getAllArticlesByUserId(id);
+    public List<ArticleDto> getMyArticles() {
+        return articleService.getAllArticlesByCurrentUser();
     }
 
     @GetMapping("/validate")

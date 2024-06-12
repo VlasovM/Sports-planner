@@ -39,13 +39,13 @@ public class TournamentRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createTournament(@Valid @RequestBody TournamentDto tournamentDto) {
-        tournamentService.createOrEdit(tournamentDto);
+        tournamentService.updateOrCreate(tournamentDto);
     }
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public void updateTournament(@Valid @RequestBody TournamentDto tournamentDto) {
-        tournamentService.createOrEdit(tournamentDto);
+        tournamentService.updateOrCreate(tournamentDto);
     }
 
 }

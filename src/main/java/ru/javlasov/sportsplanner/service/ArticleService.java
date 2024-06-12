@@ -10,7 +10,7 @@ public interface ArticleService {
 
     ArticleDto getArticleById(Long id);
 
-    List<ArticleDto> getAllArticlesByUserId(Long userId);
+    List<ArticleDto> getAllArticlesByCurrentUser();
 
     void createArticle(ArticleDto articleDto);
 

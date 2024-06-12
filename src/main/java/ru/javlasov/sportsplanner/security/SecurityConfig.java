@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     private static final String BASE_URL_API_TOURNAMENT = "/api/v1/tournaments";
 
-    private static final String BASE_URL_API_TRAINING = "/api/v1/trains";
+    private static final String BASE_URL_API_TRAINING = "/api/v1/workout";
 
     private static final String BASE_URL_API_USER = "/api/v1/users";
 

@@ -30,6 +30,6 @@ public class HealthDto {
     @Size(max = 2048, message = "The result of visiting is too long")
     private String result;
 
-    private Long user;
+    private UserDto user;
 
 }

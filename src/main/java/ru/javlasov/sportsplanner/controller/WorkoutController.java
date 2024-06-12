@@ -6,15 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.javlasov.sportsplanner.dto.TrainDto;
-import ru.javlasov.sportsplanner.service.TrainService;
+import ru.javlasov.sportsplanner.dto.WorkoutDto;
+import ru.javlasov.sportsplanner.service.WorkoutService;
 
 @Controller
-@RequestMapping("/trains")
+@RequestMapping("/workout")
 @RequiredArgsConstructor
-public class TrainController {
+public class WorkoutController {
 
-    private final TrainService trainService;
+    private final WorkoutService workoutService;
 
     @GetMapping()
     public String trains() {
@@ -29,11 +29,11 @@ public class TrainController {
 
     @GetMapping("/edit/{id}")
     public String editTrain(@PathVariable(name = "id") Long id, Model model) {
-        TrainDto trainDto = trainService.getById(id);
+        WorkoutDto workoutDto = workoutService.getById(id);
         model.addAttribute("id", id);
-        model.addAttribute("title", trainDto.getTitle());
-        model.addAttribute("reflection", trainDto.getReflection());
-        model.addAttribute("date", trainDto.getDate());
+        model.addAttribute("title", workoutDto.getTitle());
+        model.addAttribute("reflection", workoutDto.getReflection());
+        model.addAttribute("date", workoutDto.getDate());
         return "editTrain";
     }
 

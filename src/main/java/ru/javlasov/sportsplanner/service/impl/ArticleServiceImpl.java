@@ -5,21 +5,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.dto.LoggerEvent;
-import ru.javlasov.sportsplanner.enums.ArticleStatusEnum;
+import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
-import ru.javlasov.sportsplanner.mapper.ArticleStatusMapper;
+import ru.javlasov.sportsplanner.mapper.ArticleMapper;
+import ru.javlasov.sportsplanner.mapper.UserMapper;
 import ru.javlasov.sportsplanner.model.Article;
-import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.repository.ArticleRepository;
+import ru.javlasov.sportsplanner.repository.ArticleStatusRepository;
 import ru.javlasov.sportsplanner.service.ArticleService;
 import ru.javlasov.sportsplanner.service.LoggingService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
-import ru.javlasov.sportsplanner.service.UserService;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,53 +26,50 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
 
-//    private final ArticleMapper articleMapper;
+    private final ArticleStatusRepository articleStatusRepository;
 
-    private final ArticleStatusMapper articleStatusMapper;
+    private final ArticleMapper articleMapper;
+
+    private final UserMapper userMapper;
 
     private final LoggingService loggingService;
 
     private final UserCredentialsService userCredentialsService;
 
-    private final UserService userService;
-
-
     @Override
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticles() {
-        List<Article> allArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.PUBLISHED.getId());
-//        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(allArticles);
-        return null;
+        List<Article> allArticles = articleRepository.findAllByStatusId(ArticleStatusDto.PUBLISHED.getId());
+        return articleMapper.modelListToDtoList(allArticles);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ArticleDto getArticleById(Long id) {
-        var article = findArticle(id);
-//        var articleDto = articleMapper.modelToDto(article);
-//        setUserFullName(articleDto);
-        return null;
+        var article = findArticleById(id);
+        return articleMapper.modelToDto(article);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ArticleDto> getAllArticlesByUserId(Long userId) {
-        //TODO
-        List<Article> allArticles = new ArrayList<>();
-        return null;
+    public List<ArticleDto> getAllArticlesByCurrentUser() {
+        var user = userCredentialsService.getCurrentAuthUser().getUser();
+        List<Article> allFindArticles = articleRepository.findAllByUser(user);
+        return articleMapper.modelListToDtoList(allFindArticles);
     }
 
     @Override
     @Transactional
     public void createArticle(ArticleDto articleDto) {
-        var currentUser = userCredentialsService.getCurrentAuthUser();
-        articleDto.setUser(currentUser.getUser().getId());
-        articleDto.setStatus(ArticleStatusEnum.VERIFICATION);
-//        Article entity = articleMapper.dtoToModel(articleDto);
-//        entity.setCreated(LocalDate.now());
-//        var newArticle = articleRepository.save(entity);
-//        sendMessage("Пользователь %s создал новую статью с id = %d".formatted(
-//                userCredentialsService.getCurrentAuthUser().getEmail(), newArticle.getId()), TypeMessage.INFO);
+        var currentUser = userCredentialsService.getCurrentAuthUser().getUser();
+        var userDto = userMapper.modelToDto(currentUser);
+        articleDto.setUserDto(userDto);
+        articleDto.setStatus(ArticleStatusDto.VERIFICATION);
+        articleDto.setCreated(LocalDate.now());
+        var article = articleMapper.dtoToModel(articleDto);
+        article = articleRepository.save(article);
+        sendMessage("Пользователь %s создал новую статью с id = %d".formatted(
+                userCredentialsService.getCurrentAuthUser().getEmail(), article.getId()), TypeMessage.INFO);
     }
 
     @Override
@@ -87,71 +83,51 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public void editArticle(ArticleDto articleDto) {
-        var article = articleRepository.findById(articleDto.getId()).orElseThrow(
-                () -> {
-                    var errorMessage = "Статья с id = %d не найдена!".formatted(articleDto.getId());
-                    sendMessage(errorMessage, TypeMessage.ERROR);
-                    throw new NotFoundException(errorMessage);
-                });
-        article.setStatus(articleStatusMapper.dtoToModel(ArticleStatusEnum.VERIFICATION));
-        article.setTitle(articleDto.getTitle());
-        article.setText(articleDto.getText());
-        var articleAfterSave = articleRepository.save(article);
+        articleDto.setStatus(ArticleStatusDto.VERIFICATION);
+        var article = findArticleById(articleDto.getId());
+        article = articleRepository.save(article);
         sendMessage("Пользователь %s изменил статью с id = %d".formatted(
-                userCredentialsService.getCurrentAuthUser().getEmail(), articleAfterSave.getId()), TypeMessage.INFO);
+                userCredentialsService.getCurrentAuthUser().getEmail(), article.getId()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional
     public void acceptArticle(Long articleId) {
-        var article = findArticle(articleId);
-        article.setStatus(new ArticleStatus(ArticleStatusEnum.PUBLISHED.getId(),
-                ArticleStatusEnum.PUBLISHED.getTitle()));
+        var article = findArticleById(articleId);
+        var publishedStatus = articleStatusRepository
+                .findById(ArticleStatusDto.PUBLISHED.getId()).orElseThrow();
+        article.setStatus(publishedStatus);
         articleRepository.save(article);
     }
 
     @Override
     @Transactional
     public void declineArticle(Long articleId) {
-        var article = findArticle(articleId);
-        article.setStatus(new ArticleStatus(ArticleStatusEnum.DECLINE.getId(), ArticleStatusEnum.DECLINE.getTitle()));
+        var article = findArticleById(articleId);
+        var declineStatus = articleStatusRepository
+                .findById(ArticleStatusDto.PUBLISHED.getId()).orElseThrow();
+        article.setStatus(declineStatus);
         articleRepository.save(article);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ArticleDto> getArticleForValidate() {
-        List<Article> findArticles = articleRepository.findAllByStatusId(ArticleStatusEnum.VERIFICATION.getId());
-//        List<ArticleDto> allArticlesDto = articleMapper.modelToDtoList(findArticles);
-//        return fillArticlesForUserFullName(allArticlesDto);
-        return null;
+        List<Article> findArticles = articleRepository.findAllByStatusId(ArticleStatusDto.VERIFICATION.getId());
+        return articleMapper.modelListToDtoList(findArticles);
     }
 
-    private Article findArticle(Long articleId) {
-        return articleRepository.findById(articleId).orElseThrow(
-                () -> {
-                    var errorMessage = "Статья с id = %d не найдена!".formatted(articleId);
-                    sendMessage(errorMessage, TypeMessage.ERROR);
-                    throw new NotFoundException(errorMessage);
-                });
+    private Article findArticleById(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(() -> {
+            var errorMessage = "Статья с id = %d не найдена!".formatted(articleId);
+            sendMessage(errorMessage, TypeMessage.ERROR);
+            throw new NotFoundException(errorMessage);
+        });
     }
 
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
-    }
-
-    private List<ArticleDto> fillArticlesForUserFullName(List<ArticleDto> allArticlesDto) {
-        return allArticlesDto.stream().peek(article -> {
-            var user = userService.getUserById(article.getUser());
-            var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
-            article.setUserFullName(userFullName);
-        }).collect(Collectors.toList());
-    }
-
-    private void setUserFullName(ArticleDto articleDto) {
-        var user = userService.getUserById(articleDto.getUser());
-        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
-        articleDto.setUserFullName(userFullName);
     }
 
 }

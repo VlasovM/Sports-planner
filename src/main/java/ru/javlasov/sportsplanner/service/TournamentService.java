@@ -8,7 +8,7 @@ public interface TournamentService {
 
     void deleteById(Long id);
 
-    void createOrEdit(TournamentDto tournamentDto);
+    void updateOrCreate(TournamentDto tournamentDto);
 
     List<TournamentDto> getTournamentCurrentUser();
 

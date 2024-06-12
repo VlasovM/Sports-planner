@@ -39,13 +39,13 @@ public class HealthRestController {
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public void updateHealth(@Valid @RequestBody HealthDto healthDto) {
-        healthService.createOrEdit(healthDto);
+        healthService.updateOrCreate(healthDto);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createHealth(@Valid @RequestBody HealthDto healthDto) {
-        healthService.createOrEdit(healthDto);
+        healthService.updateOrCreate(healthDto);
     }
 
 }

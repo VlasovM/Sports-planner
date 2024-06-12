@@ -8,7 +8,7 @@ public interface HealthService {
 
     void deleteById(Long id);
 
-    void createOrEdit(HealthDto healthDto);
+    void updateOrCreate(HealthDto healthDto);
 
     List<HealthDto> getHealthCurrentUser();
 

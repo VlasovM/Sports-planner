@@ -9,6 +9,7 @@ import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.enums.TypeMessage;
 import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.UserCredentialsMapper;
+import ru.javlasov.sportsplanner.mapper.UserMapper;
 import ru.javlasov.sportsplanner.model.User;
 import ru.javlasov.sportsplanner.model.UserCredentials;
 import ru.javlasov.sportsplanner.repository.UserCredentialsRepository;
@@ -34,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
     private final RoleService roleService;
 
+    private final UserMapper userMapper;
+
     @Override
     @Transactional(readOnly = true)
     public UserDto getInfoAuthorizedUser() {
@@ -44,40 +47,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void editProfile(UserDto userDto) {
-        var userCredentials = userCredentialsRepository.findUserByUserId(userDto.getId())
-                .orElseThrow(() -> {
-                    var errorMessage = "Не найден пользователь с id = %d".formatted(userDto.getId());
-                    sendMessage(errorMessage, TypeMessage.ERROR);
-                    return new NotFoundException(errorMessage);
-                });
-        var user = userCredentials.getUser();
-        updateUserInfo(user, userDto);
-        var editedUser = userRepository.save(user);
+        var user = userMapper.dtoToModel(userDto);
+        user = userRepository.save(user);
         sendMessage("Пользователь %s изменил информацию о себе"
-                .formatted(editedUser.getSurname() + " " + editedUser.getName()), TypeMessage.INFO);
-    }
-
-    private void updateUserInfo(User user, UserDto userDto) {
-        user.setName(userDto.getName());
-        user.setMiddleName(userDto.getMiddleName());
-        user.setSurname(userDto.getSurname());
-        user.setAge(userDto.getAge());
-        user.setBirthday(userDto.getBirthday());
-        user.setBiography(userDto.getBiography());
+                .formatted(user.getSurname() + " " + user.getName()), TypeMessage.INFO);
     }
 
     @Override
     @Transactional
     public void createProfile(UserDto userDto) {
-        var createdUserCredentials = new UserCredentials();
-        createdUserCredentials.setEmail(userDto.getEmail());
-        setPassword(createdUserCredentials, userDto);
-        var role = roleService.getUserRole();
-        createdUserCredentials.setRole(role);
-        var user = createNewUser(userDto);
+        var createdUserCredentials = createNewUserCredentials(userDto);
+        var user = userMapper.dtoToModel(userDto);
         createdUserCredentials.setUser(user);
-        var newUser = userCredentialsRepository.save(createdUserCredentials);
-        sendMessage("Создан новый пользователь id = %d, email = %s".formatted(newUser.getId(), newUser.getEmail()),
+        createdUserCredentials = userCredentialsRepository.save(createdUserCredentials);
+        sendMessage("Создан новый пользователь id = %d, email = %s".formatted(createdUserCredentials.getUser().getId(),
+                        createdUserCredentials.getEmail()),
                 TypeMessage.INFO);
     }
 
@@ -91,21 +75,18 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
-    private User createNewUser(UserDto userDto) {
-        User createdUser = new User();
-        createdUser.setName(userDto.getName());
-        createdUser.setMiddleName(userDto.getMiddleName());
-        createdUser.setSurname(userDto.getSurname());
-        createdUser.setAge(userDto.getAge());
-        createdUser.setBirthday(userDto.getBirthday());
-        createdUser.setBiography(userDto.getBiography());
-        createdUser.setSport(userDto.getSport());
-        return createdUser;
-    }
-
     private void sendMessage(String message, TypeMessage type) {
         var loggingDto = new LoggerEvent(message, type);
         loggingService.sendMessage(loggingDto);
+    }
+
+    private UserCredentials createNewUserCredentials(UserDto userDto) {
+        var createdUserCredentials = new UserCredentials();
+        createdUserCredentials.setEmail(userDto.getEmail());
+        setPassword(createdUserCredentials, userDto);
+        var role = roleService.getUserRole();
+        createdUserCredentials.setRole(role);
+        return createdUserCredentials;
     }
 
     private void setPassword(UserCredentials userCredentials, UserDto userDto) {

@@ -1,5 +1,8 @@
 package ru.javlasov.sportsplanner;
 
+import ru.javlasov.sportsplanner.dto.ArticleDto;
+import ru.javlasov.sportsplanner.dto.UserDto;
+import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.model.Health;
@@ -47,20 +50,21 @@ public class ExpectedDataFromDB {
     }
 
     public static List<Article> getExpectedArticlesFromDB() {
-        var article1 = new Article(1L, getExpectedArticlesStatusFromDB().get(0), "title1",
+        var article1 = new Article(1L, getExpectedArticlesStatusFromDB().get(1), "title1",
                 "text1", LocalDate.of(2000, 1, 1), getExpectedUsersFromDB().get(0));
-        var article2 = new Article(2L, getExpectedArticlesStatusFromDB().get(1), "title2",
+        var article2 = new Article(2L, getExpectedArticlesStatusFromDB().get(2), "title2",
                 "text2", LocalDate.of(2000, 1, 1), getExpectedUsersFromDB().get(0));
-        var article3 = new Article(3L, getExpectedArticlesStatusFromDB().get(2), "title3",
+        var article3 = new Article(3L, getExpectedArticlesStatusFromDB().get(3), "title3",
                 "text3", LocalDate.of(2000, 1, 1), getExpectedUsersFromDB().get(0));
         return List.of(article1, article2, article3);
     }
 
     public static List<ArticleStatus> getExpectedArticlesStatusFromDB() {
-        var status1 = new ArticleStatus(1L, "article_status1");
-        var status2 = new ArticleStatus(2L, "article_status2");
-        var status3 = new ArticleStatus(3L, "article_status3");
-        return List.of(status1, status2, status3);
+        var unknown = new ArticleStatus(1L, "unknown");
+        var verification = new ArticleStatus(2L, "verification");
+        var published = new ArticleStatus(3L, "published");
+        var decline = new ArticleStatus(4L, "decline");
+        return List.of(unknown, verification, published, decline);
     }
 
     public static List<Workout> getExpectedWorkoutFromDB() {
@@ -89,6 +93,42 @@ public class ExpectedDataFromDB {
                 "opponent2", "result2", null, getExpectedUsersFromDB().get(0));
         return List.of(tournament1, tournament2);
     }
+
+    public static List<UserDto> getExpectedUsersDtoFromDB() {
+        var user1 = getExpectedUsersFromDB().get(0);
+        var userCredentials1 = getExpectedUserCredentialsFromDB().get(0);
+        var userDto1 = new UserDto(user1.getId(), user1.getName(), user1.getSurname(), user1.getMiddleName(),
+                user1.getAge(), user1.getBirthday(), user1.getBiography(), userCredentials1.getEmail(),
+                userCredentials1.getPassword(), user1.getSport());
+
+        var user2 = getExpectedUsersFromDB().get(1);
+        var userCredentials2 = getExpectedUserCredentialsFromDB().get(1);
+        var userDto2 = new UserDto(user2.getId(), user2.getName(), user2.getSurname(), user2.getMiddleName(),
+                user2.getAge(), user2.getBirthday(), user2.getBiography(), userCredentials2.getEmail(),
+                userCredentials2.getPassword(), user2.getSport());
+
+        return List.of(userDto1, userDto2);
+    }
+
+    public static List<ArticleDto> getExpectedArticlesDtoFromDB() {
+        var userDto = getExpectedUsersDtoFromDB().get(0);
+
+        var article1 = getExpectedArticlesFromDB().get(0);
+        var articleDto1 = new ArticleDto(article1.getId(), ArticleStatusDto.getById(article1.getStatus().getId()),
+                article1.getTitle(), article1.getTitle(), article1.getCreated(), userDto);
+
+
+        var article2 = getExpectedArticlesFromDB().get(1);
+        var articleDto2 = new ArticleDto(article2.getId(), ArticleStatusDto.getById(article2.getStatus().getId()),
+                article2.getTitle(), article2.getTitle(), article2.getCreated(), userDto);
+
+        var article3 = getExpectedArticlesFromDB().get(0);
+        var articleDto3 = new ArticleDto(article3.getId(), ArticleStatusDto.getById(article3.getStatus().getId()),
+                article3.getTitle(), article3.getTitle(), article3.getCreated(), userDto);
+
+        return List.of(articleDto1, articleDto2, articleDto3);
+    }
+
 //
 //    public static Set<Tournament> getExpectedTournamentsSetFromDB() {
 //        return new HashSet<>(getExpectedTournamentsListFromDB());

@@ -105,7 +105,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void declineArticle(Long articleId) {
         var article = findArticleById(articleId);
         var declineStatus = articleStatusRepository
-                .findById(ArticleStatusDto.PUBLISHED.getId()).orElseThrow();
+                .findById(ArticleStatusDto.DECLINE.getId()).orElseThrow();
         article.setStatus(declineStatus);
         articleRepository.save(article);
     }

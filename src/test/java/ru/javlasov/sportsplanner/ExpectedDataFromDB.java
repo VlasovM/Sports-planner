@@ -1,7 +1,9 @@
 package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
+import ru.javlasov.sportsplanner.dto.HealthDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
+import ru.javlasov.sportsplanner.dto.WorkoutDto;
 import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import ru.javlasov.sportsplanner.model.Article;
 import ru.javlasov.sportsplanner.model.ArticleStatus;
@@ -15,6 +17,7 @@ import ru.javlasov.sportsplanner.model.Workout;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ExpectedDataFromDB {
@@ -127,6 +130,37 @@ public class ExpectedDataFromDB {
                 article3.getTitle(), article3.getTitle(), article3.getCreated(), userDto);
 
         return List.of(articleDto1, articleDto2, articleDto3);
+    }
+
+    public static List<WorkoutDto> getExpectedWorkoutDtoFromDB() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        var userDto = getExpectedUsersDtoFromDB().get(0);
+
+        var workout1 = getExpectedWorkoutFromDB().get(0);
+        var workoutDto1 = new WorkoutDto(workout1.getId(), workout1.getDate().format(formatter), workout1.getTitle(),
+                workout1.getReflection(), userDto);
+
+        var workout2 = getExpectedWorkoutFromDB().get(0);
+        var workoutDto2 = new WorkoutDto(workout2.getId(), workout2.getDate().format(formatter), workout2.getTitle(),
+                workout2.getReflection(), userDto);
+
+        return List.of(workoutDto1, workoutDto2);
+    }
+
+    public static List<HealthDto> getExpectedHealthDtoFromDB() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        var userDto = getExpectedUsersDtoFromDB().get(0);
+
+        var health1 = getExpectedHealthFromDB().get(0);
+        var healthDto1 = new HealthDto(health1.getId(), health1.getDate().format(formatter), health1.getClinic(),
+                health1.getDoctorSpecialization(), health1.getDoctorFullName(), health1.getResult(), userDto);
+
+
+        var health2 = getExpectedHealthFromDB().get(1);
+        var healthDto2 = new HealthDto(health2.getId(), health2.getDate().format(formatter), health2.getClinic(),
+                health2.getDoctorSpecialization(), health2.getDoctorFullName(), health2.getResult(), userDto);
+
+        return List.of(healthDto1, healthDto2);
     }
 
 //

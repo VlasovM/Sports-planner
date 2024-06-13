@@ -2,7 +2,6 @@ package ru.javlasov.sportsplanner.service.impl;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,6 +12,7 @@ import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import ru.javlasov.sportsplanner.mapper.ArticleMapper;
 import ru.javlasov.sportsplanner.mapper.UserMapper;
 import ru.javlasov.sportsplanner.model.Article;
+import ru.javlasov.sportsplanner.model.ArticleStatus;
 import ru.javlasov.sportsplanner.model.UserCredentials;
 import ru.javlasov.sportsplanner.repository.ArticleRepository;
 import ru.javlasov.sportsplanner.repository.ArticleStatusRepository;
@@ -88,7 +88,7 @@ class ArticleServiceImplTest {
 
         // then
         assertThat(actualArticleDto).isNotNull();
-        assertThat(expectedArticleDto).usingRecursiveComparison().isEqualTo(actualArticleDto);
+        assertThat(actualArticleDto).usingRecursiveComparison().isEqualTo(expectedArticleDto);
     }
 
     @Test
@@ -110,7 +110,7 @@ class ArticleServiceImplTest {
 
         // then
         assertThat(actualArticlesDto).isNotNull();
-        assertThat(expectedArticlesDto).usingRecursiveComparison().isEqualTo(actualArticlesDto);
+        assertThat(actualArticlesDto).usingRecursiveComparison().isEqualTo(expectedArticlesDto);
     }
 
     @Test
@@ -141,53 +141,55 @@ class ArticleServiceImplTest {
         assertThat(actualArticle).isPresent();
         assertThat(actualArticle.get()).usingRecursiveComparison().isEqualTo(expectedArticle);
     }
-//
-//    @Test
-//    @DisplayName("Should change status article to accept")
-//    void acceptArticleTest() {
-//        // given
-//        var incomeArticle = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
-//        incomeArticle.setStatus(ArticleStatusEnum.VERIFICATION);
-//
-//        // when
-//        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesSetFromDB().stream().iterator().next();
-//        expectedArticle.setStatus(new ArticleStatus(ArticleStatusEnum.VERIFICATION.getId(),
-//                ArticleStatusEnum.VERIFICATION.getTitle()));
-//        Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));
-//        Mockito.when(mockArticleRepository.save(any())).thenReturn(expectedArticle);
-//
-//        underTestService.acceptArticle(incomeArticle.getId());
-//        var article = mockArticleRepository.findById(incomeArticle.getId());
-//
-//        // then
-//        assertThat(article).isPresent();
-//        assertThat(article.get().getStatus().getTitle()).isEqualTo(ArticleStatusEnum.PUBLISHED.getTitle());
-//        assertThat(article.get().getStatus().getId()).isEqualTo(ArticleStatusEnum.PUBLISHED.getId());
-//    }
-//
-//    @Test
-//    @DisplayName("Should change status article to decline")
-//    void declineArticleTest() {
-//        // given
-//        var incomeArticle = ExpectedDataFromDB.getExpectedArticleDtoFromDB().get(0);
-//        incomeArticle.setStatus(ArticleStatusEnum.VERIFICATION);
-//
-//        // when
-//        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesSetFromDB().stream().iterator().next();
-//        expectedArticle.setStatus(new ArticleStatus(ArticleStatusEnum.DECLINE.getId(),
-//                ArticleStatusEnum.DECLINE.getTitle()));
-//        Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));
-//        Mockito.when(mockArticleRepository.save(any())).thenReturn(expectedArticle);
-//
-//        underTestService.declineArticle(incomeArticle.getId());
-//        var article = mockArticleRepository.findById(incomeArticle.getId());
-//
-//        // then
-//        assertThat(article).isPresent();
-//        assertThat(article.get().getStatus().getTitle()).isEqualTo(ArticleStatusEnum.DECLINE.getTitle());
-//        assertThat(article.get().getStatus().getId()).isEqualTo(ArticleStatusEnum.DECLINE.getId());
-//    }
-//
+
+    @Test
+    @DisplayName("Should change status article to accept")
+    void acceptArticleTest() {
+        // given
+        var incomeArticle = ExpectedDataFromDB.getExpectedArticlesDtoFromDB().get(0);
+        incomeArticle.setStatus(ArticleStatusDto.VERIFICATION);
+
+        // when
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        expectedArticle.setStatus(new ArticleStatus(ArticleStatusDto.VERIFICATION.getId(),
+                ArticleStatusDto.VERIFICATION.getTitle()));
+        Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));
+        Mockito.when(mockArticleStatusRepository.findById(ArticleStatusDto.PUBLISHED.getId())).thenReturn(Optional.of(
+                ExpectedDataFromDB.getExpectedArticlesStatusFromDB().get(0)));
+        Mockito.when(mockArticleRepository.save(any())).thenReturn(expectedArticle);
+
+        underTestService.acceptArticle(incomeArticle.getId());
+        var actualArticle = mockArticleRepository.findById(incomeArticle.getId());
+
+        // then
+        assertThat(actualArticle).isPresent();
+        assertThat(actualArticle.get()).usingRecursiveComparison().isEqualTo(expectedArticle);
+    }
+
+    @Test
+    @DisplayName("Should change status article to decline")
+    void declineArticleTest() {
+        // given
+        var incomeArticle = ExpectedDataFromDB.getExpectedArticlesDtoFromDB().get(0);
+        incomeArticle.setStatus(ArticleStatusDto.VERIFICATION);
+
+        // when
+        var expectedArticle = ExpectedDataFromDB.getExpectedArticlesFromDB().get(0);
+        expectedArticle.setStatus(new ArticleStatus(ArticleStatusDto.DECLINE.getId(),
+                ArticleStatusDto.DECLINE.getTitle()));
+        Mockito.when(mockArticleRepository.findById(incomeArticle.getId())).thenReturn(Optional.of(expectedArticle));
+        Mockito.when(mockArticleStatusRepository.findById(ArticleStatusDto.DECLINE.getId())).thenReturn(Optional.of(
+                ExpectedDataFromDB.getExpectedArticlesStatusFromDB().get(3)));
+        Mockito.when(mockArticleRepository.save(any())).thenReturn(expectedArticle);
+
+        underTestService.declineArticle(incomeArticle.getId());
+        var actualArticle = mockArticleRepository.findById(incomeArticle.getId());
+
+        // then
+        assertThat(actualArticle).isPresent();
+        assertThat(actualArticle.get()).usingRecursiveComparison().isEqualTo(expectedArticle);
+    }
+
     private void makeMockAuthUser(UserCredentials expectedUserCredentials) {
         Authentication authentication = Mockito.mock(Authentication.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);

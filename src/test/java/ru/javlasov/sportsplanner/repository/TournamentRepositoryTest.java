@@ -12,7 +12,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("Tests for tournament repository")
 public class TournamentRepositoryTest {
 
     @Autowired

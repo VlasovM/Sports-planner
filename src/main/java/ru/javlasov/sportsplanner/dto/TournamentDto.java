@@ -3,19 +3,21 @@ package ru.javlasov.sportsplanner.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TournamentDto {
 
     private Long id;
 
     @NotNull(message = "Please set the tournament day")
-    private LocalDate date;
+    private String date;
 
     @NotEmpty(message = "Please set the tournament title")
     private String title;
@@ -29,6 +31,6 @@ public class TournamentDto {
     @Size(max = 2048, message = "The reflection of tournament is too long")
     private String reflection;
 
-    private UserDto user;
+    private UserDto userDto;
 
 }

@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,6 +32,6 @@ public class HealthDto {
     @Size(max = 2048, message = "The result of visiting is too long")
     private String result;
 
-    private UserDto user;
+    private UserDto userDto;
 
 }

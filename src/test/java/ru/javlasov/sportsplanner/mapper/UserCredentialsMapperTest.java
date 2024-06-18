@@ -9,7 +9,6 @@ import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
-@DisplayName("Test for userCredentials mapper")
 class UserCredentialsMapperTest {
 
     @Autowired

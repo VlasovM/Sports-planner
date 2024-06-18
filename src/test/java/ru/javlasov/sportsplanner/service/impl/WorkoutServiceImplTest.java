@@ -23,7 +23,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
-@DisplayName("Tests for workout service")
 class WorkoutServiceImplTest {
 
     private final WorkoutRepository mockWorkoutRepository = Mockito.mock(WorkoutRepository.class);

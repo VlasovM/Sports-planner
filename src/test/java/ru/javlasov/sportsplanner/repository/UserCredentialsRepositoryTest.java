@@ -9,7 +9,6 @@ import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("Tests for userCredentials repository")
 class UserCredentialsRepositoryTest {
 
     @Autowired

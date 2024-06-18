@@ -2,6 +2,7 @@ package ru.javlasov.sportsplanner;
 
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.dto.HealthDto;
+import ru.javlasov.sportsplanner.dto.TournamentDto;
 import ru.javlasov.sportsplanner.dto.UserDto;
 import ru.javlasov.sportsplanner.dto.WorkoutDto;
 import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
@@ -163,104 +164,21 @@ public class ExpectedDataFromDB {
         return List.of(healthDto1, healthDto2);
     }
 
-//
-//    public static Set<Tournament> getExpectedTournamentsSetFromDB() {
-//        return new HashSet<>(getExpectedTournamentsListFromDB());
-//    }
-//
-//    public static List<User> getExpectedUsersFromDB() {
-//        var user1 = new User(1L, "name1", null, "surname1", 22,
-//                LocalDate.of(2000, 1, 1), "biography1",
-//                getExpectedSportsFromDB().iterator().next().getId(), getExpectedArticlesSetFromDB(),
-//                getExpectedTrainsSetFromDB(), getExpectedTournamentsSetFromDB(), getExpectedHealthSetFromDB());
-//        var user2 = new User(2L, "name2", "middlename2", "surname2", 25,
-//                LocalDate.of(2000, 1, 1), "biography2",
-//                2L, null, null, null, null);
-//        return List.of(user1, user2);
-//    }
-//
-//    public static List<ArticleDto> getExpectedArticleDtoFromDB() {
-//        var user = getExpectedUsersFromDB().get(0);
-//        var userFullName = user.getName() + " " + user.getMiddleName() + " " + user.getSurname();
-//        var articleDto = new ArticleDto(1L, ArticleStatusEnum.UNKNOWN, "title1", "text1",
-//                LocalDate.of(2000, 1, 1), 1L, userFullName);
-//        return List.of(articleDto);
-//    }
-//
-//    public static List<Role> getExpectedRolesFromDB() {
-//        var roleFirst = new Role();
-//        roleFirst.setId(1L);
-//        roleFirst.setRole("USER");
-//        var roleSecond = new Role();
-//        roleSecond.setId(2L);
-//        roleSecond.setRole("ADMIN");
-//        return List.of(roleFirst, roleSecond);
-//    }
-//
-//    public static List<UserCredentials> getExpectedUserCredentialsFromDB() {
-//        var userCredentials = new UserCredentials(1L, "test@mail.ru", "password",
-//                getExpectedUsersFromDB().get(0), getExpectedRolesFromDB().get(0));
-//        return List.of(userCredentials);
-//    }
+    public static List<TournamentDto> getExpectedTournamentsDtoFromDB() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        var userDto = getExpectedUsersDtoFromDB().get(0);
 
-//    public static List<UserDto> getExpectedUserDtoFromDB() {
-//        var expectedUser = getExpectedUserCredentialsFromDB().get(0);
-//        var expectedUserDto = new UserDto();
-//        expectedUserDto.setId(expectedUser.getId());
-//        expectedUserDto.setSport(ExpectedDataFromDB.getExpectedSportsFromDB().iterator().next().getId());
-//        expectedUserDto.setName(expectedUser.getUser().getName());
-//        expectedUserDto.setSurname(expectedUser.getUser().getSurname());
-//        expectedUserDto.setMiddleName(expectedUser.getUser().getMiddleName());
-//        expectedUserDto.setBirthday(expectedUser.getUser().getBirthday());
-//        expectedUserDto.setEmail(expectedUser.getEmail());
-//        expectedUserDto.setBiography(expectedUser.getUser().getBiography());
-//        expectedUserDto.setAge(expectedUser.getUser().getAge());
-//        expectedUserDto.setPassword(expectedUser.getPassword());
-//        return List.of(expectedUserDto);
-//    }
-//
-//    public static Set<TrainDto> getExpectedTrainDtoFromDB() {
-//        var dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.ENGLISH);
-//        Set<Train> expectedTrains = getExpectedTrainsFromDB();
-//        return expectedTrains.stream().map(entity -> {
-//            var expectedDto = new TrainDto();
-//            expectedDto.setId(entity.getId());
-//            expectedDto.setUser(entity.getUser());
-//            expectedDto.setDate(entity.getDate().format(dateTimeFormatter));
-//            expectedDto.setTitle(entity.getTitle());
-//            expectedDto.setReflection(entity.getReflection());
-//            return expectedDto;
-//        }).collect(Collectors.toSet());
-//    }
-//
-//    public static Set<HealthDto> getExpectedHealthDto() {
-//        Set<Health> expectedHealth = getExpectedHealthFromDB();
-//        return expectedHealth.stream().map(entity -> {
-//            var expectedDto = new HealthDto();
-//            expectedDto.setId(entity.getId());
-//            expectedDto.setDate(entity.getDate());
-//            expectedDto.setClinic(entity.getClinic());
-//            expectedDto.setUser(entity.getUser());
-//            expectedDto.setResult(entity.getResult());
-//            expectedDto.setDoctorFullName(entity.getDoctorFullName());
-//            expectedDto.setDoctorSpecialization(entity.getDoctorSpecialization());
-//            return expectedDto;
-//        }).collect(Collectors.toSet());
-//    }
-//
-//    public static Set<TournamentDto> getExpectedTournamentDto() {
-//        Set<Tournament> expectedTournament = getExpectedTournamentsFromDB();
-//        return expectedTournament.stream().map(entity -> {
-//            var expectedDto = new TournamentDto();
-//            expectedDto.setId(entity.getId());
-//            expectedDto.setUser(entity.getUser());
-//            expectedDto.setResult(entity.getResult());
-//            expectedDto.setDate(entity.getDate());
-//            expectedDto.setReflection(entity.getReflection());
-//            expectedDto.setTitle(entity.getTitle());
-//            expectedDto.setOpponent(entity.getOpponent());
-//            return expectedDto;
-//        }).collect(Collectors.toSet());
-//    }
+        var tournament1 = getExpectedTournamentsFromDB().get(0);
+        var tournamentDto1 = new TournamentDto(tournament1.getId(), tournament1.getDate().format(formatter),
+                tournament1.getTitle(), tournament1.getOpponent(), tournament1.getResult(), tournament1.getReflection(),
+                userDto);
+
+        var tournament2 = getExpectedTournamentsFromDB().get(1);
+        var tournamentDto2 = new TournamentDto(tournament2.getId(), tournament2.getDate().format(formatter),
+                tournament2.getTitle(), tournament2.getOpponent(), tournament2.getResult(), tournament2.getReflection(),
+                userDto);
+
+        return List.of(tournamentDto1, tournamentDto2);
+    }
 
 }

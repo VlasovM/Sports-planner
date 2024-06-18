@@ -26,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HealthServiceImplTest {
 
-    private final LoggingService mockLoggingService =
-            Mockito.mock(LoggingService.class);
+    private final LoggingService mockLoggingService = Mockito.mock(LoggingService.class);
 
     private final HealthMapper mockHealthMapper = Mockito.mock(HealthMapper.class);
 

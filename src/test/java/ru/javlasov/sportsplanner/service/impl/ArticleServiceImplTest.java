@@ -27,7 +27,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
-@DisplayName("Tests for article service")
 class ArticleServiceImplTest {
 
     private final ArticleRepository mockArticleRepository = Mockito.mock(ArticleRepository.class);

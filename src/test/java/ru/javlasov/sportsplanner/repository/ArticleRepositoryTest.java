@@ -10,10 +10,9 @@ import ru.javlasov.sportsplanner.model.Article;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("Tests for article repository")
 class ArticleRepositoryTest {
 
     @Autowired

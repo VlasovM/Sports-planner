@@ -11,11 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
-import ru.javlasov.sportsplanner.controller.rest.HealthRestController;
-import ru.javlasov.sportsplanner.dto.HealthDto;
+import ru.javlasov.sportsplanner.controller.rest.WorkoutRestController;
+import ru.javlasov.sportsplanner.dto.WorkoutDto;
 import ru.javlasov.sportsplanner.security.SecurityConfig;
-import ru.javlasov.sportsplanner.service.HealthService;
 import ru.javlasov.sportsplanner.service.UserCredentialsService;
+import ru.javlasov.sportsplanner.service.WorkoutService;
 
 import java.util.List;
 
@@ -25,11 +25,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(HealthRestController.class)
-@Import(SecurityConfig.class)
-class HealthRestControllerTest {
+@WebMvcTest(WorkoutRestController.class)
+@Import({SecurityConfig.class})
+class WorkoutRestControllerTest {
 
-    private final static String BASE_URL = "/api/v1/healths";
+    private final static String BASE_URL = "/api/v1/workout";
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,31 +38,29 @@ class HealthRestControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private HealthService mockHealthService;
+    private WorkoutService mockTrainService;
 
     @MockBean
     private UserCredentialsService mockUserCredentialsService;
 
-
     @Test
-    @DisplayName("Should get all healths")
+    @DisplayName("Should get all workout and get OK status")
     @WithMockUser
-    void getAllHealthForCurrentUserTest() throws Exception {
-        List<HealthDto> expectedHealthDtoList = ExpectedDataFromDB.getExpectedHealthDtoFromDB();
-        given(mockHealthService.getHealthCurrentUser()).willReturn(expectedHealthDtoList);
+    void getAllWorkoutTest() throws Exception {
+        List<WorkoutDto> expectedWorkoutDto = ExpectedDataFromDB.getExpectedWorkoutDtoFromDB();
+        given(mockTrainService.getAllForCurrentUser()).willReturn(expectedWorkoutDto);
         mockMvc.perform(get(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(
-                        objectMapper.writeValueAsString(expectedHealthDtoList)
-                ));
+                .andExpect(content().json(objectMapper
+                        .writeValueAsString(expectedWorkoutDto)));
     }
 
     @Test
-    @DisplayName("Should delete health by id and get OK status")
     @WithMockUser
-    void deleteHealthByIdTest() throws Exception {
+    @DisplayName("Should delete workout and get OK status")
+    void deleteWorkoutByIdTest() throws Exception {
         // given
         var expectedDeletedId = 1L;
 
@@ -73,41 +71,41 @@ class HealthRestControllerTest {
     }
 
     @Test
-    @DisplayName("Should get 302 (redirect) status if create with not auth user")
-    void createHealthWithNotAuthUserTest() throws Exception {
+    @WithMockUser
+    @DisplayName("Should create workout and get CREATED status")
+    void createWorkoutTest() throws Exception {
+        var incomeWorkoutDto = ExpectedDataFromDB.getExpectedWorkoutDtoFromDB().get(0);
+        incomeWorkoutDto.setId(null);
+
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is3xxRedirection());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(incomeWorkoutDto))
+                )
+                .andExpect(status().isCreated());
     }
 
     @Test
     @WithMockUser
-    @DisplayName("Should update health and get ok status")
-    void updateHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
+    @DisplayName("Should edit train and get OK status")
+    void editTrainTest() throws Exception {
+        var incomeWorkoutDto = ExpectedDataFromDB.getExpectedWorkoutDtoFromDB().get(0);
 
         mockMvc.perform(patch(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
+                        .content(objectMapper.writeValueAsString(incomeWorkoutDto))
                 )
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser
-    @DisplayName("Should create health and get created status")
-    void createHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
-        incomeHealthDto.setId(null);
-
+    @DisplayName("Should get 302 (redirect) status if created with not auth user")
+    void createTrainWithNotAuthUserTest() throws Exception {
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
-                )
-                .andExpect(status().isCreated());
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is3xxRedirection());
     }
 
 }

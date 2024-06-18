@@ -10,7 +10,6 @@ import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
-@DisplayName("Tests for article mapper")
 public class ArticleStatusMapperTest {
 
     @Autowired

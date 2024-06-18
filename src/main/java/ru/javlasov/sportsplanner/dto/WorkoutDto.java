@@ -25,6 +25,6 @@ public class WorkoutDto {
     @Size(max = 2048, message = "The reflection of training is too long")
     private String reflection;
 
-    private UserDto user;
+    private UserDto userDto;
 
 }

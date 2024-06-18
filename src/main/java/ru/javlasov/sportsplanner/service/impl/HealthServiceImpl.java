@@ -72,7 +72,8 @@ public class HealthServiceImpl implements HealthService {
     private Health findById(Long healthId) {
         return healthRepository.findById(healthId)
                 .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти посещение врача по id %d".formatted(healthId), TypeMessage.ERROR);
+                    sendMessage("Ошибка при попытке найти посещение врача по id %d"
+                            .formatted(healthId), TypeMessage.ERROR);
                     throw new NotFoundException("Возникла ошибка с получением данных," +
                             " обратитесь к администратору системы.");
                 });

@@ -119,62 +119,59 @@ public class ExpectedDataFromDB {
 
         var article1 = getExpectedArticlesFromDB().get(0);
         var articleDto1 = new ArticleDto(article1.getId(), ArticleStatusDto.getById(article1.getStatus().getId()),
-                article1.getTitle(), article1.getTitle(), article1.getCreated(), userDto);
+                article1.getTitle(), article1.getText(), article1.getCreated(), userDto);
 
 
         var article2 = getExpectedArticlesFromDB().get(1);
         var articleDto2 = new ArticleDto(article2.getId(), ArticleStatusDto.getById(article2.getStatus().getId()),
-                article2.getTitle(), article2.getTitle(), article2.getCreated(), userDto);
+                article2.getTitle(), article2.getText(), article2.getCreated(), userDto);
 
         var article3 = getExpectedArticlesFromDB().get(0);
         var articleDto3 = new ArticleDto(article3.getId(), ArticleStatusDto.getById(article3.getStatus().getId()),
-                article3.getTitle(), article3.getTitle(), article3.getCreated(), userDto);
+                article3.getTitle(), article3.getText(), article3.getCreated(), userDto);
 
         return List.of(articleDto1, articleDto2, articleDto3);
     }
 
     public static List<WorkoutDto> getExpectedWorkoutDtoFromDB() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         var userDto = getExpectedUsersDtoFromDB().get(0);
 
         var workout1 = getExpectedWorkoutFromDB().get(0);
-        var workoutDto1 = new WorkoutDto(workout1.getId(), workout1.getDate().format(formatter), workout1.getTitle(),
+        var workoutDto1 = new WorkoutDto(workout1.getId(), workout1.getDate(), workout1.getTitle(),
                 workout1.getReflection(), userDto);
 
         var workout2 = getExpectedWorkoutFromDB().get(0);
-        var workoutDto2 = new WorkoutDto(workout2.getId(), workout2.getDate().format(formatter), workout2.getTitle(),
+        var workoutDto2 = new WorkoutDto(workout2.getId(), workout2.getDate(), workout2.getTitle(),
                 workout2.getReflection(), userDto);
 
         return List.of(workoutDto1, workoutDto2);
     }
 
     public static List<HealthDto> getExpectedHealthDtoFromDB() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         var userDto = getExpectedUsersDtoFromDB().get(0);
 
         var health1 = getExpectedHealthFromDB().get(0);
-        var healthDto1 = new HealthDto(health1.getId(), health1.getDate().format(formatter), health1.getClinic(),
+        var healthDto1 = new HealthDto(health1.getId(), health1.getDate(), health1.getClinic(),
                 health1.getDoctorSpecialization(), health1.getDoctorFullName(), health1.getResult(), userDto);
 
 
         var health2 = getExpectedHealthFromDB().get(1);
-        var healthDto2 = new HealthDto(health2.getId(), health2.getDate().format(formatter), health2.getClinic(),
+        var healthDto2 = new HealthDto(health2.getId(), health2.getDate(), health2.getClinic(),
                 health2.getDoctorSpecialization(), health2.getDoctorFullName(), health2.getResult(), userDto);
 
         return List.of(healthDto1, healthDto2);
     }
 
     public static List<TournamentDto> getExpectedTournamentsDtoFromDB() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         var userDto = getExpectedUsersDtoFromDB().get(0);
 
         var tournament1 = getExpectedTournamentsFromDB().get(0);
-        var tournamentDto1 = new TournamentDto(tournament1.getId(), tournament1.getDate().format(formatter),
+        var tournamentDto1 = new TournamentDto(tournament1.getId(), tournament1.getDate(),
                 tournament1.getTitle(), tournament1.getOpponent(), tournament1.getResult(), tournament1.getReflection(),
                 userDto);
 
         var tournament2 = getExpectedTournamentsFromDB().get(1);
-        var tournamentDto2 = new TournamentDto(tournament2.getId(), tournament2.getDate().format(formatter),
+        var tournamentDto2 = new TournamentDto(tournament2.getId(), tournament2.getDate(),
                 tournament2.getTitle(), tournament2.getOpponent(), tournament2.getResult(), tournament2.getReflection(),
                 userDto);
 

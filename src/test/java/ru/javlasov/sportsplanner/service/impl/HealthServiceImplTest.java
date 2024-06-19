@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 
 class HealthServiceImplTest {
 
@@ -78,6 +79,44 @@ class HealthServiceImplTest {
         assertThat(actualException.getClass()).isEqualTo(NotFoundException.class);
         assertThat(actualException.getMessage()).isEqualTo("Возникла ошибка с получением данных, " +
                 "обратитесь к администратору системы.");
+    }
+
+    @Test
+    @DisplayName("Should get health by id")
+    void getByIdTest() {
+        // given
+        var expectedHealth = ExpectedDataFromDB.getExpectedHealthFromDB().get(0);
+        var expectedHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
+        var incomeId = expectedHealth.getId();
+
+        // when
+        Mockito.when(mockHealthRepository.findById(incomeId)).thenReturn(Optional.of(expectedHealth));
+        Mockito.when(mockHealthMapper.modelToDto(expectedHealth)).thenReturn(expectedHealthDto);
+        var actualHealthDto = underTestService.getById(incomeId);
+
+        // then
+        assertThat(actualHealthDto).usingRecursiveComparison().isEqualTo(expectedHealthDto);
+    }
+
+    @Test
+    @DisplayName("Should create health")
+    void createHealthTest() {
+        // given
+        var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
+        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
+        incomeHealthDto.setId(null);
+        var incomeHealth = ExpectedDataFromDB.getExpectedHealthFromDB().get(0);
+        incomeHealth.setId(null);
+        var expectedHealth = ExpectedDataFromDB.getExpectedHealthFromDB().get(0);
+
+
+        // when
+        makeMockAuthUser(expectedUserCredentials);
+        Mockito.when(mockHealthRepository.save(any())).thenReturn(expectedHealth);
+        Mockito.when(mockHealthMapper.dtoToModel(incomeHealthDto)).thenReturn(incomeHealth);
+        underTestService.updateOrCreate(incomeHealthDto);
+
+        // then
     }
 
     private void makeMockAuthUser(UserCredentials expectedUserCredentials) {

@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Добавить проверку здоровья</title>
+    <title>Изменить информацию о проверке здоровья</title>
 </head>
 <body>
-<h1>Добавить проверку здоровья</h1>
-<form id="create-form" action="createTournament.html" th:method="post">
+<h1>Изменить информацию о здоровье</h1>
+<form id="create-form" action="../tournament/createTournament.html" th:method="patch">
+    <div>
+        <label for="id-input">Идентификатор:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
+    </div>
     <div>
         <label for="health-date-input">Дата посещения врача:</label>
         <input id="health-date-input" name="date" type="date" th:value="*{date}" value=""/>
@@ -30,20 +34,20 @@
         <input id="health-result-input" name="result" type="text" th:value="*{result}" value=""/>
     </div>
     <div class="row">
-        <a href="homePageAuth.html" th:href="@{/health}">
-            <button type="button" onclick="create()">Сохранить</button>
+        <a href="../homePages/homePageAuth.html" th:href="@{/templates/health}">
+            <button type="button" onclick="edit()">Сохранить</button>
         </a>
-        <a href="homePageAuth.html" th:href="@{/}">
+        <a href="../homePages/homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>
     </div>
 </form>
 </body>
-
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 <script>
-    function create() {
+    function edit() {
 
+        const idInput = document.getElementById("id-input")
         const dateInput = document.getElementById("health-date-input")
         const clinicInput = document.getElementById("health-clinic-input")
         const doctorSpecializationInput = document.getElementById("health-doctorSpecialization-input")
@@ -51,6 +55,7 @@
         const resultInput = document.getElementById("health-result-input")
 
         const health = {
+            id: idInput.value,
             date: dateInput.value,
             clinic: clinicInput.value,
             doctorSpecialization: doctorSpecializationInput.value,
@@ -59,7 +64,7 @@
         }
 
         fetch("/api/v1/healths", {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

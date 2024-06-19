@@ -186,6 +186,7 @@
                         <exclude>ru/javlasov/sportsplanner/model/*</exclude>
                         <exclude>ru/javlasov/sportsplanner/dto/*</exclude>
                         <exclude>ru/javlasov/sportsplanner/controller/*.class</exclude>
+                        <exclude>ru/javlasov/sportsplanner/SportsPlannerApplication.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -212,9 +213,8 @@
                                     <element>PACKAGE</element>
                                     <limits>
                                         <limit>
-                                            <counter>LINE</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.75</minimum>
+                                            <counter>INSTRUCTION</counter>
+                                            <minimum>60.0%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

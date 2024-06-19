@@ -42,15 +42,15 @@
 <script>
 
     $(function () {
-        $.get('/api/v1/trains').done(function (trains) {
-            trains.forEach(function (workout) {
+        $.get('/api/v1/workout').done(function (workout) {
+            workout.forEach(function (workout) {
                 $('tbody').append(`
                     <tr>
                         <td>${workout.title}</td>
                         <td>${workout.date}</td>
                         <td>${workout.reflection}</td>
                        <td>
-                            <a href="/trains/edit/${workout.id}">
+                            <a href="/workout/edit/${workout.id}">
                                 <button value="${workout.id}">Изменить</button>
                             </a>
                         </td>
@@ -64,7 +64,7 @@
     });
 
     function deleteTrain(id) {
-        fetch("/api/v1/trains/" + id, {
+        fetch("/api/v1/workout/" + id, {
             method: "DELETE"
         })
             .then(() => {

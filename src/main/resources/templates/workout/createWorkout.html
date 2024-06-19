@@ -2,15 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Изменить тренировку</title>
+    <title>Добавить тренировку</title>
 </head>
 <body>
-<h1>Изменить тренировку</h1>
-<form id="edit-form" action="editTrain.html" th:method="patch">
-    <div>
-        <label for="id-input">Идентификатор:</label>
-        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
-    </div>
+<h1>Добавить тренировку</h1>
+<form id="create-form" action="createWorkout.html" th:method="post">
     <div>
         <label for="workout-title-input">Название тренировки:</label>
         <input id="workout-title-input" name="title" type="text" th:value="*{title}" value=""/>
@@ -24,10 +20,10 @@
         <input id="workout-reflection-input" name="reflection" type="text" th:value="*{reflection}" value=""/>
     </div>
     <div class="row">
-        <a href="homePageAuth.html" th:href="@{/trains}">
-            <button type="button" onclick="update()">Сохранить</button>
+        <a href="../homePages/homePageAuth.html" th:href="@{/workout}">
+            <button type="button" onclick="create()">Сохранить</button>
         </a>
-        <a href="homePageAuth.html" th:href="@{/}">
+        <a href="../homePages/homePageAuth.html" th:href="@{/}">
             <button type="button">Отменить</button>
         </a>
     </div>
@@ -35,22 +31,20 @@
 </body>
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 <script>
-    function update() {
+    function create() {
 
-        const idInput = document.getElementById("id-input")
         const titleInput = document.getElementById("workout-title-input")
         const dateInput = document.getElementById("workout-date-input")
         const reflectionInput = document.getElementById("workout-reflection-input")
 
         const workout = {
-            id: idInput.value,
             title: titleInput.value,
             date: dateInput.value,
             reflection: reflectionInput.value,
         }
 
-        fetch("/api/v1/trains", {
-            method: "PATCH",
+        fetch("/api/v1/workout", {
+            method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -58,7 +52,7 @@
             body: JSON.stringify(workout)
         })
             .then(rawResponse => rawResponse.json())
-            .then(json => newTrain.innerHTML = JSON.stringify(json, null, 4))
+            .then(json => newWorkout.innerHTML = JSON.stringify(json, null, 4))
 
     }
 </script>

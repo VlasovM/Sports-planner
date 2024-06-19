@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 
 class TournamentServiceImplTest {
 
@@ -76,6 +77,43 @@ class TournamentServiceImplTest {
         assertThat(actualException.getClass()).isEqualTo(NotFoundException.class);
         assertThat(actualException.getMessage()).isEqualTo("Возникла ошибка с получением данных, " +
                 "обратитесь к администратору системы.");
+    }
+
+    @Test
+    @DisplayName("Should get tournament by id")
+    void getByIdTest() {
+        // given
+        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().get(0);
+        var expectedTournamentDto = ExpectedDataFromDB.getExpectedTournamentsDtoFromDB().get(0);
+        var incomeId = expectedTournament.getId();
+
+        // when
+        Mockito.when(mockTournamentRepository.findById(incomeId)).thenReturn(Optional.of(expectedTournament));
+        Mockito.when(mockTournamentMapper.modelToDto(expectedTournament)).thenReturn(expectedTournamentDto);
+        var actualHealthDto = underTestService.getById(incomeId);
+
+        // then
+        assertThat(actualHealthDto).usingRecursiveComparison().isEqualTo(expectedTournamentDto);
+    }
+
+    @Test
+    @DisplayName("Should create tournament")
+    void createHealthTest() {
+        // given
+        var expectedUserCredentials = ExpectedDataFromDB.getExpectedUserCredentialsFromDB().get(0);
+        var incomeTournamentDto = ExpectedDataFromDB.getExpectedTournamentsDtoFromDB().get(0);
+        incomeTournamentDto.setId(null);
+        var incomeTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().get(0);
+        incomeTournament.setId(null);
+        var expectedTournament = ExpectedDataFromDB.getExpectedTournamentsFromDB().get(0);
+
+        // when
+        makeMockAuthUser(expectedUserCredentials);
+        Mockito.when(mockTournamentRepository.save(any())).thenReturn(expectedTournament);
+        Mockito.when(mockTournamentMapper.dtoToModel(incomeTournamentDto)).thenReturn(incomeTournament);
+        underTestService.updateOrCreate(incomeTournamentDto);
+
+        // then
     }
 
     private void makeMockAuthUser(UserCredentials expectedUserCredentials) {

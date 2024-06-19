@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import ru.javlasov.sportsplanner.ExpectedDataFromDB;
 import ru.javlasov.sportsplanner.dto.ArticleDto;
 import ru.javlasov.sportsplanner.enums.ArticleStatusDto;
+import ru.javlasov.sportsplanner.expection.NotFoundException;
 import ru.javlasov.sportsplanner.mapper.ArticleMapper;
 import ru.javlasov.sportsplanner.mapper.UserMapper;
 import ru.javlasov.sportsplanner.model.Article;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class ArticleServiceImplTest {
@@ -187,6 +189,48 @@ class ArticleServiceImplTest {
         // then
         assertThat(actualArticle).isPresent();
         assertThat(actualArticle.get()).usingRecursiveComparison().isEqualTo(expectedArticle);
+    }
+
+    @Test
+    @DisplayName("Should get all articles for validate moderator")
+    void getArticleForValidateTest() {
+        // given
+        List<Article> expectedArticles = ExpectedDataFromDB.getExpectedArticlesFromDB()
+                .stream()
+                .filter(article -> ArticleStatusDto.VERIFICATION.getId().equals(article.getStatus().getId()))
+                .toList();
+        List<ArticleDto> expectedArticleDto = ExpectedDataFromDB.getExpectedArticlesDtoFromDB()
+                .stream()
+                .filter(articleDto -> ArticleStatusDto.VERIFICATION.equals(articleDto.getStatus()))
+                .toList();
+
+        // then
+        Mockito.when(mockArticleRepository.findAllByStatusId(ArticleStatusDto.VERIFICATION.getId()))
+                .thenReturn(expectedArticles);
+        Mockito.when(mockArticleMapper.modelListToDtoList(expectedArticles)).thenReturn(expectedArticleDto);
+        List<ArticleDto> actualArticleDto = underTestService.getArticleForValidate();
+
+        // when
+        assertThat(actualArticleDto).isNotEmpty();
+        assertThat(actualArticleDto.size()).isEqualTo(expectedArticleDto.size());
+        assertThat(actualArticleDto).usingRecursiveComparison().isEqualTo(expectedArticleDto);
+    }
+
+    @Test
+    @DisplayName("Should get exception when article not found by id")
+    void findArticleByNotExistsIdTest() {
+        // given
+        var incomeId = 10L;
+
+        // when
+        Mockito.when(mockArticleRepository.findById(incomeId)).thenReturn(Optional.empty());
+        NotFoundException actualResult = assertThrows(NotFoundException.class,
+                () -> underTestService.getArticleById(incomeId));
+
+
+        // then
+        assertThat(actualResult).isNotNull();
+        assertThat(actualResult.getMessage()).isEqualTo("Статья с id = 10 не найдена!");
     }
 
     private void makeMockAuthUser(UserCredentials expectedUserCredentials) {

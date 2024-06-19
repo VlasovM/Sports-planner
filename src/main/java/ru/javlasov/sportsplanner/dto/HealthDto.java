@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class HealthDto {
     private Long id;
 
     @NotNull(message = "Please set the date of visit a doctor")
-    private String date;
+    private LocalDate date;
 
     @NotEmpty(message = "Please set the clinic name")
     private String clinic;

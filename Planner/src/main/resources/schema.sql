@@ -84,4 +84,21 @@ CREATE TABLE IF NOT EXISTS health
     result VARCHAR(2048) NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS clinic_request
+(
+    id SERIAL PRIMARY KEY NOT NULL,
+    request_id VARCHAR(32) NOT NULL,
+    status INT NOT NULL,
+    note VARCHAR(2048) NULL,
+    doctor_full_name VARCHAR(128) NULL,
+    doctor_specialization VARCHAR(128) NULL,
+    clinic VARCHAR(256),
+    date_visit timestamp NULL,
+    patient_name VARCHAR(128) NULL,
+    patient_middle_name VARCHAR(128) NULL,
+    patient_surname VARCHAR(128) NULL,
+    patient_birthday timestamp NULL,
+    result VARCHAR(4096) NULL
+);

@@ -31,6 +31,6 @@ MERGE INTO tournaments KEY (id, date, title, opponent, result, reflection, user_
     VALUES (1, '2000-01-01', 'title1', 'opponent1', 'result1', 'reflection1', 1),
            (2, '2000-01-01', 'title2', 'opponent2', 'result2', null, 1);
 
-MERGE INTO health KEY (id, date, clinic, doctor_specialization, doctor_full_name, result, user_id)
-    VALUES (1, '2000-01-01', 'clinic1', 'doctor_specialization1', 'doctor_full_name1', 'result1', 1),
-           (2, '2000-01-01', 'clinic2', 'doctor_specialization2', 'doctor_full_name2', 'result2', 1);
+MERGE INTO health KEY (id, date, clinic, doctor_specialization, doctor_full_name, result, user_id, status, note)
+    VALUES (1, '2000-01-01', 'clinic1', 'doctor_specialization1', 'doctor_full_name1', 'result1', 1, 'confirmed', null),
+           (2, '2000-01-01', 'clinic2', 'doctor_specialization2', 'doctor_full_name2', 'result2', 1, 'unconfirmed', null);

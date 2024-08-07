@@ -29,28 +29,6 @@ public class HealthServiceImpl implements HealthService {
     private final LoggingService loggingService;
 
     @Override
-    @Transactional
-    public void deleteById(Long id) {
-        findById(id);
-        healthRepository.deleteById(id);
-        sendMessage("Пользователь %s удалил проверку здоровья с id = %d".formatted(
-                userCredentialsService.getCurrentAuthUser().getEmail(), id), TypeMessage.INFO);
-    }
-
-    @Override
-    @Transactional
-    public void updateOrCreate(HealthDto healthDto) {
-        var currentUserCredentials = userCredentialsService.getCurrentAuthUser();
-        var currentUser = currentUserCredentials.getUser();
-        var health = healthMapper.dtoToModel(healthDto);
-        health.setUser(currentUser);
-        health = healthRepository.save(health);
-        sendMessage("Пользователь %s %s проверку здоровья с id = %d".formatted(
-                currentUserCredentials.getEmail(), healthDto.getId() == null ? "создал" : "изменил",
-                health.getId()), TypeMessage.INFO);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<HealthDto> getHealthCurrentUser() {
         var currentUser = userCredentialsService.getCurrentAuthUser().getUser();
@@ -59,21 +37,22 @@ public class HealthServiceImpl implements HealthService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public HealthDto getById(Long id) {
         var health = findById(id);
         return healthMapper.modelToDto(health);
     }
 
-    private void sendMessage(String message, TypeMessage type) {
-        var loggingDto = new LoggerEvent(message, type);
+    private void sendMessage(String message) {
+        var loggingDto = new LoggerEvent(message, TypeMessage.ERROR);
         loggingService.sendMessage(loggingDto);
     }
 
     private Health findById(Long healthId) {
         return healthRepository.findById(healthId)
                 .orElseThrow(() -> {
-                    sendMessage("Ошибка при попытке найти посещение врача по id %d"
-                            .formatted(healthId), TypeMessage.ERROR);
+                    sendMessage("Ошибка при попытке отчет по проверке здоровья по id %d"
+                            .formatted(healthId));
                     throw new NotFoundException("Возникла ошибка с получением данных," +
                             " обратитесь к администратору системы.");
                 });

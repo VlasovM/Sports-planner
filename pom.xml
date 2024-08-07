@@ -10,6 +10,7 @@
     <modules>
         <module>Planner</module>
         <module>Journaling</module>
+        <module>Clinic</module>
     </modules>
     <packaging>pom</packaging>
 

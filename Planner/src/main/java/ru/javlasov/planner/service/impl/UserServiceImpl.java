@@ -19,6 +19,9 @@ import ru.javlasov.planner.service.RoleService;
 import ru.javlasov.planner.service.UserCredentialsService;
 import ru.javlasov.planner.service.UserService;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -73,6 +76,11 @@ public class UserServiceImpl implements UserService {
                     sendMessage(errorMessage, TypeMessage.ERROR);
                     return new NotFoundException(errorMessage);
                 });
+    }
+
+    @Override
+    public List<User> findUsersForClinicRequest(String name, String surname, String middleName, LocalDate birthday) {
+        return userRepository.findUsersForClinicRequest(name, middleName, surname, birthday);
     }
 
     private void sendMessage(String message, TypeMessage type) {

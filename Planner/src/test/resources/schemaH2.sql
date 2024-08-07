@@ -83,5 +83,7 @@ CREATE TABLE IF NOT EXISTS health
     doctor_full_name VARCHAR(32) NOT NULL,
     result VARCHAR(2048) NOT NULL,
     user_id INT NOT NULL,
+    status VARCHAR(256) NOT NULL,
+    note VARCHAR(256) NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 )

@@ -2,6 +2,7 @@ package ru.javlasov.planner.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 import ru.javlasov.planner.model.User;
 
 import java.time.LocalDate;
@@ -13,7 +14,10 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
             "WHERE user.name = :name " +
             "AND user.surname = :surname " +
             "AND user.middleName = :middleName " +
-            "AND user.birthday = :birtday")
-    List<User> findUsersForClinicRequest(String name, String middleName, String surName, LocalDate birthday);
+            "AND user.birthday = :birthday")
+    List<User> findUsersForClinicRequest(@Param(value = "name") String name,
+                                         @Param(value = "middleName") String middleName,
+                                         @Param(value = "surname") String surname,
+                                         @Param(value = "birthday") LocalDate birthday);
 
 }

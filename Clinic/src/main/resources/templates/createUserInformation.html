@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить запись пациента</title>
+</head>
+<body>
+<h1>Добавить посещение пациента</h1>
+<form id="create-form" action="createUserInformation.html" th:method="post">
+    <div>
+        <label for="patient-name-input">Имя пациента:</label>
+        <input id="patient-name-input" type="text"/>
+    </div>
+    <div>
+        <label for="patient-surname-input">Фамилия пациента:</label>
+        <input id="patient-surname-input" name="surname" type="text" th:value="*{patientSurname}"/>
+    </div>
+    <div>
+        <label for="patient-middle-name-input">Отчество пациента:*</label>
+        <input id="patient-middle-name-input" name="middleName" type="text" th:value="*{patientMiddleName}"/>
+    </div>
+    <div>
+        <label for="patient-birthday-input">Дата рождения пациента:</label>
+        <input id="patient-birthday-input" name="birthday" type="date" th:value="*{patientBirthday}">
+    </div>
+    <div>
+        <label for="patient-date-visited-input">Дата визита пациента:</label>
+        <input id="patient-date-visited-input" name="visited" type="date" th:value="*{visited}">
+    </div>
+    <div>
+        <label for="result-input">Результат посещения:</label>
+        <input id="result-input" name="result" type="text" th:value="*{result}"/>
+    </div>
+    <div class="row">
+        <a href="homePageAuth.html" th:href="@{/}">
+            <button type="button" onclick="create()">Сохранить</button>
+        </a>
+        <a href="homePageAuth.html" th:href="@{/}">
+            <button type="button">Отменить</button>
+        </a>
+    </div>
+    <h3>* - если таковое имеется.</h3>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function create() {
+
+        const patientNameInput = document.getElementById("patient-name-input")
+        const patientSurnameInput = document.getElementById("patient-surname-input")
+        const patientMiddleNameInput = document.getElementById("patient-middle-name-input")
+        const patientBirthdayInput = document.getElementById("patient-birthday-input")
+        const patientDateVisitedInput = document.getElementById("patient-date-visited-input")
+        const resultInput = document.getElementById("result-input")
+
+        const healthInformationDto = {
+            patientName: patientNameInput.value,
+            patientSurname: patientSurnameInput.value,
+            patientMiddleName: patientMiddleNameInput.value,
+            patientBirthday: patientBirthdayInput.value,
+            visited: patientDateVisitedInput.value,
+            result: resultInput.value,
+        }
+
+        fetch("/api/v1/clinic", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(healthInformationDto)
+        })
+            .then(rawResponse => rawResponse.json())
+            .then(json => heath.innerHTML = JSON.stringify(json, null, 4));
+    }
+</script>
+</html>

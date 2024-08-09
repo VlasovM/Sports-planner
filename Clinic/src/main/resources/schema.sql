@@ -14,10 +14,27 @@ CREATE TABLE IF NOT EXISTS doctors
     specialization INT NOT NULL,
 );
 
+CREATE TABLE IF NOT EXISTS roles
+(
+    id SERIAL PRIMARY KEY NOT NULL,
+    role VARCHAR(64) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_credentials
+(
+    id SERIAL PRIMARY KEY NOT NULL,
+    email VARCHAR(32) NOT NULL,
+    password VARCHAR(64) NOT NULL,
+    doctor_id INT NOT NULL,
+    role_id INT NOT NULL,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
 CREATE TABLE IF NOT EXISTS health_information
 (
     id SERIAL PRIMARY KEY NOT NULL,
-    request_id VARCHAR(32) NOT NULL,
+    request_id VARCHAR(36) NOT NULL,
     patient_name VARCHAR(64) NOT NULL,
     patient_middle_name VARCHAR(64) NULL,
     patient_surname varchar(64) NOT NULL,

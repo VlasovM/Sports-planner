@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinic</title>
+    <style>
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .h1 {
+            font-size: 40px;
+        }
+
+        .h2 {
+            color: darkcyan;
+        }
+    </style>
+</head>
+<body>
+<h1 class="h1" style="text-align: center">Клиника</h1>
+<h2 class="h2" style="text-align: center">Чтобы продолжить, пожалуйста, авторизируйтесь</h2>
+<a th:href="@{/application/login}" class="button" style="float: right" >Вход</a>
+
+</body>
+</html>

@@ -27,4 +27,15 @@ public class HealthInformationDto {
     @NotBlank(message = "Укажите результат посещения")
     private String result;
 
+    @Override
+    public String toString() {
+        return "HealthInformationDto{" +
+                "patientName='" + patientName + '\'' +
+                ", patientMiddleName='" + patientMiddleName + '\'' +
+                ", patientSurname='" + patientSurname + '\'' +
+                ", patientBirthday=" + patientBirthday +
+                ", visited=" + visited +
+                ", result='" + result + '\'' +
+                '}';
+    }
 }

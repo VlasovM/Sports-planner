@@ -26,7 +26,12 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         var authUser = getUserCredentials(email);
-        return User.builder().username(authUser.getEmail()).password(authUser.getPassword()).roles(authUser.getRole().getRole()).build();
+        return User
+                .builder()
+                .username(authUser.getEmail())
+                .password(authUser.getPassword())
+                .roles(authUser.getRole().getRole())
+                .build();
     }
 
     private UserCredentials getUserCredentials(String email) {

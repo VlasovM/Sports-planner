@@ -33,6 +33,8 @@ public class SecurityConfig {
 
     private static final String BASE_URL_API_SPORTS = "/api/v1/sports";
 
+    private static final String BASE_URL_API_CLINIC = "/api/v1/clinic";
+
     private final UserCredentialsService userCredentialsService;
 
     @Bean
@@ -50,6 +52,7 @@ public class SecurityConfig {
     private void addPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/").permitAll()
+                .requestMatchers(HttpMethod.POST, BASE_URL_API_CLINIC).permitAll()
                 .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES).permitAll()
                 .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES + "/article/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/registration").permitAll()

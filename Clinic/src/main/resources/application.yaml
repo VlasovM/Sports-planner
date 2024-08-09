@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/hospital
+    url: jdbc:postgresql://localhost:5432/clinic
     username: postgres # default
     password: password # default
   jpa:

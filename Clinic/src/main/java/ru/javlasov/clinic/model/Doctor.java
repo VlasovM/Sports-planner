@@ -1,12 +1,14 @@
 package ru.javlasov.clinic.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import ru.javlasov.clinic.enums.Specialization;
 
 @Entity
 @Table(name = "doctors")
@@ -29,7 +31,8 @@ public class Doctor {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "specialization", nullable = false)
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "specialization", referencedColumnName = "id")
     private Specialization specialization;
 
 }

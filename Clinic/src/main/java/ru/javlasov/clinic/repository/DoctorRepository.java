@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DoctorRepository extends CrudRepository<Doctor, Long> {
 
-    Optional<Doctor> findDoctorByFullNameAndSpecializationId(String fullName, Long SpecializationId);
+    Optional<Doctor> findDoctorByFullNameAndSpecializationId(String fullName, Long specializationId);
 
 }

@@ -100,5 +100,6 @@ CREATE TABLE IF NOT EXISTS clinic_request
     patient_middle_name VARCHAR(128) NULL,
     patient_surname VARCHAR(128) NULL,
     patient_birthday timestamp NULL,
+    user_id INT NULL,
     result VARCHAR(4096) NULL
 );

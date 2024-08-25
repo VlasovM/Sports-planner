@@ -18,19 +18,19 @@ public class TournamentDto {
 
     private Long id;
 
-    @NotNull(message = "Please set the tournament day")
+    @NotNull(message = "Укажите дату турнира")
     private LocalDate date;
 
-    @NotEmpty(message = "Please set the tournament title")
+    @NotEmpty(message = "Укажите название турнира")
     private String title;
 
-    @NotEmpty(message = "Please set the your opponent")
+    @NotEmpty(message = "Укажите вашего соперника")
     private String opponent;
 
-    @NotEmpty(message = "Please set the result of tournament")
+    @NotEmpty(message = "Укажите результат турнира")
     private String result;
 
-    @Size(max = 2048, message = "The reflection of tournament is too long")
+    @Size(max = 2048, message = "Рефлексия по турниру слишком длинная")
     private String reflection;
 
     private UserDto userDto;

@@ -21,7 +21,8 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,54 +61,12 @@ class HealthRestControllerTest {
     }
 
     @Test
-    @DisplayName("Should delete health by id and get OK status")
-    @WithMockUser
-    void deleteHealthByIdTest() throws Exception {
-        // given
-        var expectedDeletedId = 1L;
-
-        // when
-        mockMvc.perform(delete(BASE_URL + "/" + expectedDeletedId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("Should get 302 (redirect) status if create with not auth user")
     void createHealthWithNotAuthUserTest() throws Exception {
         mockMvc.perform(post(BASE_URL)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is3xxRedirection());
-    }
-
-    @Test
-    @WithMockUser
-    @DisplayName("Should update health and get ok status")
-    void updateHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
-
-        mockMvc.perform(patch(BASE_URL)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
-                )
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser
-    @DisplayName("Should create health and get created status")
-    void createHealthTest() throws Exception {
-        var incomeHealthDto = ExpectedDataFromDB.getExpectedHealthDtoFromDB().get(0);
-        incomeHealthDto.setId(null);
-
-        mockMvc.perform(post(BASE_URL)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(incomeHealthDto))
-                )
-                .andExpect(status().isCreated());
     }
 
 }

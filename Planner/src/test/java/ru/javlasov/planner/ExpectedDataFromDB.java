@@ -80,14 +80,13 @@ public class ExpectedDataFromDB {
     }
 
     public static List<Health> getExpectedHealthFromDB() {
-//        var health1 = new Health(1L, LocalDate.of(2000, 1, 1), "clinic1",
-//                "doctor_specialization1", "doctor_full_name1",
-//                "result1", getExpectedUsersFromDB().get(0), "confirmed", null);
-//        var health2 = new Health(2L, LocalDate.of(2000, 1, 1), "clinic2",
-//                "doctor_specialization2", "doctor_full_name2",
-//                "result2", getExpectedUsersFromDB().get(0), "unconfirmed", null);
-//        return List.of(health1, health2);
-        return new ArrayList<>();
+        var health1 = new Health(1L, LocalDate.of(2000, 1, 1), "clinic1",
+                "doctor_specialization1", "doctor_full_name1",
+                "result1", getExpectedUsersFromDB().get(0));
+        var health2 = new Health(2L, LocalDate.of(2000, 1, 1), "clinic2",
+                "doctor_specialization2", "doctor_full_name2",
+                "result2", getExpectedUsersFromDB().get(0));
+        return List.of(health1, health2);
     }
 
     public static List<Tournament> getExpectedTournamentsFromDB() {

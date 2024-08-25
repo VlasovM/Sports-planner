@@ -19,29 +19,29 @@ public class UserDto {
 
     private Long id;
 
-    @Size(min = 2, message = "Name must be minimum 2 characters")
+    @Size(min = 2, message = "Имя должен содержать минимум 2 символа")
     private String name;
 
-    @Size(min = 2, message = "Surname must be minimum 2 characters")
+    @Size(min = 2, message = "Фамилия долна содержать минимум 2 символа")
     private String surname;
 
-    @Pattern(regexp = "[а-яА-Я]*", message = "Middle name cannot contains digits")
+    @Pattern(regexp = "[а-яА-Я]*", message = "Отчество не должно содержать цифры")
     private String middleName;
 
     @NotNull
-    @Min(value = 16, message = "You must be over 16 years old")
-    @Max(value = 150, message = "You can't be more than 150 years old.")
+    @Min(value = 16, message = "Вам должно быть больше 16 лет")
+    @Max(value = 150, message = "Вам должно быть меньше 150 лет")
     private Integer age;
 
-    @NotNull(message = "The birthday cannot be empty")
+    @NotNull(message = "Укажите дату рождения")
     private LocalDate birthday;
 
     private String biography;
 
-    @Email(message = "The email is not valid. Example: test@mail.ru")
+    @Email(message = "Не валидная почта. Пример: test@mail.ru")
     private String email;
 
-    @Size(min = 8, message = "The password must be minimum 8 characters")
+    @Size(min = 8, message = "Пароль должен содержать минимум 8 символов")
     private String password;
 
     @NotNull

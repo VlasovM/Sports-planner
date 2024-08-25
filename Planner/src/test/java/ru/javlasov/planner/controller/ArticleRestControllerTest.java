@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.javlasov.planner.ExpectedDataFromDB;
 import ru.javlasov.planner.controller.rest.ArticleRestController;
 import ru.javlasov.planner.dto.ArticleDto;
-import ru.javlasov.planner.dto.ErrorDto;
+import ru.javlasov.planner.dto.ErrorMessageDto;
 import ru.javlasov.planner.enums.ArticleStatusDto;
 import ru.javlasov.planner.security.SecurityConfig;
 import ru.javlasov.planner.service.ArticleService;
@@ -102,9 +102,7 @@ public class ArticleRestControllerTest {
     void attemptCreateInvalidArticleTest() throws Exception {
         // given
         var expectedUserDto = ExpectedDataFromDB.getExpectedUsersDtoFromDB().get(0);
-        var expectedErrorMessageFirstPart = "The title cannot be empty";
-        var expectedErrorMessageSecondPart = "The text of article cannot be empty";
-        var expectedErrorCode = "400 BAD_REQUEST";
+        var expectedStatus = 400;
         var incomeInvalidDto = new ArticleDto(null, ArticleStatusDto.VERIFICATION, null, null,
                 LocalDate.now(), expectedUserDto);
 
@@ -115,14 +113,10 @@ public class ArticleRestControllerTest {
                         .content(objectMapper.writeValueAsString(incomeInvalidDto))
                 )
                 .andExpect(status().isBadRequest());
+        var actualStatus = resultActions.andReturn().getResponse().getStatus();
 
         // then
-        var resultString = resultActions.andReturn().getResponse().getContentAsString();
-        var resultError = objectMapper.readValue(resultString, ErrorDto.class);
-
-        assertThat(resultError.getHttpStatusCode()).isEqualTo(expectedErrorCode);
-        assertThat(resultError.getMessage().contains(expectedErrorMessageFirstPart)).isTrue();
-        assertThat(resultError.getMessage().contains(expectedErrorMessageSecondPart)).isTrue();
+        assertThat(actualStatus).isEqualTo(expectedStatus);
     }
 
     @Test

@@ -1,12 +1,14 @@
-package ru.javlasov.planner.response;
+package ru.javlasov.clinic.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.javlasov.planner.enums.Status;
+import ru.javlasov.clinic.enums.Status;
 
 @Getter
 @Setter
-public class ClinicResponse {
+@AllArgsConstructor
+public class PlannerResponse {
 
     private Status status;
 

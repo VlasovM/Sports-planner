@@ -9,10 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorDto {
+public class ErrorMessageDto {
 
     private String message;
-
-    private String httpStatusCode;
 
 }

@@ -25,13 +25,4 @@ public enum Specialization {
         return UNKNOWN;
     }
 
-    public static Specialization findByTitle(String title) {
-        for (Specialization specialization : values()) {
-            if (specialization.title.equals(title)) {
-                return specialization;
-            }
-        }
-        return UNKNOWN;
-    }
-
 }

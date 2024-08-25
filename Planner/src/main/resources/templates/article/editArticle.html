@@ -3,30 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Изменить статью</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
+<body class="background">
 <h1>Изменить статью</h1>
 <form id="create-form" action="createArticle.html" th:method="patch">
     <div>
-        <label for="id-input">Идентификатор:</label>
-        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
+        <label class="input-text" for="id-input">Идентификатор:</label>
+        <input id="id-input" type="text" readonly="readonly"/>
     </div>
     <div>
-        <label for="article-title-input">Заголовок:</label>
-        <input id="article-title-input" name="title" type="text" th:value="*{title}" value=""/>
+        <label class="input-text" for="article-title-input">Заголовок:</label>
+        <input id="article-title-input" type="text"/>
     </div>
     <div>
-        <label for="article-text-input">Текст:</label>
-        <input id="article-text-input" name="text" type="text" th:value="*{text}" value=""/>
+        <label class="input-text" for="article-text-input">Текст:</label>
+        <input id="article-text-input" type="text"/>
     </div>
     <div class="row">
-        <a href="../homePages/homePageAuth.html" th:href="@{/articles/user/}">
-            <button type="button" onclick="update()">Сохранить</button>
-        </a>
+        <button type="button" class="button" onclick="update()">Сохранить</button>
         <a href="../homePages/homePageAuth.html" th:href="@{/}">
-            <button type="button">Отменить</button>
+            <button class="button" type="button">Отменить</button>
         </a>
     </div>
+    <pre class="error" id="information"></pre>
 </form>
 </body>
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
@@ -43,7 +75,7 @@
             text: textInput.value,
         }
 
-        fetch("/api/v1/articles", {
+        const resultFromAPI = fetch("/api/v1/articles", {
             method: "PATCH",
             headers: {
                 'Accept': 'application/json',
@@ -51,8 +83,16 @@
             },
             body: JSON.stringify(article)
         })
-            .then(rawResponse => rawResponse.json())
-            .then(json => newArticle.innerHTML = JSON.stringify(json, null, 4))
+
+        const informationAboutCreateDto = document.getElementById("information")
+
+        if (resultFromAPI.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultFromAPI.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
 
     }
 </script>

@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>SportsApplication</title>
     <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+
         .button {
             background-color: darkcyan;
             border: 1px solid white;
@@ -31,7 +36,7 @@
         }
     </style>
 </head>
-<body>
+<body class="background">
 <h1 class="h1" style="text-align: center">Спортивный планировщик</h1>
 <a th:href="@{/application/logout}" class="button" style="float: right">Выход</a>
 <table>
@@ -40,14 +45,6 @@
         <th>
             <a href="../article/articles.html" th:href="@{/articles}" class="article">Статьи</a>
         </th>
-        <th>
-            <a href="../article/createArticle.html" th:href="@{/articles/create}" class="article">Добавить статью</a>
-        </th>
-        <th>
-            <a href="../article/articlesByUser.html" th:href="@{/articles/user/}" class="article">Мои статьи</a>
-        </th>
-    </tr>
-    <tr>
         <th>
             <a href="../workout/workout.html" th:href="@{/trains}" class="button">Мои тренировки</a>
         </th>
@@ -60,13 +57,19 @@
     </tr>
     <tr>
         <th>
+            <a href="../article/articlesByUser.html" th:href="@{/articles/user/}" class="article">Мои статьи</a>
+        </th>
+        <th>
             <a href="../workout/createWorkout.html" th:href="@{/trains/create}" class="button">Добавить тренировку</a>
         </th>
         <th>
-            <a href="../tournament/createTournament.html" th:href="@{/tournaments/create}" class="button">Добавить турнир</a>
+            <a href="../tournament/createTournament.html" th:href="@{/tournaments/create}" class="button">Добавить
+                турнир</a>
         </th>
+    </tr>
+    <tr>
         <th>
-            <a href="../health/createHealth.html" th:href="@{/health/create}" class="button">Добавить проверку здоровья</a>
+            <a href="../article/createArticle.html" th:href="@{/articles/create}" class="article">Добавить статью</a>
         </th>
     </tr>
     </thead>

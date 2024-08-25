@@ -1,27 +1,17 @@
 package ru.javlasov.planner.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public final class AsyncClinicResponse {
+@AllArgsConstructor
+public class AsyncClinicResponse {
 
-    private volatile static AsyncClinicResponse uniqueResponse;
+    private HttpStatus status;
 
-    private String responseStatus = "SUCCEED";
-
-    private String responseMessage = "Сообщение успешно принято системой \"Sports-planner\"";
-
-    public static AsyncClinicResponse getInstance() {
-        if (uniqueResponse == null) {
-            synchronized (AsyncClinicResponse.class) {
-                if (uniqueResponse == null) {
-                    uniqueResponse = new AsyncClinicResponse();
-                }
-            }
-        }
-        return uniqueResponse;
-    }
+    private String message;
 
 }

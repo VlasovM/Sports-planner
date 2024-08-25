@@ -141,6 +141,7 @@
                 <configuration>
                     <configLocation>${checkstyle.config.url}</configLocation>
                     <sourceDirectories>${project.build.sourceDirectory}</sourceDirectories>
+                    <excludes>**/security/**</excludes>
                 </configuration>
                 <executions>
                     <execution>

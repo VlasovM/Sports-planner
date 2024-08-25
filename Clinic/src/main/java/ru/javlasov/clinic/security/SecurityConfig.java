@@ -36,11 +36,12 @@ public class SecurityConfig {
     private void addPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/").permitAll()
-                .requestMatchers(HttpMethod.POST, BASE_URL_API_CLINIC + "/create").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, BASE_URL_API_CLINIC + "/create")
+                .hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
         );
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);

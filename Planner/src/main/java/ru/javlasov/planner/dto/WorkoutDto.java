@@ -18,13 +18,13 @@ public class WorkoutDto {
 
     private Long id;
 
-    @NotNull(message = "Set date of train")
+    @NotNull(message = "Укажите дату тренировки")
     private LocalDateTime date;
 
-    @NotEmpty(message = "The title of training cannot be empty")
+    @NotEmpty(message = "Название тренировки не может быть пустым")
     private String title;
 
-    @Size(max = 2048, message = "The reflection of training is too long")
+    @Size(max = 2048, message = "Слишком длинная рефлексия")
     private String reflection;
 
     private UserDto userDto;

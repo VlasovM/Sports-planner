@@ -11,4 +11,8 @@ public class AsyncPlannerResponse {
 
     private String responseMessage;
 
+    @Override
+    public String toString() {
+        return "Статус: " + responseStatus + " сообщение: " + responseMessage;
+    }
 }

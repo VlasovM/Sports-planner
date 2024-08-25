@@ -3,48 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Добавить запись пациента</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, #f5706c);
+            height: 100vh;
+        }
+
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: brown;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
-<h1>Добавить посещение пациента</h1>
+
+<body class="background">
+<h1>Добавить данные о посещении пациента</h1>
 <form id="create-form" action="createUserInformation.html" th:method="post">
     <div>
-        <label for="patient-name-input">Имя пациента:</label>
+        <label class="input-text" for="patient-name-input">Имя пациента:</label>
         <input id="patient-name-input" type="text"/>
     </div>
     <div>
-        <label for="patient-surname-input">Фамилия пациента:</label>
-        <input id="patient-surname-input" name="surname" type="text" th:value="*{patientSurname}"/>
+        <label class="input-text" for="patient-surname-input">Фамилия пациента:</label>
+        <input id="patient-surname-input" type="text"/>
     </div>
     <div>
-        <label for="patient-middle-name-input">Отчество пациента:*</label>
-        <input id="patient-middle-name-input" name="middleName" type="text" th:value="*{patientMiddleName}"/>
+        <label class="input-text" for="patient-middle-name-input">Отчество пациента:*</label>
+        <input id="patient-middle-name-input" type="text"/>
     </div>
     <div>
-        <label for="patient-birthday-input">Дата рождения пациента:</label>
-        <input id="patient-birthday-input" name="birthday" type="date" th:value="*{patientBirthday}">
+        <label class="input-text" for="patient-birthday-input">Дата рождения пациента:</label>
+        <input id="patient-birthday-input" type="date">
     </div>
     <div>
-        <label for="patient-date-visited-input">Дата визита пациента:</label>
-        <input id="patient-date-visited-input" name="visited" type="date" th:value="*{visited}">
+        <label class="input-text" for="patient-date-visited-input">Дата визита пациента:</label>
+        <input id="patient-date-visited-input" type="date">
     </div>
     <div>
-        <label for="result-input">Результат посещения:</label>
-        <input id="result-input" name="result" type="text" th:value="*{result}"/>
+        <label class="input-text" for="result-input">Результат посещения:</label>
+        <input id="result-input" type="text"/>
     </div>
+    <br>
     <div class="row">
+        <button class="button" type="button" onclick="createClinicInformation()">Сохранить</button>
         <a href="homePageAuth.html" th:href="@{/}">
-            <button type="button" onclick="create()">Сохранить</button>
-        </a>
-        <a href="homePageAuth.html" th:href="@{/}">
-            <button type="button">Отменить</button>
+            <button class="button" type="button">Отменить</button>
         </a>
     </div>
     <h3>* - если таковое имеется.</h3>
+    <pre class="error" id="information"></pre>
 </form>
 </body>
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 <script>
-    function create() {
+    async function createClinicInformation() {
 
         const patientNameInput = document.getElementById("patient-name-input")
         const patientSurnameInput = document.getElementById("patient-surname-input")
@@ -52,6 +87,8 @@
         const patientBirthdayInput = document.getElementById("patient-birthday-input")
         const patientDateVisitedInput = document.getElementById("patient-date-visited-input")
         const resultInput = document.getElementById("result-input")
+
+        const informationAboutCreateDto = document.getElementById("information")
 
         const healthInformationDto = {
             patientName: patientNameInput.value,
@@ -62,16 +99,23 @@
             result: resultInput.value,
         }
 
-        fetch("/api/v1/clinic", {
+        const resultCreateHealthInformation = await fetch("/api/v1/clinic", {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(healthInformationDto)
-        })
-            .then(rawResponse => rawResponse.json())
-            .then(json => heath.innerHTML = JSON.stringify(json, null, 4));
+        });
+
+        if (resultCreateHealthInformation.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultCreateHealthInformation.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
     }
+
 </script>
 </html>

@@ -58,4 +58,7 @@ public class ClinicRequest {
     @Column(name = "result")
     private String result;
 
+    @Column(name = "user_id")
+    private Long userId;
+
 }

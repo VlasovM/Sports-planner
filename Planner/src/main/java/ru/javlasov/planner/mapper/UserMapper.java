@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import ru.javlasov.planner.dto.UserDto;
 import ru.javlasov.planner.model.User;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
@@ -13,5 +15,7 @@ public interface UserMapper {
     UserDto modelToDto(User model);
 
     User dtoToModel(UserDto dto);
+
+    List<UserDto> modelListToDtoList(List<User> modelList);
 
 }

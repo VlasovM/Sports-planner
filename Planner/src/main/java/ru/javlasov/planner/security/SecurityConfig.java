@@ -47,12 +47,12 @@ public class SecurityConfig {
         return filterChain.build();
     }
 
-//    /article/{id}
-
     private void addPermissions(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/").permitAll()
                 .requestMatchers(HttpMethod.POST, BASE_URL_API_CLINIC).permitAll()
+                .requestMatchers(HttpMethod.GET, BASE_URL_API_CLINIC).hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, BASE_URL_API_CLINIC + "/chooseRequest").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES).permitAll()
                 .requestMatchers(HttpMethod.GET, BASE_URL_ARTICLES + "/article/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/registration").permitAll()

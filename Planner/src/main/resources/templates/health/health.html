@@ -67,15 +67,6 @@
         })
     });
 
-    function deleteHealth(id) {
-        fetch("/api/v1/healths/" + id, {
-            method: "DELETE"
-        })
-            .then(() => {
-                location.reload();
-            })
-    }
-
 </script>
 
 </body>

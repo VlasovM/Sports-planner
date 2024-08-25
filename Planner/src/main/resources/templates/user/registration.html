@@ -3,52 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Регистрация пользователя</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], input[type=number], input[type=email], input[type=password], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
+<body class="background">
 <h1>Регистрация</h1>
 <form id="create-form" action="registration.html" th:method="post">
     <div>
-        <label for="user-name-input">Имя:</label>
-        <input id="user-name-input" name="name" type="text" th:value="*{name}" value=""/>
+        <label class="input-text" for="user-name-input">Имя:</label>
+        <input id="user-name-input" type="text"/>
     </div>
     <div>
-        <label for="user-middle-name-input">Отчество:</label>
-        <input id="user-middle-name-input" name="middlename" type="text" th:value="*{middlename}" value=""/>
+        <label class="input-text" for="user-middle-name-input">Отчество:</label>
+        <input id="user-middle-name-input" type="text"/>
     </div>
     <div>
-        <label for="user-surname-input">Фамилия:</label>
-        <input id="user-surname-input" name="surname" type="text" th:value="*{surname}" value=""/>
+        <label class="input-text" for="user-surname-input">Фамилия:</label>
+        <input id="user-surname-input" type="text"/>
     </div>
     <div>
-        <label for="user-birthday-input">Дата рождения:</label>
-        <input id="user-birthday-input" name="birthday" type="date" th:value="*{birthday}" value=""/>
+        <label class="input-text" for="user-birthday-input">Дата рождения:</label>
+        <input id="user-birthday-input" type="date"/>
     </div>
     <div class="row">
-        <label for="user-age-input">Возвраст:</label>
-        <input id="user-age-input" name="age" type="number" th:value="*{age}" value=""/>
+        <label class="input-text" for="user-age-input">Возвраст:</label>
+        <input id="user-age-input" type="number"/>
     </div>
     <div class="row">
-        <label for="user-email-input">Почта:</label>
-        <input id="user-email-input" name="email" type="email" th:value="*{email}" value=""/>
+        <label class="input-text" for="user-email-input">Почта:</label>
+        <input id="user-email-input" type="email"/>
     </div>
     <div class="row">
-        <label for="user-password-input">Пароль:</label>
-        <input id="user-password-input" name="password" type="password" th:value="*{password}" value=""/>
+        <label class="input-text" for="user-password-input">Пароль:</label>
+        <input id="user-password-input" type="password"/>
     </div>
     <div class="row">
-        <label for="sportId">Спорт:</label>
+        <label class="input-text" for="sportId">Спорт:</label>
         <select id="sportId" name="sportId">
             <option>Выбрать жанр</option>
         </select>
     </div>
     <div class="row">
+        <button class="button" type="button" onclick="registration()">Сохранить</button>
         <a href="../homePages/homePageNotAuth.html" th:href="@{/}">
-            <button type="button" onclick="registration()">Сохранить</button>
-        </a>
-        <a href="../homePages/homePageNotAuth.html" th:href="@{/}">
-            <button type="button">Отменить</button>
+            <button class="button" type="button">Отменить</button>
         </a>
     </div>
+    <pre class="error" id="information"></pre>
 </form>
 </body>
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
@@ -75,7 +108,9 @@
             sport: sportIdInput.value
         }
 
-        fetch("/api/v1/users", {
+        const informationAboutCreateDto = document.getElementById("information")
+
+        const resultFromAPI = fetch("/api/v1/users", {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -83,8 +118,14 @@
             },
             body: JSON.stringify(user)
         })
-            .then(rawResponse => rawResponse.json())
-            .then(json => newUser.innerHTML = JSON.stringify(json, null, 4))
+
+        if (resultFromAPI.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultFromAPI.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
 
     }
 </script>
@@ -94,12 +135,7 @@
         $.ajax({
             url: "/api/v1/sports",
             type: "GET",
-            dataType: "json",
-            success: function (sports) {
-                $.each(sports, function (i, sport) {
-                    $("#sportId").append("<option value='" + sport.id + "'>" + sport.title + "</option>");
-                });
-            }
+            dataType: "json"
         });
     });
 </script>

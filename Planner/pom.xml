@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.javlasov</groupId>
     <artifactId>Planner</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Planner</name>
     <description>Planner</description>
 

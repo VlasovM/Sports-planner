@@ -1,19 +1,20 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/clinic
+    url: jdbc:postgresql://localhost:5432/planner
     username: postgres # default
     password: password # default
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
         format_sql: true
   sql:
     init:
-      mode: never
+      mode: always
+      data-locations: "classpath:data.sql"
       schema-locations: "classpath:schema.sql"
 
 server:

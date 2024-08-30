@@ -16,7 +16,7 @@ public class Specialization {
     @Id
     private Long id;
 
-    @Column(name = "title", nullable = false, unique = true)
+    @Column(name = "specialization", nullable = false, unique = true)
     private String specialization;
 
 }

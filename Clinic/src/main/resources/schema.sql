@@ -11,16 +11,10 @@ CREATE TABLE IF NOT EXISTS doctors
     middle_name VARCHAR(32) NULL,
     surname VARCHAR(32) NOT NULL,
     full_name VARCHAR(256) NOT NULL,
-    specialization INT NOT NULL,
+    specialization INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS roles
-(
-    id SERIAL PRIMARY KEY NOT NULL,
-    role VARCHAR(64) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS user_credentials
+CREATE TABLE IF NOT EXISTS user_credentials_clinic
 (
     id SERIAL PRIMARY KEY NOT NULL,
     email VARCHAR(32) NOT NULL,

@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.javlasov</groupId>
     <artifactId>Clinic</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Hospital</name>
     <description>Clinic</description>
 

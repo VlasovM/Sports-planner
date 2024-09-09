@@ -36,7 +36,7 @@ public class HomeController {
 
     @GetMapping("/registration")
     public String registration() {
-        return "registration";
+        return "user/registration";
     }
 
     private boolean checkUser(Authentication authentication) {

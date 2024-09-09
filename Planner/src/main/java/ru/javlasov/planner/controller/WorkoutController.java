@@ -18,12 +18,12 @@ public class WorkoutController {
 
     @GetMapping()
     public String trains() {
-        return "workout";
+        return "workout/workout";
     }
 
     @GetMapping("/create")
     public String createTrain() {
-        return "createWorkout";
+        return "workout/createWorkout";
     }
 
 
@@ -34,7 +34,7 @@ public class WorkoutController {
         model.addAttribute("title", workoutDto.getTitle());
         model.addAttribute("reflection", workoutDto.getReflection());
         model.addAttribute("date", workoutDto.getDate());
-        return "editWorkout";
+        return "workout/editWorkout";
     }
 
 }

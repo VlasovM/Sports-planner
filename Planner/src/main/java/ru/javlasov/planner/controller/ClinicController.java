@@ -12,7 +12,7 @@ public class ClinicController {
 
     @GetMapping
     public String getAllRequestsForModerator() {
-        return "allClinicRequests";
+        return "clinic/allClinicRequests";
     }
 
 }

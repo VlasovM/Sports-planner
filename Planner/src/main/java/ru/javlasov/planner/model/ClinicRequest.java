@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import ru.javlasov.planner.enums.Status;
 
 import java.time.LocalDate;
 
@@ -26,7 +25,7 @@ public class ClinicRequest {
     private String requestId;
 
     @Column(name = "status", nullable = false)
-    private Status status;
+    private Long status;
 
     @Column(name = "note")
     private String note;
@@ -40,7 +39,7 @@ public class ClinicRequest {
     @Column(name = "clinic")
     private String clinic;
 
-    @Column(name = "date_visited")
+    @Column(name = "date_visit")
     private LocalDate dateVisited;
 
     @Column(name = "patient_name")
@@ -49,7 +48,7 @@ public class ClinicRequest {
     @Column(name = "patient_surname")
     private String patientSurname;
 
-    @Column(name = "patient_iddle_name")
+    @Column(name = "patient_middle_name")
     private String patientMiddleName;
 
     @Column(name = "patient_birthday")

@@ -44,8 +44,9 @@ public class ClinicRestController {
     }
 
     @PostMapping("/incomeResponse")
-    public ResponseEntity<?> getInformationFromSportsPlanner(@RequestParam(name = "responseId") String responseId,
-                                                             @RequestBody PlannerResponse plannerResponse) {
+    public ResponseEntity<PlannerResponse> getInformationFromSportsPlanner(
+            @RequestParam(name = "responseId") String responseId,
+            @RequestBody PlannerResponse plannerResponse) {
         var infoMessage = String.format("Получен ответ от Приложения \"Планнер\" на ранее отправленный запрос " +
                 "с requestId = %s, Ответ: %s", responseId, plannerResponse);
         LOGGER.info(infoMessage);

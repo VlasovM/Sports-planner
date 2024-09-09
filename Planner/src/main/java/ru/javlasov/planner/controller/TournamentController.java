@@ -18,12 +18,12 @@ public class TournamentController {
 
     @GetMapping
     public String tournaments() {
-        return "tournaments";
+        return "tournament/tournaments";
     }
 
     @GetMapping("/create")
     public String createTournament() {
-        return "createTournament";
+        return "tournament/createTournament";
     }
 
     @GetMapping("/edit/{id}")
@@ -35,7 +35,7 @@ public class TournamentController {
         model.addAttribute("opponent", tournamentDto.getOpponent());
         model.addAttribute("result", tournamentDto.getResult());
         model.addAttribute("reflection", tournamentDto.getReflection());
-        return "editTournament";
+        return "tournament/editTournament";
     }
 
 }

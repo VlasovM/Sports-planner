@@ -2,7 +2,6 @@ package ru.javlasov.planner.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.javlasov.planner.enums.Status;
 
 import java.time.LocalDate;
 
@@ -14,7 +13,7 @@ public class ClinicRequestDto {
 
     private String requestId;
 
-    private Status status;
+    private Long status;
 
     private String note;
 

@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS articles
 (
     id SERIAL PRIMARY KEY NOT NULL,
     article_status INT NOT NULL,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(1024) NOT NULL,
     text TEXT NOT NULL,
     created DATE NOT NULL,
     user_id INT NOT NULL,

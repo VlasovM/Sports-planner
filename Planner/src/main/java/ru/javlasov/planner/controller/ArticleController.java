@@ -21,18 +21,18 @@ public class ArticleController {
 
     @GetMapping
     public String articles() {
-        return "articles";
+        return "article/articles";
     }
 
     @GetMapping("/article/{id}")
     public String article(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("id", id);
-        return "article";
+        return "article/article";
     }
 
     @GetMapping("/create")
     public String create() {
-        return "createArticle";
+        return "article/createArticle";
     }
 
     @GetMapping("/edit/{id}")
@@ -42,19 +42,19 @@ public class ArticleController {
         model.addAttribute("text", articleDto.getText());
         model.addAttribute("title", articleDto.getTitle());
         model.addAttribute("created", articleDto.getCreated());
-        return "editArticle";
+        return "article/editArticle";
     }
 
     @GetMapping("/user/")
     public String articlesByUser(Model model) {
         var currentUser = userCredentialsService.getCurrentAuthUser();
         model.addAttribute("userId", currentUser.getUser().getId());
-        return "articlesByUser";
+        return "article/articlesByUser";
     }
 
     @GetMapping("/validate")
     public String validateArticles() {
-        return "articlesValidate";
+        return "article/articlesValidate";
     }
 
 }

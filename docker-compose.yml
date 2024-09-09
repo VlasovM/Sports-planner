@@ -24,6 +24,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   postgres:
+    restart: always
     image: postgres:13.6
     container_name: 'postgres'
     ports:
@@ -32,19 +33,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=planner
-
-  clinic-application:
-    container_name: clinic-application
-    build:
-      dockerfile: Clinic/Dockerfile
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/planner
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-    ports:
-      - "8091:8091"
-    depends_on:
-      - postgres
 
   journaling-application:
     container_name: journaling-application
@@ -63,19 +51,19 @@ services:
       - zookeeper
       - postgres
 
-  planner-application:
-    container_name: planner-application
-    build:
-      dockerfile: Planner/Dockerfile
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/planner
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-      - spring.kafka.bootstrap-servers=broker:9092
-      - spring.kafka.producer.bootstrap-servers=broker:9092
-    ports:
-      - "8080:8080"
-    depends_on:
-      - kafka
-      - zookeeper
-      - postgres
+#  planner-application:
+#    container_name: planner-application
+#    build:
+#      dockerfile: Planner/Dockerfile
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/planner
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=password
+#      - spring.kafka.bootstrap-servers=broker:9092
+#      - spring.kafka.producer.bootstrap-servers=broker:9092
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - kafka
+#      - zookeeper
+#      - postgres

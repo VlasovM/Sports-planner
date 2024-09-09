@@ -4,6 +4,12 @@ CREATE TABLE IF NOT EXISTS specializations
     specialization VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS roles
+(
+    id SERIAL PRIMARY KEY NOT NULL,
+    role VARCHAR(64) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS doctors
 (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -14,7 +20,7 @@ CREATE TABLE IF NOT EXISTS doctors
     specialization INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS user_credentials_clinic
+CREATE TABLE IF NOT EXISTS user_credentials
 (
     id SERIAL PRIMARY KEY NOT NULL,
     email VARCHAR(32) NOT NULL,

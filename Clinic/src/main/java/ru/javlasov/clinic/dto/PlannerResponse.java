@@ -16,10 +16,7 @@ public class PlannerResponse {
 
     @Override
     public String toString() {
-        if (message.isEmpty()) {
-            return "Статус: " + status.getTitle() + " - " + status.getText();
-        }
-        return "Статус: " + status.getTitle() + " - " + status.getText() + ". Сообщение: " + message;
+        return "Статус: " + status + ". Сообщение: " + message;
     }
 
 }

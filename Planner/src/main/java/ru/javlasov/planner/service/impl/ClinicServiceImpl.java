@@ -72,7 +72,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     @Transactional
     public void processClinicRequest() {
-        List<ClinicRequest> findClinicRequest = clinicRequestRepository.findAllByStatus(Status.PROCESS);
+        List<ClinicRequest> findClinicRequest = clinicRequestRepository.findAllByStatus(Status.PROCESS.getId());
         findClinicRequest.forEach(this::processClinicRequest);
     }
 
@@ -80,7 +80,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Transactional(readOnly = true)
     public List<ModerationClinicRequestDto> findRequestsForModerator(Status status) {
         List<ModerationClinicRequestDto> resultList = new ArrayList<>();
-        List<ClinicRequest> allClinicRequestsForModeration = clinicRequestRepository.findAllByStatus(status);
+        List<ClinicRequest> allClinicRequestsForModeration = clinicRequestRepository.findAllByStatus(status.getId());
         for (ClinicRequest request : allClinicRequestsForModeration) {
             List<User> usersForClinicRequest = userRepository
                     .findUsersForClinicRequest(request.getPatientName(), request.getPatientMiddleName(),
@@ -115,7 +115,7 @@ public class ClinicServiceImpl implements ClinicService {
         clinicRequestDto.setDoctorFullName(incomeClinicRequest.getDoctorFullName());
         clinicRequestDto.setDoctorSpecialization(incomeClinicRequest.getDoctorSpecialization());
         clinicRequestDto.setResult(incomeClinicRequest.getResult());
-        clinicRequestDto.setStatus(Status.PROCESS);
+        clinicRequestDto.setStatus(Status.PROCESS.getId());
         clinicRequestDto.setPatient(incomeClinicRequest.getPatient());
         return clinicRequestDto;
     }
@@ -132,7 +132,7 @@ public class ClinicServiceImpl implements ClinicService {
             processForFirstTime(usersForClinicRequest, clinicRequest, clinicResponse);
         }
     }
-    
+
     private void processPreviouslyVerified(ClinicRequest clinicRequest, ClinicResponse clinicResponse) {
         var correctUser = userRepository.findById(clinicRequest.getUserId()).orElseThrow(() -> {
             String errorMessage = String.format("Не удалось найти юзера с id = %d", clinicRequest.getUserId());
@@ -144,20 +144,21 @@ public class ClinicServiceImpl implements ClinicService {
         clinicResponse.setMessage(succeedMessage);
         clinicResponse.setStatus(Status.SUCCEED);
         sendClinicResponse(clinicResponse, clinicRequest.getRequestId());
-        clinicRequest.setStatus(Status.SUCCEED);
+        clinicRequest.setStatus(Status.SUCCEED.getId());
         clinicRequestRepository.save(clinicRequest);
     }
 
     private void processForFirstTime(List<User> usersForClinicRequest, ClinicRequest clinicRequest,
                                      ClinicResponse clinicResponse) {
         if (usersForClinicRequest.size() > 1) {
-            clinicRequest.setStatus(Status.MODERATION);
+            clinicRequest.setStatus(Status.MODERATION.getId());
         } else if (usersForClinicRequest.isEmpty()) {
             String errorMessage = String.format("Не найден пользователь в системе приложения \"Планер\"" +
                     " для запроса с requestId = %s", clinicRequest.getRequestId());
             createAndSendLogInformation(errorMessage, TypeMessage.ERROR);
             clinicResponse.setStatus(Status.ERROR);
             clinicResponse.setMessage(errorMessage);
+            clinicRequest.setNote(errorMessage);
             fillAndUpdateClinicRequest(clinicRequest, Status.ERROR);
             sendClinicResponse(clinicResponse, clinicRequest.getRequestId());
         } else {
@@ -168,7 +169,7 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     private void fillAndUpdateClinicRequest(ClinicRequest clinicRequest, Status status) {
-        clinicRequest.setStatus(status);
+        clinicRequest.setStatus(status.getId());
         clinicRequest.setNote(clinicRequest.getNote());
         clinicRequestRepository.save(clinicRequest);
     }
@@ -196,6 +197,7 @@ public class ClinicServiceImpl implements ClinicService {
         HttpEntity<ClinicResponse> response = new HttpEntity<>(clinicResponse);
         try {
             ClinicResponse incomeClinicResponse = restTemplate.postForObject(url, response, ClinicResponse.class);
+            LOGGER.info(url);
             LOGGER.info(String.format("Получен ответ от приложения \"Клиника\" по полученному запросу" +
                     " с requestId = %s, %s", requestId, incomeClinicResponse));
         } catch (Exception exception) {

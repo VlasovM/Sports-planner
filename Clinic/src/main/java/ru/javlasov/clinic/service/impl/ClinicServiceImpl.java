@@ -43,7 +43,7 @@ public class ClinicServiceImpl implements ClinicService {
         var healthInformation = fillHealthInformation(healthInformationDto, currentDoctor);
         var logMessage = String.format("Сохраняем полученную информацию о пациенте %s от доктора %s" +
                         " с requestId = %s ", healthInformation.getPatientSurname() + " "
-                        + healthInformation.getPatientName(), healthInformation.getDoctor().getFullName(),
+                        + healthInformation.getPatientName(), currentDoctor.getFullName(),
                 healthInformation.getRequestId());
         LOGGER.info(logMessage);
         return healthInformationRepository.save(healthInformation);
@@ -55,7 +55,7 @@ public class ClinicServiceImpl implements ClinicService {
         healthInformation.setPatientMiddleName(healthInformationDto.getPatientMiddleName());
         healthInformation.setPatientSurname(healthInformationDto.getPatientSurname());
         healthInformation.setPatientBirthday(healthInformationDto.getPatientBirthday());
-        healthInformation.setDoctor(currentDoctor);
+        healthInformation.setDoctorId(currentDoctor.getId());
         healthInformation.setVisited(healthInformationDto.getVisited());
         healthInformation.setResult(healthInformationDto.getResult());
         healthInformation.setRequestId(UUID.randomUUID().toString());

@@ -19,14 +19,15 @@
 
 Другая же часть приложения имитирует функционал для врача, который должен вносить результат о проверке здоровья
 спортсмена, прошедшего у него осмотр.
+
 ## Содержание:
-- [Начало работы](##Начало-работы)
-- [Технологии](##Технологии)
-- [Архитектура](##Архитектура)
-- [База данных](##База-данных)
-- [Тестирование](##Тестирование)
-- [Планируемые доработки](##Планируемые-доработки)
-- [Контакты](##Контакты)
+- [Начало работы](#Начало-работы)
+- [Технологии](#Технологии)
+- [Архитектура](#Архитектура)
+- [База данных](#База-данных)
+- [Тестирование](#Тестирование)
+- [Планируемые доработки](#Планируемые-доработки)
+- [Контакты](#Контакты)
 
 ## Начало работы:
 Для того, чтобы начать работать с приложением необходимо склонировать проект к тебе на машину командой:
@@ -131,5 +132,122 @@ ER-диаграмма базы данных clinic (модуль Clinic):
   <a href="https://openjdk.org/projects/jdk/17/">
     <img src="https://img.shields.io/badge/Java%3A%20-17%20-%20darkcyan?style=flat&logo=openjdk" alt="JDK Badge"/>
   </a>
+  <a href="https://spring.io/blog/2024/05/23/spring-boot-3-3-0-available-now">
+    <img src="https://img.shields.io/badge/Spring%20boot%3A%20-3.3.0%20-%20darkcyan?style=flat&logo=Spring" alt="Spring Badge"/>
+  </a>
+  <a href="https://maven.apache.org/">
+    <img src="https://img.shields.io/badge/Apache%20Maven%20-%20darkcyan?style=flat&logo=Apache-Maven" alt="Maven Badge"/>
+  </a>
 </div>
 
+This application consist of three microservices, different connect each other.
+
+First part can help user can write result of his workout, tournaments. Read and write article and read result of 
+health check.
+
+Another part make imitation clinic. User in the role doctor can make result of health check his patient.
+
+## Content
+- [Getting started](#Getting-started)
+- [Technologies](#Technologies)
+- [Architecture](#Architecture)
+- [Data base](#Data-base)
+- [Test](#Test)
+- [To Do](#To-Do)
+- [Contacts](#Contacts)
+
+## Getting-started
+For start you need to clone this application in your PC next command:
+
+    git clone https://github.com/VlasovM/Sports-planner.git
+
+After installing the project you need to install Docker desktop. Instruction, how to do it:
+
+https://docs.docker.com/desktop/install/windows-install/
+
+Then you need to move to project folder, open console and enter the command:
+
+    mvn clean package
+
+After succeed run this command you need create and run docker container with next command:
+
+    docker compose up
+
+If all last step is succeed, in interface Docker desktop you will see the container **sports-planner** and seven image with all part application.
+
+Now, our application is running and ready to work.
+
+Application **planner** will be available to link: http://localhost:8080/
+
+Available users:
+- VolkovLI@planner.ru | Volkov
+- MoskvinVV@planner.ru | Moskvin
+- EliseevaEA@planner.ru | Eliseeva
+
+Application **clinic** will be available to link: http://localhost:8091/
+
+Available users:
+- VolkovLI@clinic.ru  | Volkov
+- MoskvinVV@clinic.ru  | Moskvin
+- EliseevaEA@clinic.ru  | Eliseeva
+
+Instruction and data for connect to database you can see in chapter [Database.](#Data-base)
+
+## Technologies:
+- Project builder: Maven
+- Main framework: Spring Boot 3.3.0
+- DBMS:
+  - H2 v.2.2.220 (only for testing)
+  - PostgreSQL v.42.6.0
+- Test:
+  - JUnit 5
+  - Mockito-core
+  - Spring boot test
+  - Spring security test
+- Develop frontend:
+  - Spring thymeleaf
+  - Jquery
+- Other dependency:
+  - Spring data jpa
+  - Spring security
+  - Spring kafka
+  - Lombok
+  - Map struct
+  - Hibernate-validator
+  - Docker
+
+## Architecture:
+
+Interaction between Planner-application and Journaling-application make from Kafka with unidirectional relation
+(only Planner send data to Journaling and no other way).
+
+Between Clinic-application and Planner-application interaction by REST.
+<h2>![image](./readme_assets/Architecture sports-planner.PNG)</h2>
+
+## База данных:
+Main DBMS in project: **PostgreSQL**  
+DBMS for tests: **H2**
+
+ERD database planner (module Planner + Journaling):
+<h2>![image](./readme_assets/planner%20DB.PNG)</h2>
+
+ERD database clinic (module Clinic):
+<h2>![image](./readme_assets/clinic%20DB.PNG)</h2>
+
+## Test:
+Tests completed only for module Planner.
+Tests coverage: repository (custom query), service, controller, mapper, handler.
+
+For repository make integration tests with H2.
+For service, mapper, handler use mock tests.
+For controller uses mockMvc.
+
+## To Do:
+- Added authentication from JWT;
+- Create tests for module Clinic;
+- Replace database for logs (module Journaling) from SQL to NoSQL;
+- Add repost for coverage code;
+- Add Spring Cloud: Circuit Breaker, OpenFeign;
+
+## Contacts:
+For any questions and suggestions you can write me to tg: https://t.me/JaVlasov

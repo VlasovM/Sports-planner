@@ -1,4 +1,4 @@
-package ru.javlasov.clinic.dto;
+package ru.javlasov.clinic.api.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,8 @@ import ru.javlasov.clinic.enums.Status;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PlannerResponse {
+public class ClinicResponse {
+
 
     private Status status;
 
@@ -16,7 +17,7 @@ public class PlannerResponse {
 
     @Override
     public String toString() {
-        return "Статус: " + status + ". Сообщение: " + message;
+        return "Статус: " + status + " сообщение: " + message;
     }
 
 }

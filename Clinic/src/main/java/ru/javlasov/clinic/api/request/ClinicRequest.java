@@ -1,7 +1,8 @@
-package ru.javlasov.clinic.dto;
+package ru.javlasov.clinic.api.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.javlasov.clinic.dto.PatientDto;
 
 import java.time.LocalDate;
 

@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.javlasov.clinic.api.response.ClinicResponse;
+import ru.javlasov.clinic.api.response.PlannerResponse;
 import ru.javlasov.clinic.dto.HealthInformationDto;
-import ru.javlasov.clinic.dto.PlannerResponse;
 import ru.javlasov.clinic.enums.Status;
 import ru.javlasov.clinic.service.ClinicService;
 import ru.javlasov.clinic.service.UserCredentialsService;
@@ -44,14 +45,14 @@ public class ClinicRestController {
     }
 
     @PostMapping("/incomeResponse")
-    public ResponseEntity<PlannerResponse> getInformationFromSportsPlanner(
+    public ResponseEntity<ClinicResponse> getInformationFromSportsPlanner(
             @RequestParam(name = "responseId") String responseId,
             @RequestBody PlannerResponse plannerResponse) {
         var infoMessage = String.format("Получен ответ от Приложения \"Планнер\" на ранее отправленный запрос " +
                 "с requestId = %s, Ответ: %s", responseId, plannerResponse);
         LOGGER.info(infoMessage);
-        var responseForPlanner = new PlannerResponse(Status.SUCCEED, infoMessage);
-        return ResponseEntity.ok(responseForPlanner);
+        var clinicResponse = new ClinicResponse(Status.SUCCEED, infoMessage);
+        return ResponseEntity.ok(clinicResponse);
     }
 
 }

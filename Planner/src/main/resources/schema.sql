@@ -94,12 +94,13 @@ CREATE TABLE IF NOT EXISTS clinic_request
     note VARCHAR(2048) NULL,
     doctor_full_name VARCHAR(128) NULL,
     doctor_specialization VARCHAR(128) NULL,
-    clinic VARCHAR(256),
+    clinic VARCHAR(256) NULL,
     date_visit timestamp NULL,
     patient_name VARCHAR(128) NULL,
     patient_middle_name VARCHAR(128) NULL,
     patient_surname VARCHAR(128) NULL,
     patient_birthday timestamp NULL,
     user_id INT NULL,
-    result VARCHAR(4096) NULL
+    result VARCHAR(4096) NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

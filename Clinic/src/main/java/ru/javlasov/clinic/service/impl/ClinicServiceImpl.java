@@ -7,7 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.javlasov.clinic.api.response.AsyncPlannerResponse;
-import ru.javlasov.clinic.dto.ClinicRequest;
+import ru.javlasov.clinic.api.request.ClinicRequest;
 import ru.javlasov.clinic.dto.HealthInformationDto;
 import ru.javlasov.clinic.dto.PatientDto;
 import ru.javlasov.clinic.enums.Specialization;

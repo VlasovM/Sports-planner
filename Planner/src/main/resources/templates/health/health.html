@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои проверки здоровья</title>
+    <style>
+        .h1 {
+            font-size: 30px;
+        }
+
+        .health {
+            table-layout: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 20px;
+            border-collapse: collapse;
+            border: 2px solid black;
+            letter-spacing: 1px;
+            width: 1800px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<h1 class="h1" style="text-align: center">Мои проверки здоровья</h1>
+<table class="health">
+    <thead>
+    <tr>
+        <th scope="col">Дата</th>
+        <th scope="col">Клиника</th>
+        <th scope="col">Специализация врача</th>
+        <th scope="col">Врач</th>
+        <th scope="col">Результат</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $.get('/api/v1/healths').done(function (healths) {
+            healths.forEach(function (health) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${health.date}</td>
+                        <td>${health.clinic}</td>
+                        <td>${health.doctorSpecialization}</td>
+                        <td>${health.doctorFullName}</td>
+                        <td>${health.result}</td>
+                        <td>
+                            <a href="/health/edit/${health.id}">
+                                <button value="${health.id}">Изменить</button>
+                            </a>
+                        </td>
+                        <td>
+                            <button onclick="deleteHealth(${health.id})">Удалить</button>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+</script>
+
+</body>
+</html>

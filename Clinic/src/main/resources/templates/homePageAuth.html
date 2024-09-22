@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SportsApplication</title>
+    <style>
+
+        .button {
+            background-color: brown;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .h1 {
+            font-size: 40px;
+            color: brown;
+        }
+
+        .h2 {
+            color: black;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, #f5706c);
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="background">
+<h1 class="h1" style="text-align: center">Приложение "Клиника"</h1>
+<h2 class="h2" style="text-align: center"></h2>
+<a href="createUserInformation.html" th:href="@{/clinic/create}">
+    <button class="button" type="button">Добавить запись</button>
+</a>
+<a th:href="@{/application/logout}"  style="float: right">
+    <button class="button" type="button">Выход</button>
+</a>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(function () {
+        $.get('/api/v1/clinic/currentUser').done(function (fullNameCurrentUser) {
+            $('h2').append(`
+                    <tr>
+                        <th>Здравствуйте, ${fullNameCurrentUser}</th>
+                    </tr>
+                `)
+        })
+    });
+</script>
+</body>
+</html>

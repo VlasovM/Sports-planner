@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SportsApplication</title>
+    <style>
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .article {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 64px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .h1 {
+            font-size: 40px;
+        }
+
+        .h2 {
+            color: darkcyan;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="background">
+<h1 class="h1" style="text-align: center">Спортивный планировщик</h1>
+<h2 class="h2" style="text-align: center">Чтобы увидеть больше возможностей войдите или зарегистрируйтесь</h2>
+<a href="user/registration.html" class="button" style="float: right"
+   th:href="@{/registration}">Зарегистрироваться</a>
+<a th:href="@{/application/login}" class="button" style="float: right">Вход</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>
+            <a href="article/articles.html" th:href="@{/articles}" class="article">Статьи</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</body>
+</html>

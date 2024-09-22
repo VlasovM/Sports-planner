@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация пользователя</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], input[type=number], input[type=email], input[type=password], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="background">
+<h1>Регистрация</h1>
+<form id="create-form" action="registration.html" th:method="post">
+    <div>
+        <label class="input-text" for="user-name-input">Имя:</label>
+        <input id="user-name-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="user-middle-name-input">Отчество:</label>
+        <input id="user-middle-name-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="user-surname-input">Фамилия:</label>
+        <input id="user-surname-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="user-birthday-input">Дата рождения:</label>
+        <input id="user-birthday-input" type="date"/>
+    </div>
+    <div class="row">
+        <label class="input-text" for="user-age-input">Возвраст:</label>
+        <input id="user-age-input" type="number"/>
+    </div>
+    <div class="row">
+        <label class="input-text" for="user-email-input">Почта:</label>
+        <input id="user-email-input" type="email"/>
+    </div>
+    <div class="row">
+        <label class="input-text" for="user-password-input">Пароль:</label>
+        <input id="user-password-input" type="password"/>
+    </div>
+    <div class="row">
+        <label class="input-text" for="sportId">Спорт:</label>
+        <select id="sportId" name="sportId">
+            <option>Выбрать жанр</option>
+        </select>
+    </div>
+    <div class="row">
+        <button class="button" type="button" onclick="registration()">Сохранить</button>
+        <a href="../homePageNotAuth.html" th:href="@{/}">
+            <button class="button" type="button">Отменить</button>
+        </a>
+    </div>
+    <pre class="error" id="information"></pre>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function registration() {
+
+        const nameInput = document.getElementById("user-name-input")
+        const middleNameInput = document.getElementById("user-middle-name-input")
+        const surnameInput = document.getElementById("user-surname-input")
+        const birthdayInput = document.getElementById("user-birthday-input")
+        const ageInput = document.getElementById("user-age-input")
+        const emailInput = document.getElementById("user-email-input")
+        const passwordInput = document.getElementById("user-password-input")
+        const sportIdInput = document.getElementById("sportId")
+
+        const user = {
+            name: nameInput.value,
+            middleName: middleNameInput.value,
+            surname: surnameInput.value,
+            birthday: birthdayInput.value,
+            age: ageInput.value,
+            email: emailInput.value,
+            password: passwordInput.value,
+            sport: sportIdInput.value
+        }
+
+        const informationAboutCreateDto = document.getElementById("information")
+
+        const resultFromAPI = fetch("/api/v1/users", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+
+        if (resultFromAPI.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultFromAPI.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
+
+    }
+</script>
+
+<script>
+    $(function () {
+        $.ajax({
+            url: "/api/v1/sports",
+            type: "GET",
+            dataType: "json"
+        });
+    });
+</script>
+
+</html>

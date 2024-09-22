@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить статью</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="background">
+<h1>Изменить статью</h1>
+<form id="create-form" action="createArticle.html" th:method="patch">
+    <div>
+        <label class="input-text" for="id-input">Идентификатор:</label>
+        <input id="id-input" type="text" readonly="readonly"/>
+    </div>
+    <div>
+        <label class="input-text" for="article-title-input">Заголовок:</label>
+        <input id="article-title-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="article-text-input">Текст:</label>
+        <input id="article-text-input" type="text"/>
+    </div>
+    <div class="row">
+        <button type="button" class="button" onclick="update()">Сохранить</button>
+        <a href="../homePageAuth.html" th:href="@{/}">
+            <button class="button" type="button">Отменить</button>
+        </a>
+    </div>
+    <pre class="error" id="information"></pre>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function update() {
+
+        const idInput = document.getElementById("id-input")
+        const titleInput = document.getElementById("article-title-input")
+        const textInput = document.getElementById("article-text-input")
+
+        const article = {
+            id: idInput.value,
+            title: titleInput.value,
+            text: textInput.value,
+        }
+
+        const resultFromAPI = fetch("/api/v1/articles", {
+            method: "PATCH",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(article)
+        })
+
+        const informationAboutCreateDto = document.getElementById("information")
+
+        if (resultFromAPI.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultFromAPI.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
+
+    }
+</script>
+</html>

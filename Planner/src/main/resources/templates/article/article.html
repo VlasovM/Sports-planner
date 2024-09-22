@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Тестируем статью</title>
+    <style>
+        .article {
+            table-layout: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 20px;
+            border-collapse: collapse;
+            border: 2px solid black;
+            letter-spacing: 1px;
+            width: 1500px;
+            text-align: center;
+        }
+
+        .article-values {
+            font-size: 40px;
+        }
+        .article-text {
+            font-size: 30px;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="background">
+<form id="article-form" action="article.html" th:method="get">
+    <div>
+        <input type="hidden" id="articleId" name="id" th:value="*{id}"/>
+    </div>
+</form>
+<table class="article">
+    <thead>
+    <tr class="article-values">
+        <th scope="col">Название</th>
+        <th scope="col">Автор</th>
+        <th scope="col">Дата создания</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</body>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    let articleIdInput = document.getElementById('articleId');
+    let articleId = articleIdInput.value;
+
+    $(function () {
+        $.get('/api/v1/articles/article/' + articleId).done(function (article) {
+            $('tbody').append(`
+                    <tr>
+                        <th class="article-values">${article.title}</th>
+                        <th class="article-values">${article.userFullName}</th>
+                        <th class="article-values">${article.created}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" class="article-text">${article.text}</th>
+                    </tr>
+                `)
+        })
+    });
+
+</script>
+
+<body>
+
+</body>
+</html>

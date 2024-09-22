@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SportsApplication</title>
+    <style>
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .article {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 64px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .request {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 64px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .h1 {
+            font-size: 40px;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="background">
+<h1 class="h1" style="text-align: center">Спортивный планировщик</h1>
+<a th:href="@{/application/logout}" class="button" style="float: right">Выход</a>
+<table>
+    <thead>
+    <tr>
+        <th>
+            <a href="article/articles.html" th:href="@{/articles}" class="article">Статьи</a>
+        </th>
+        <th>
+            <a href="article/articles.html" th:href="@{/articles/validate}" class="article">Статьи на модерацию</a>
+        </th>
+        <th>
+            <a href="clinic/allClinicRequests.html" th:href="@{/clinic}" class="request">Запросы от приложения "Клиника"</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</body>
+</html>

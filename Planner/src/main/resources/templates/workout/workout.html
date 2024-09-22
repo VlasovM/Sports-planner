@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои тренировки</title>
+    <style>
+
+        .h1 {
+            font-size: 40px;
+        }
+
+        .trains {
+            table-layout: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 20px;
+            border-collapse: collapse;
+            border: 2px solid black;
+            letter-spacing: 1px;
+            width: 1500px;
+            text-align: center;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+
+    </style>
+</head>
+<body class="background">
+<h1 class="h1" style="text-align: center">Мои тренировки</h1>
+<table class="trains">
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Дата тренировки</th>
+        <th scope="col">Рефлексия</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $.get('/api/v1/workout').done(function (workout) {
+            workout.forEach(function (workout) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${workout.title}</td>
+                        <td>${workout.date}</td>
+                        <td>${workout.reflection}</td>
+                       <td>
+                            <a href="/workout/edit/${workout.id}">
+                                <button value="${workout.id}">Изменить</button>
+                            </a>
+                        </td>
+                        <td>
+                            <button onclick="deleteTrain(${workout.id})">Удалить</button>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+    function deleteTrain(id) {
+        fetch("/api/v1/workout/" + id, {
+            method: "DELETE"
+        })
+            .then(() => {
+                location.reload();
+            })
+    }
+
+</script>
+
+</body>
+</html>

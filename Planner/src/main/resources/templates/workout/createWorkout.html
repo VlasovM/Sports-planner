@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить тренировку</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, darkcyan);
+            height: 100vh;
+        }
+
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], select, input[type=datetime-local] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: darkcyan;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="background">
+<h1>Добавить тренировку</h1>
+<form id="create-form" action="createWorkout.html" th:method="post">
+    <div>
+        <label class="input-text" for="workout-title-input">Название тренировки:</label>
+        <input id="workout-title-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="workout-date-input">Дата тренировки:</label>
+        <input id="workout-date-input" type="datetime-local"/>
+    </div>
+    <div>
+        <label class="input-text" for="workout-reflection-input">О тренировке:</label>
+        <input id="workout-reflection-input" type="text"/>
+    </div>
+    <div class="row">
+        <button class="button" type="button" onclick="create()">Сохранить</button>
+        <a href="../homePageAuth.html" th:href="@{/}">
+            <button class="button" type="button">Отменить</button>
+        </a>
+    </div>
+    <pre class="error" id="information"></pre>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function create() {
+
+        const titleInput = document.getElementById("workout-title-input")
+        const dateInput = document.getElementById("workout-date-input")
+        const reflectionInput = document.getElementById("workout-reflection-input")
+
+        const workout = {
+            title: titleInput.value,
+            date: dateInput.value,
+            reflection: reflectionInput.value,
+        }
+
+        const informationAboutCreateDto = document.getElementById("information")
+
+        const resultFromAPI = fetch("/api/v1/workout", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workout)
+        })
+
+        if (resultFromAPI.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultFromAPI.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
+
+    }
+</script>
+</html>

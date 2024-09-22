@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinic</title>
+    <style>
+        .button {
+            background-color: brown;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+            display: inline-block;
+            font-size: 16px;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .h1 {
+            font-size: 40px;
+            color: brown;
+        }
+
+        .h2 {
+            color: black;
+        }
+
+        .background {
+            background: linear-gradient(#FFFFFF, #f5706c);
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="background">
+<h1 class="h1" style="text-align: center">Приложение "Клиника"</h1>
+<h2 class="h2" style="text-align: center">Для продолжения работы необходимо авторизироваться.</h2>
+<a th:href="@{/application/login}" class="button" style="text-align: center">Вход</a>
+</body>
+</html>

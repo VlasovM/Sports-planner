@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить запись пациента</title>
+    <style>
+        .background {
+            background: linear-gradient(#FFFFFF, #f5706c);
+            height: 100vh;
+        }
+
+        .input-text {
+            font-size: 25px;
+        }
+
+        input[type=text], select, input[type=date] {
+            width: 40%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        .button {
+            background-color: brown;
+            border: 1px solid white;
+            color: white;
+            padding: 15px 75px;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="background">
+<h1>Добавить данные о посещении пациента</h1>
+<form id="create-form" action="createUserInformation.html" th:method="post">
+    <div>
+        <label class="input-text" for="patient-name-input">Имя пациента:</label>
+        <input id="patient-name-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="patient-surname-input">Фамилия пациента:</label>
+        <input id="patient-surname-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="patient-middle-name-input">Отчество пациента:*</label>
+        <input id="patient-middle-name-input" type="text"/>
+    </div>
+    <div>
+        <label class="input-text" for="patient-birthday-input">Дата рождения пациента:</label>
+        <input id="patient-birthday-input" type="date">
+    </div>
+    <div>
+        <label class="input-text" for="patient-date-visited-input">Дата визита пациента:</label>
+        <input id="patient-date-visited-input" type="date">
+    </div>
+    <div>
+        <label class="input-text" for="result-input">Результат посещения:</label>
+        <input id="result-input" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <button class="button" type="button" onclick="createClinicInformation()">Сохранить</button>
+        <a href="homePageAuth.html" th:href="@{/}">
+            <button class="button" type="button">Отменить</button>
+        </a>
+    </div>
+    <h3>* - если таковое имеется.</h3>
+    <pre class="error" id="information"></pre>
+</form>
+</body>
+<script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    async function createClinicInformation() {
+
+        const patientNameInput = document.getElementById("patient-name-input")
+        const patientSurnameInput = document.getElementById("patient-surname-input")
+        const patientMiddleNameInput = document.getElementById("patient-middle-name-input")
+        const patientBirthdayInput = document.getElementById("patient-birthday-input")
+        const patientDateVisitedInput = document.getElementById("patient-date-visited-input")
+        const resultInput = document.getElementById("result-input")
+
+        const informationAboutCreateDto = document.getElementById("information")
+
+        const healthInformationDto = {
+            patientName: patientNameInput.value,
+            patientSurname: patientSurnameInput.value,
+            patientMiddleName: patientMiddleNameInput.value,
+            patientBirthday: patientBirthdayInput.value,
+            visited: patientDateVisitedInput.value,
+            result: resultInput.value,
+        }
+
+        const resultCreateHealthInformation = await fetch("/api/v1/clinic", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(healthInformationDto)
+        });
+
+        if (resultCreateHealthInformation.status === 200) {
+            window.location.replace("/")
+        } else {
+            resultCreateHealthInformation.json().then(result => {
+                informationAboutCreateDto.innerHTML = JSON.stringify(result, null, 4);
+            })
+        }
+    }
+
+</script>
+</html>

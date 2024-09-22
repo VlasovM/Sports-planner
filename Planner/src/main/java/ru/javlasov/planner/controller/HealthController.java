@@ -1,0 +1,18 @@
+package ru.javlasov.planner.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/health")
+public class HealthController {
+
+    @GetMapping
+    public String health() {
+        return "health/health";
+    }
+
+}

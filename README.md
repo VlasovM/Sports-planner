@@ -97,7 +97,7 @@ https://docs.docker.com/desktop/install/windows-install/
 
 Между Clinic-application и Planner-application взаимодействие по REST.
 
-<h2>![image](./readme_assets/Architecture sports-planner.PNG)</h2>
+![image](./readme_assets/achitecture.PNG)
 
 ## База данных:
 Основная СУБД в проекте: **PostgreSQL**  
@@ -105,11 +105,11 @@ https://docs.docker.com/desktop/install/windows-install/
 
 ER-диаграмма базы данных planner (модуль Planner + Journaling):
 
-<h2>![image](./readme_assets/planner%20DB.PNG)</h2>
+![image](./readme_assets/planner%20DB.PNG)
 
 ER-диаграмма базы данных clinic (модуль Clinic):
 
-<h2>![image](./readme_assets/clinic%20DB.PNG)</h2>
+![image](./readme_assets/clinic%20DB.PNG)
 
 ## Тестирование:
 Тесты написаны только для модуля Planner.
@@ -226,7 +226,7 @@ Interaction between Planner-application and Journaling-application make from Kaf
 
 Between Clinic-application and Planner-application interaction by REST.
 
-<h2>![image](./readme_assets/Architecture sports-planner.PNG)</h2>
+![image](./readme_assets/achitecture.PNG)
 
 ## База данных:
 Main DBMS in project: **PostgreSQL**  
@@ -234,11 +234,11 @@ DBMS for tests: **H2**
 
 ERD database planner (module Planner + Journaling):
 
-<h2>![image](./readme_assets/planner%20DB.PNG)</h2>
+![image](./readme_assets/planner%20DB.PNG)
 
 ERD database clinic (module Clinic):
 
-<h2>![image](./readme_assets/clinic%20DB.PNG)</h2>
+![image](./readme_assets/clinic%20DB.PNG)
 
 ## Test:
 Tests completed only for module Planner.
